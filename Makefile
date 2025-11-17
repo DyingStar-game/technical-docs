@@ -1,5 +1,5 @@
 # =============================================================================
-# DyingStar Website - Makefile
+# DyingStar Resources Dynamic Service - Makefile
 # =============================================================================
 
 # Colors for output
@@ -17,20 +17,25 @@ $(info ❗❗ Using podman for compose commands❗❗)
 EXECUTOR := podman compose
 endif
 
-COMPOSE := $(EXECUTOR) -f docker/docker-compose.yml
+# Get absolute path to project root
+ROOT_DIR := $(shell pwd)
+COMPOSE := $(EXECUTOR) -f $(ROOT_DIR)/docker/docker-compose.yml --env-file $(ROOT_DIR)/.env
 
 DEV_SERVICE := dev
 APP_SERVICE := app
 
-# =============================================================================
-# CP/PO/Others Profile - Simple site testing
-# =============================================================================
 
-.PHONY: start
-start: ## Start the complete application (install, build, start) for testing
-	@echo "$(CYAN)🚀 Starting DyingStar Discord Bot for testing...$(RESET)"
-	@echo "$(YELLOW)This will install dependencies, build, and start the application$(RESET)"
-	@$(COMPOSE) up $(APP_SERVICE) --build
+# =============================================================================
+# Check .env file exists
+# =============================================================================
+.PHONY: check-env
+check-env:
+	@if [ ! -f .env ]; then \
+		echo "$(RED)❌ .env file not found!$(RESET)"; \
+		echo "$(YELLOW)💡 Copy .env.sample to .env and configure it:$(RESET)"; \
+		echo "   cp .env.sample .env"; \
+		exit 1; \
+	fi
 
 .PHONY: stop
 stop: ## Stop all running services
@@ -42,8 +47,8 @@ stop: ## Stop all running services
 # =============================================================================
 
 .PHONY: up
-up: ## Start only for development (no app)
-	@echo "$(CYAN)🔧 Starting development environment ...$(RESET)"
+up: check-env ## Start only dev for development (no app)
+	@echo "$(CYAN)🔧 Starting development environment...$(RESET)"
 	@$(COMPOSE) up $(DEV_SERVICE) -d
 	@echo "$(GREEN)✅ Development environment ready!$(RESET)"
 	@echo "$(YELLOW)Use 'make pnpm <command>' to run pnpm commands$(RESET)"
@@ -53,14 +58,9 @@ down: ## Stop development environment
 	@echo "$(CYAN)🛑 Stopping development environment...$(RESET)"
 	@$(COMPOSE) down
 
-.PHONY:dev
-dev: ## Run the development environment
-	@echo "$(CYAN)📦 Running: pnpm start$(RESET)"
-	@$(COMPOSE) exec $(DEV_SERVICE) sh -c "corepack enable && corepack install && pnpm start"
-
 # Generic pnpm command runner
 .PHONY: pnpm
-pnpm: ## Run any pnpm command (usage: make pnpm install, make pnpm dev, etc.)
+pnpm: check-env ## Run any pnpm command (usage: make pnpm install, make pnpm dev, etc.)
 	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
 		echo "$(RED)❌ Please provide a pnpm command. Usage: make pnpm <command>$(RESET)"; \
 		echo "$(YELLOW)Examples: make pnpm install, make pnpm dev, make pnpm build$(RESET)"; \
@@ -76,10 +76,6 @@ pnpm: ## Run any pnpm command (usage: make pnpm install, make pnpm dev, etc.)
 .PHONY: logs
 logs: ## Show logs for all services
 	@$(COMPOSE) logs -f
-
-.PHONY: logs-app
-logs-app: ## Show logs for app service only
-	@$(COMPOSE) logs -f $(APP_SERVICE)
 
 .PHONY: logs-dev
 logs-dev: ## Show logs for dev service only
@@ -112,7 +108,7 @@ clean-volumes: ## Remove all volumes (WARNING: This will delete all data!)
 
 .PHONY: help
 help: ## Show this help message
-	@echo "$(CYAN)DyingStar Discord Bot - Available Commands:$(RESET)"
+	@echo "$(CYAN)DyingStar Resources Dynamic - Available Commands:$(RESET)"
 	@echo ""
 	@echo "$(YELLOW)CP/PO/Others Profile (Simple Testing):$(RESET)"
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(start|stop)"
@@ -121,11 +117,11 @@ help: ## Show this help message
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(up|down|pnpm)"
 	@echo ""
 	@echo "$(YELLOW)Utilities:$(RESET)"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(logs|shell|status|clean-volumes)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(logs|shell|status|clean-volumes|db)"
 	@echo ""
 	@echo "$(YELLOW)Examples:$(RESET)"
-	@echo "  $(CYAN)make start$(RESET)           # Start app for testing (CP/PO/Others)"
 	@echo "  $(CYAN)make up$(RESET)             # Start dev environment (Dev)"
+	@echo "  $(CYAN)make pnpm dev$(RESET)       # Start dev server"
 	@echo "  $(CYAN)make pnpm build$(RESET)     # Build the application"
 	@echo "  $(CYAN)make install$(RESET)        # Install dependencies"
 

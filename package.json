@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "start": "docusaurus start",
+    "start": "docusaurus start --host 0.0.0.0",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
@@ -45,5 +45,6 @@
   },
   "engines": {
     "node": ">=20.0"
-  }
+  },
+  "packageManager": "pnpm@10.22.0"
 }
