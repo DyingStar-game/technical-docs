@@ -15,15 +15,16 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.dyingstar-game.com',
+  url: 'https://dyingstar-game.com/',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/technical-docs/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'DyingStar-game',
   projectName: 'technical-docs',
+  trailingSlash: true,
 
   onBrokenLinks: 'throw',
 
@@ -254,7 +255,7 @@ const config: Config = {
           items: [
             {
               label: 'Discord',
-              href: 'https://discord.gg/cD7SvUKajG',
+              href: 'https://discord.gg/t4ybBPwHaH  ',
             },
             {
               label: 'Twitter',
