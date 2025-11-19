@@ -1,0 +1,8 @@
+{
+  "label": "Documentation Guideline",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Guideline for contributing to documentation"
+  }
+}

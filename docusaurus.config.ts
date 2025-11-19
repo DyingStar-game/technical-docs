@@ -151,7 +151,7 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'globalSidebar',
+          sidebarId: 'projectSidebar',
           position: 'left',
           label: 'Project',
         },
@@ -246,7 +246,7 @@ const config: Config = {
           items: [
             {
               label: 'Project',
-              to: '/docs/global/intro',
+              to: '/docs/project/intro',
             },
           ],
         },
