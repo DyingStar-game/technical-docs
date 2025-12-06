@@ -1,20 +1,19 @@
 ---
-title: Technical Doc - Local Environment
+title: Setup Local Environment
 description: Setting up local environment for Technical Documentation
 sidebar_position: 2
 ---
 
-# Technical Doc - Local Environment
+# Setup - Local Environment
 
-:::info
-**The procedure described below applies to Windows users.**  
-For those using MacOS or Linux, documentation will be added at a later date.
+:::info **The procedure described below applies to Windows users.**  
+For those using MacOS or Linux, documentation will be added at a later date.  
 :::
 
-This section covers setting up the local development environment with WSL (Windows Subsystem for Linux) in order to edit the Dying Star project documentation.
-This environment allows you to edit pages with live previews in your browser.
+This section covers setting up the local development environment with WSL (Windows Subsystem for Linux) in order to edit the Dying Star project documentation. This environment allows you to edit pages with live previews in your browser.
 
 This procedure will cover:
+
 - [Installing a Linux distribution on Windows using WSL2](#install-wsl2)
 - [Installing Make to set up the build environment](#install-make)
 - [Installing GitKraken to work with existing Git versioning](#install-gitkraken)
@@ -23,24 +22,25 @@ This procedure will cover:
 - [Installing Visual Studio Code](#install-visual-studio-code)
 - [Start the development environment](#project-start-up)
 
------
+---
 
 ## Install WSL2
 
 ### Prerequisites
 
 Before enabling virtualization, make sure the following conditions are met:
+
 - **CPU compatibility**: Most modern processors support virtualization technologies such as Intel VT-x or AMD-V. These features allow the CPU to run virtual machines efficiently.
 - **BIOS / UEFI compatibility**: Recent systems generally provide a virtualization option directly within their BIOS / UEFI settings.
-- **Windows Version**: You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11 to use the commands below.
-If you are on earlier versions please see the [manual install page](https://learn.microsoft.com/en-us/windows/wsl/install-manual).
+- **Windows Version**: You must be running Windows 10 version 2004 and higher (Build 19041 and higher) or Windows 11 to use the commands below. If you are on earlier versions please see the [manual install page](https://learn.microsoft.com/en-us/windows/wsl/install-manual).
 
-:::info Virtualization is already enabled on many Windows devices.
-:::
-:::info Only modify what you need in the BIOS.
+:::info Virtualization is already enabled on many Windows devices.  
+:::  
+:::info Only modify what you need in the BIOS.  
 :::
 
 To run WSL 2, hardware virtualization must be enabled on your machine. Follow the steps below:
+
 - Restart your computer. While it is booting, press the key that opens the BIOS/UEFI configuration panel (commonly `F1`, `F2`, `Delete`, `Escape` or `F10`)
 - Once inside the BIOS/UEFI menu, look for sections such as `Advanced`, `Processor`, or `CPU Configuration`
 - In the CPU configuration section, locate an option named `Intel Virtualization Technology`, `VT-x`, `AMD-V`, `SVM` or simply `Virtualisation` (the exact wording varies depending on the manufacturer)
@@ -52,9 +52,11 @@ To run WSL 2, hardware virtualization must be enabled on your machine. Follow th
     <summary>Useful Links</summary>
 
     [Microsoft - Enable Virtualization on Windows](https://support.microsoft.com/en-us/windows/enable-virtualization-on-windows-c5578302-6e43-4b4b-a449-8ced115f58e1)
+
 </details>
 
 ### Install WSL
+
 To install WSL and enable all required features, open PowerShell **as administrator** and run:
 
 ```bash
@@ -65,8 +67,8 @@ wsl --install
 
 Once the process completes, restart your computer.
 
-:::note[Custom Distribution]
-By default, Ubuntu will be the Linux distribution installed. If you want to use another distribution, refer to the [custom installation procedure](https://learn.microsoft.com/en-us/windows/wsl/install#change-the-default-linux-distribution-installed).
+:::note Custom Distribution  
+By default, Ubuntu will be the Linux distribution installed. If you want to use another distribution, refer to the [custom installation procedure](https://learn.microsoft.com/en-us/windows/wsl/install#change-the-default-linux-distribution-installed).  
 :::
 
 Once installing your Linux Distribution is complete, open the distribution (Ubuntu by default) using the Windows Start menu.
@@ -74,6 +76,7 @@ Once installing your Linux Distribution is complete, open the distribution (Ubun
 ![Install Ubuntu command](/img/project/localDocEnvironment/wslInstall_02.png)
 
 When you launch the distribution for the first time, you will be prompted to:
+
 - Choose a **User Name**
 - Choose a **Password**
 
@@ -82,20 +85,21 @@ Once created, this user will be your default account and you will be signed in a
 
 ![Ubuntu User Account](/img/project/localDocEnvironment/wslInstall_03.png)
 
-:::info
-    This account is considered a **Linux Administrator**. You can run `sudo` administrative commands.
+:::info This account is considered a **Linux Administrator**. You can run `sudo` administrative commands.  
 :::
 
 <details>
     <summary>Useful Links</summary>
 
     [Microsoft - WSL Install](https://learn.microsoft.com/fr-fr/windows/wsl/install)
+
 </details>
 
------
+---
 
 ## Install Make
-:::warning These commands must be executed in your Linux distribution console.
+
+:::warning These commands must be executed in your Linux distribution console.  
 :::
 
 To install Make on your Linux distribution, start by updating your package list with the following command:
@@ -105,19 +109,22 @@ sudo apt-get update
 ```
 
 Then, run the following command to install Make:
+
 ```bash
 sudo apt-get -y install make
 ```
 
 You can check if Make has been installed correctly with:
+
 ```bash
 make -v
 ```
 
------
+---
 
 ## Install GitKraken
-:::warning These commands must be executed in your Linux distribution console.
+
+:::warning These commands must be executed in your Linux distribution console.  
 :::
 
 First you have to download GitKraken package using the following command:
@@ -138,11 +145,9 @@ Once GitKraken is installed, you can start it with:
 gitkraken
 ```
 
-:::warning Windows 10
-    GitKraken requires a graphical environment.  
-    On Windows 11, this works out of the box thanks to WSLg.
-    On Windows 10, you must install an X11 server such as VcXsrv.
-:::
+:::warning Windows 10 GitKraken requires a graphical environment.  
+ On Windows 11, this works out of the box thanks to WSLg. On Windows 10, you must install an X11 server such as VcXsrv.  
+ :::
 
 <details>
     <summary>Useful Links</summary>
@@ -150,14 +155,16 @@ gitkraken
     [GitKraken - Install on WSL](https://help.gitkraken.com/gitkraken-desktop/windows-subsystem-for-linux/#download-and-install-gitkraken-desktop-on-wsl-2)
 
     [Korben - Linux avec une interface graphique sous Windows 10](https://korben.info/linux-wsl-gui-interface-graphique-windows-10.html)
+
 </details>
 
------
+---
 
 ## Clone Repository
+
 Repository link : https://github.com/DyingStar-game/technical-docs
 
-:::warning These commands must be executed in your Linux distribution console.
+:::warning These commands must be executed in your Linux distribution console.  
 :::
 
 With Ubuntu open, to launch GitKraken, enter the command in the console :
@@ -166,19 +173,19 @@ With Ubuntu open, to launch GitKraken, enter the command in the console :
 gitkraken
 ```
 
-When the application opens, select `File` → `Clone Repo...`
-Choose the folder where you want to clone the repository, paste the [technical-doc](https://github.com/DyingStar-game/technical-docs) repository URL, and click `Clone the repo!`.
+When the application opens, select `File` → `Clone Repo...` Choose the folder where you want to clone the repository, paste the [technical-doc](https://github.com/DyingStar-game/technical-docs) repository URL, and click `Clone the repo!`.
 
 After cloning, a banner will appear at the top of GitKraken offering to open the newly cloned repository.
 
 ![Cloning Repository](/img/project/localDocEnvironment/cloneRepository.gif)
 
------
+---
 
 ## Install Docker
+
 Docker Desktop : https://www.docker.com/products/docker-desktop
 
-:::warning WSL must be installed before starting the installation.
+:::warning WSL must be installed before starting the installation.  
 :::
 
 Start by downloading the Docker Desktop installer from the [product page](https://www.docker.com/products/docker-desktop).
@@ -189,18 +196,18 @@ Start by downloading the Docker Desktop installer from the [product page](https:
     If you don't know which version of Windows (AMD64 or ARM64) you are using, the information can be found in **Settings** -> **System Information**
 
     ![Download Docker Desktop](/img/project/localDocEnvironment/dockerInstall01.png)
+
 </details>
 
 ![Download Docker Desktop](/img/project/localDocEnvironment/dockerInstall02.png)
 
 Once downloaded, launch the Docker Desktop installation:
 
-:::warning
-    Make sure “Use WSL 2 instead of Hyper-V” is checked in Docker Desktop settings.
+:::warning Make sure “Use WSL 2 instead of Hyper-V” is checked in Docker Desktop settings.  
 :::
 
 ![Install Docker Desktop](/img/project/localDocEnvironment/dockerInstall03.gif)  
-*Docker Desktop may require a reboot to finish installing components.*
+_Docker Desktop may require a reboot to finish installing components._
 
 You can log in to your Docker account or create a new one / proceed without logging in:
 
@@ -218,11 +225,13 @@ Docker is now installed and running!
     [Youtube - Install Docker Desktop (2025)](https://www.youtube.com/watch?v=B6kYsucb128)
 
     [Doc Docker - Install Docker Desktop on Windows](https://docs.docker.com/desktop/setup/install/windows-install/#install-docker-desktop-on-windows)
+
 </details>
 
------
+---
 
 ## Install Visual Studio Code
+
 Visual Studio Code : https://code.visualstudio.com/download
 
 Start by downloading the Visual Studio Code installer from the [product page](https://code.visualstudio.com/download) then run the installer.
@@ -235,7 +244,7 @@ Once installed, an empty project window opens.
 
 Ensure you have the Remote – WSL extension installed in Visual Studio Code.
 
-:::info VS Code usually installs this extension automatically when opening a folder from WSL.
+:::info VS Code usually installs this extension automatically when opening a folder from WSL.  
 :::
 
 ![Visual Studio Code WSL Extension](/img/project/localDocEnvironment/vsCodeInstall03.png)
@@ -244,9 +253,10 @@ Ensure you have the Remote – WSL extension installed in Visual Studio Code.
     <summary>Useful Links</summary>
 
     [Visual Studio Code - Install on Windows](https://code.visualstudio.com/docs/setup/windows)
+
 </details>
 
------
+---
 
 ## Project Start-Up
 
