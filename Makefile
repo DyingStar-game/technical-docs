@@ -1,5 +1,5 @@
 # =============================================================================
-# DyingStar Resources Dynamic Service - Makefile
+# DyingStar Technical Documentation - Makefile
 # =============================================================================
 
 # Colors for output
@@ -58,6 +58,11 @@ down: ## Stop development environment
 	@echo "$(CYAN)🛑 Stopping development environment...$(RESET)"
 	@$(COMPOSE) down
 
+.PHONY: dev
+dev: ## Run the development environment
+	@echo "$(CYAN)📦 Running: pnpm start$(RESET)"
+	@$(COMPOSE) exec $(DEV_SERVICE) sh -c "corepack enable && corepack install && pnpm start"
+
 # Generic pnpm command runner
 .PHONY: pnpm
 pnpm: check-env ## Run any pnpm command (usage: make pnpm install, make pnpm dev, etc.)
@@ -91,6 +96,17 @@ status: ## Show status of all services
 	@echo "$(CYAN)📊 Service Status:$(RESET)"
 	@$(COMPOSE) ps
 
+.PHONY: clean
+clean: ## Remove .cache and dist folders (WARNING: This will delete all compiled files!)
+	@echo "$(RED)⚠️  This will delete .cache build node_modules folders !$(RESET)"
+	@read -p "Are you sure? (y/N) " answer; \
+	if [ "$$answer" = "y" ] || [ "$$answer" = "Y" ]; then \
+		sudo rm -rf .cache build node_modules; \
+		echo "$(GREEN)✅ Folders cleaned$(RESET)"; \
+	else \
+		echo "$(YELLOW)Cancelled$(RESET)"; \
+	fi
+
 .PHONY: clean-volumes
 clean-volumes: ## Remove all volumes (WARNING: This will delete all data!)
 	@echo "$(RED)⚠️  This will delete all Docker volumes and data!$(RESET)"
@@ -108,22 +124,14 @@ clean-volumes: ## Remove all volumes (WARNING: This will delete all data!)
 
 .PHONY: help
 help: ## Show this help message
-	@echo "$(CYAN)DyingStar Resources Dynamic - Available Commands:$(RESET)"
-	@echo ""
-	@echo "$(YELLOW)CP/PO/Others Profile (Simple Testing):$(RESET)"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(start|stop)"
+	@echo "$(CYAN)DyingStar Technical Documentation - Available Commands:$(RESET)"
 	@echo ""
 	@echo "$(YELLOW)Dev Profile (Development):$(RESET)"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(up|down|pnpm)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && ($$1 == "up" || $$1 == "down" || $$1 == "pnpm" || $$1 == "dev") {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
 	@echo "$(YELLOW)Utilities:$(RESET)"
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST) | grep -E "(logs|shell|status|clean-volumes|db)"
+	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / && ($$1 == "logs" || $$1 == "shell" || $$1 == "status" || $$1 == "clean-volumes") {printf "  $(CYAN)%-15s$(RESET) %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 	@echo ""
-	@echo "$(YELLOW)Examples:$(RESET)"
-	@echo "  $(CYAN)make up$(RESET)             # Start dev environment (Dev)"
-	@echo "  $(CYAN)make pnpm dev$(RESET)       # Start dev server"
-	@echo "  $(CYAN)make pnpm build$(RESET)     # Build the application"
-	@echo "  $(CYAN)make install$(RESET)        # Install dependencies"
 
 # Default target
 .DEFAULT_GOAL := help
