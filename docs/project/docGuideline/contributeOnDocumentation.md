@@ -69,7 +69,8 @@ To add documentation, create a new branch from `main`. Each branch should follow
    - Checks the documentation validity
    - Tests links to ensure they work
 
-4. **Review**: The PR must be validated by a **Lead** or **Sub-Lead** from the relevant team. And **Dercraker** for the format
+4. **Review**: The PR must be validated by a **Lead** or **Sub-Lead** from the relevant team. And initially, **Dercraker** for the format. After that, only **Lead** or **Sub-Lead** will suffice.
 
 5. **Merge and Deployment**: Once approved and merged into `main`, a new version of the site is automatically deployed.
+
 
