@@ -1,6 +1,8 @@
 ---
-title: Audio Introduction
-sidebar_position: 1
+title: Startup Template
+sidebar_position: 4
 ---
 
 # Team Audio Technical Documentation
+
+
