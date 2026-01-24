@@ -73,4 +73,12 @@ To add documentation, create a new branch from `main`. Each branch should follow
 
 5. **Merge and Deployment**: Once approved and merged into `main`, a new version of the site is automatically deployed.
 
+## Naming Convention
+
+- Use camelCase for maning folders and files
+- Never use space in folders or files names 
+
+## Documentation structure
+- Do no exceed 3 folders in depth
+
 
