@@ -75,10 +75,11 @@ To add documentation, create a new branch from `main`. Each branch should follow
 
 ## Naming Convention
 
-- Use camelCase for maning folders and files
+- Use camelCase for naning folders and files
 - Never use space in folders or files names 
 
 ## Documentation structure
 - Do no exceed 3 folders in depth
+
 
 
