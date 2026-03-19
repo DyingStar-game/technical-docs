@@ -246,7 +246,7 @@ const config: Config = {
           items: [
             {
               label: 'Project',
-              to: '/docs/project/0_usage_wiki/intro',
+              to: '/docs/project/usage_wiki/intro/',
             },
           ],
         },
