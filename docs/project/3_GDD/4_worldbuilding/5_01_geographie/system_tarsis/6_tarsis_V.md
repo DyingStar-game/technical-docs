@@ -65,12 +65,16 @@ Définition des biomes
 ## Anneau
 
 ### Informations
+| champ | valeur | unité |
+|----------|----------|----------|
 | Rayon intérieur | 192897 | km |
 | Rayon extérieur | 554334 | km |
 | Rayon épaisseur | 2.16 | km |
 
 
 ### Composition
+| champ | valeur | unité |
+|----------|----------|----------|
 | H2O (glace) | 48.6052 | % |
 | Silicates | 26.3948 | % |
 |Organics | 8.9641 | % |
