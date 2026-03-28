@@ -70,7 +70,7 @@ Définition des biomes
 
 ## Lunes
 
-### Tarsis II.M1
+### Tarsis IV.M1
 
 #### Description
 
@@ -112,7 +112,7 @@ Définition des biomes
 
 #### Biomes
 
-### Tarsis II.M2
+### Tarsis IV.M2
 
 #### Description
 
