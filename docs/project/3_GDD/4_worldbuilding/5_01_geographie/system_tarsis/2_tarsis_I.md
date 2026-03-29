@@ -56,7 +56,7 @@
 | Cobalt |  0.138906598606341 | % |
 | Cuivre | 0.109138258502879 | % |
 | Argent | 0.0252375821703934 | % |
-| Manganèse | 0.195446221692123, | % |
+| Manganèse | 0.195446221692123 | % |
 | Or | 0.00738488734652399 | % |
 | Platine | 0.00616662691430405 | % |
 | Thorium | 0.000505528401917305 | % |
@@ -67,15 +67,24 @@
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
+### jour
+| nom | Composition
+|----------|----------|
+| puddle | sodium |
+| Lava_Lake | obsidien |
+| Viscous_rock | obsidien |
 
 
-## Lunes
 
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
+### nuit
+| nom | Composition |
+|----------|----------|
+| pele_haire | obsidien |
+| pele_tear | obsidien |
+| obsidian_Field | obsidien |
+| Lava_River | obsidien | 
+| Lava_Lake | obsidien |
+| Lapiaz | Carbonatite |
+
 
 
