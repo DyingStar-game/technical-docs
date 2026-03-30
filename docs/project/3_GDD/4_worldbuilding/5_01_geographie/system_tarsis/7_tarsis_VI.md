@@ -53,9 +53,7 @@
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
+Ocean
 
 
 ## Lunes

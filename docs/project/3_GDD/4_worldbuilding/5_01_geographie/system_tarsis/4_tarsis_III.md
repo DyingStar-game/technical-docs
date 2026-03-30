@@ -31,11 +31,3 @@ Composition de la planète, matériaux
 Définition des biomes
 :::
 
-
-## Lunes
-
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
-
-

@@ -7,18 +7,18 @@
 
 | champ | valeur | unité |
 |----------|----------|----------|
-Type | Tellurique Silicatées | |
-Masse | 0.110521 | M🜨 |
-Rayon  |   3515 | Km |
-Température de jour | 73 | K° |
-Température de nuit |  72 | K° |
-Distance  | 8.084611 | UA |
-Pression atmosphérique | 0.0186631574274241 | bar |
-épaisseur atmosphérique | 45.0904402809602 | km |
-Période de révolution | 9640.0544043535 | jours |
-Durée de jour sidéral | 57.7596236145087 | h |
-Inclinaison | 10.602 | ° | 
-rotation | rétrograde/progradre | |
+| Type | Tellurique Silicatées | |
+| Masse | 0.110521 | M🜨 |
+| Rayon | 3515 | Km |
+| Température de jour | 73 | K° |
+| Température de nuit |  72 | K° |
+| Distance | 8.084611 | UA |
+| Pression atmosphérique | 0.0186631574274241 | bar |
+| épaisseur atmosphérique | 45.0904402809602 | km |
+| Période de révolution | 9640.0544043535 | jours |
+| Durée de jour sidéral | 57.7596236145087 | h |
+| Inclinaison | 10.602 | ° |
+| rotation | rétrograde/progradre | |
 
 
 ## Composition
@@ -63,15 +63,19 @@ rotation | rétrograde/progradre | |
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
-
-
-## Lunes
-
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
-
+| nom | Composition |
+|----------|----------|
+| ice_Crevasse | méthane |
+|Ice_Plain | méthane |
+| Ice_Geyser | Azote |
+| Snow | méthane |
+|désert rocheux | méthane |
+| Glacier | méthane |
+| cryovolcanique | méthane |
+| Hydrocarbon_dune |  |
+| Nitrogen_Ice | Azote |
+| Ice_pick | méthane | 
+| Sublimation_Pit | méthane |
+| Mud | Méthane, Ammoniac |
+| Sandy_Desert | Tholins (méthane) |
 

@@ -63,35 +63,35 @@
 
 ## Biomes
 
-| champ |
-|----------|
-| caprock |
-| fluted_columns |
-| lava_dome |
-| corundum_sand_desert |
-| corundum_plateau |
-| valley_of_fire |
-| Anhydrite_desert |
-| Columnar_basalt_vertical |
-| Mining_Excavation |
-| Cave |
-| Mining_Cave |
-| Crystalline_Fields |
-| Sulphur_Volcano |
-| Sulfur_Plain |
-| Pressure_Canyon |
-| Magmatic_Crust |
-| Ash_Desert |
-| fumarole |
-| Obsidian_Field |
-| Lava_Lake |
-| Lava_Field |
-| Volcanic_Basalt |
-| Active_Volcano |
-| Canyon |
-| Cliff |
-| Rocky_Desert |
-| Sandy_Desert |
+| nom | Composition |
+|----------|----------|
+| caprock |  |
+| fluted_columns |  |
+| lava_dome |  |
+| corundum_sand_desert |  |
+| corundum_plateau |  |
+| valley_of_fire |  |
+| Anhydrite_desert |  |
+| Columnar_basalt_vertical |  |
+| Mining_Excavation |  |
+| Cave |  |
+| Mining_Cave |  |
+| Crystalline_Fields |  |
+| Sulphur_Volcano |  |
+| Sulfur_Plain |  |
+| Pressure_Canyon |  |
+| Magmatic_Crust |  |
+| Ash_Desert |  |
+| fumarole |  |
+| Obsidian_Field |  |
+| Lava_Lake |  |
+| Lava_Field |  |
+| Volcanic_Basalt |  |
+| Active_Volcano |  |
+| Canyon |  |
+| Cliff |  |
+| Rocky_Desert |  |
+| Sandy_Desert |  |
 
 
 ## Lunes

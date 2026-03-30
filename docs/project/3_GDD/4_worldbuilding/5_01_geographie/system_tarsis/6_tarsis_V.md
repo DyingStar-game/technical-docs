@@ -57,9 +57,7 @@
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
+Ocean
 
 
 ## Anneau
