@@ -57,34 +57,24 @@
 
 ## Biomes
 
-<<<<<<< HEAD
 Ocean
-=======
-:::info
-Définition des biomes
-:::
->>>>>>> main
 
 
 ## Anneau
 
 ### Informations
-<<<<<<< HEAD
+
 | champ | valeur | unité |
 |----------|----------|----------|
-=======
->>>>>>> main
 | Rayon intérieur | 192897 | km |
 | Rayon extérieur | 554334 | km |
 | Rayon épaisseur | 2.16 | km |
 
 
 ### Composition
-<<<<<<< HEAD
+
 | champ | valeur | unité |
 |----------|----------|----------|
-=======
->>>>>>> main
 | H2O (glace) | 48.6052 | % |
 | Silicates | 26.3948 | % |
 |Organics | 8.9641 | % |
@@ -95,7 +85,6 @@ Définition des biomes
 
 ## Lunes
 
-<<<<<<< HEAD
 ### Tarsis V.M1
 
 #### Description
@@ -359,11 +348,5 @@ Définition des biomes
 
 #### Biomes
 
-
-=======
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
->>>>>>> main
 
 

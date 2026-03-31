@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 # Tarsis IV
-=======
-# Tarsis II
->>>>>>> main
 
 ## Description
 
 
 ## Informations
 
-<<<<<<< HEAD
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | Sandbox | |
@@ -25,18 +20,13 @@
 | Durée de jour sidéral | 25.0 | h |
 | Inclinaison | 1.5 | ° |
 | rotation | rétrograde/progradre | |
-=======
-:::info
-Lister les informations telle que la distance à l'étoile, rayon de la planète....
-:::
->>>>>>> main
+
 
 
 ## Composition
 
 ### Athmosphere
 
-<<<<<<< HEAD
 | champ | valeur | unité |
 |----------|----------|----------|
 | N2 | 78.7 | % |
@@ -70,22 +60,8 @@ Lister les informations telle que la distance à l'étoile, rayon de la planète
 | Uranium | 0.13 | % |
 
 
-=======
-:::info
-Composition de la planète, matériaux
-:::
-
-### Sol
-
-:::info
-Composition de la planète, matériaux
-:::
->>>>>>> main
-
-
 ## Biomes
 
-<<<<<<< HEAD
 | nom | Composition |
 |----------|----------|
 | caprock |  |
@@ -115,16 +91,10 @@ Composition de la planète, matériaux
 | Cliff |  |
 | Rocky_Desert |  |
 | Sandy_Desert |  |
-=======
-:::info
-Définition des biomes
-:::
->>>>>>> main
 
 
 ## Lunes
 
-<<<<<<< HEAD
 ### Tarsis IV.M1
 
 #### Description
@@ -199,12 +169,5 @@ Définition des biomes
 
 #### Biomes
 
-
-
-=======
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
->>>>>>> main
 
 
