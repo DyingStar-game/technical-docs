@@ -63,15 +63,13 @@
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
-
-
-## Lunes
-
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
+| nom | Composition |
+|----------|----------|
+| Rocky_Desert | anorthosite, basalte, feldspaths, pyroxènes |
+| fumerolle | CO2, Soufre |
+| Sulfur_Plain | Soufre |
+| Sandy_Desert | anorthosite, basalte, feldspaths, pyroxènes |
+| Iron_Desert | obsidien |
+| Active_Volcano | basalt |
 
 

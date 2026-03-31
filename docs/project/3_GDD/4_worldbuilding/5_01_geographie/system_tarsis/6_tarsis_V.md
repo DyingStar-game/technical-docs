@@ -57,20 +57,34 @@
 
 ## Biomes
 
+<<<<<<< HEAD
+Ocean
+=======
 :::info
 Définition des biomes
 :::
+>>>>>>> main
 
 
 ## Anneau
 
 ### Informations
+<<<<<<< HEAD
+| champ | valeur | unité |
+|----------|----------|----------|
+=======
+>>>>>>> main
 | Rayon intérieur | 192897 | km |
 | Rayon extérieur | 554334 | km |
 | Rayon épaisseur | 2.16 | km |
 
 
 ### Composition
+<<<<<<< HEAD
+| champ | valeur | unité |
+|----------|----------|----------|
+=======
+>>>>>>> main
 | H2O (glace) | 48.6052 | % |
 | Silicates | 26.3948 | % |
 |Organics | 8.9641 | % |
@@ -81,8 +95,275 @@ Définition des biomes
 
 ## Lunes
 
+<<<<<<< HEAD
+### Tarsis V.M1
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune Alumineux | |
+| Masse | 0.038 | M🜨 |
+| Rayon | 2552.0 | Km |
+| Température de jour | ? | K° |
+| Température de nuit |  ? | K° |
+| Periapsis  | ? | km |
+| Apoapsis  | 554327.0 | km |
+| Pression atmosphérique | 0.017 | bar |
+| épaisseur atmosphérique | 139.5 | km |
+| Période de révolution | 4.1 | jours |
+| Durée de jour sidéral | 98.4 | h |
+| Inclinaison | -0.67 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| N2 | 56.0 | % |
+| CO2 | 43.0 | % |
+| Ar | 1.0 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Aluminium | 39.9915649447536 | % |
+| Cuivre | 14.9968368542826 | % |
+| Nickel | 14.9968368542826 | % |
+| Titane | 14.9968368542826 | % |
+| Zinc | 9.9978912361884 | % |
+| Fer | 4.9989456180942 | % |
+| RareEarths | 0.01 | % |
+| Thorium | 0.00699202459095 | % |
+| Uranium | 0.00349601229547 | % |
+| Argent | 0.00034960122955 | % |
+| Or | 0.0001 | % |
+| PGMs | 0.0001 | % |
+| Platine | 0.00005 | % |
+
+
+#### Biomes
+
+### Tarsis V.M2
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune Métallique | |
+| Masse | 0.274 | M🜨 |
+| Rayon | 0.9261 | Km |
+| Température de jour | 184.0 | K° |
+| Température de nuit |  183.2 | K° |
+| Periapsis  | 843272.0 | km |
+| Apoapsis  | 843272.0 | km |
+| Pression atmosphérique | 1.30 | bar |
+| épaisseur atmosphérique | 55.0 | km |
+| Période de révolution | 7.7 | jours |
+| Durée de jour sidéral | 184.8 | h |
+| Inclinaison | -0.91 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| N2 | 92.0 | % |
+| CH4 | 7.0 | % |
+| Ar | 1.0 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| ? | ? | % |
+
+
+#### Biomes
+
+### Tarsis V.M3
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune ? | |
+| Masse | 0.118 | M🜨 |
+| Rayon | 3632 | Km |
+| Température de jour | 183.4 | K° |
+| Température de nuit |  190.3 | K° |
+| Periapsis  | 1604945.0 | km |
+| Apoapsis  | 1604945.0 | km |
+| Pression atmosphérique | 1.86 | bar |
+| épaisseur atmosphérique | 34.3 | km |
+| Période de révolution | 20.2 | jours |
+| Durée de jour sidéral | ? | h |
+| Inclinaison | 2.73 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| CO2 | 70.8 | % |
+| N2 | 28.9 | % |
+| SO2 | 0.3 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| ? | ? | % |
+
+
+#### Biomes
+
+### Tarsis V.M4
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune ? | |
+| Masse | 0.383 | M🜨 |
+| Rayon | 7757 | Km |
+| Température de jour | 183.4 | K° |
+| Température de nuit |  182.3 | K° |
+| Periapsis  | 2247097.0 | km |
+| Apoapsis  | 2247097.0 | km |
+| Pression atmosphérique | 1.858 | bar |
+| épaisseur atmosphérique | 34.3 | km |
+| Période de révolution | 33.5 | jours |
+| Durée de jour sidéral | 805.1 | h |
+| Inclinaison | 3.70 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| CO2 | 71.1 | % |
+| N2 | 28.9 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Fer | ? | % |
+
+
+#### Biomes
+
+### Tarsis V.M5
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune ? | |
+| Masse | 0.001 | M🜨 |
+| Rayon | 809 | Km |
+| Température de jour | 183.4 <!> | K° |
+| Température de nuit |  232.3 <!> | K° |
+| Periapsis  | 3204491.0 | km |
+| Apoapsis  | 3204491.0 | km |
+| Pression atmosphérique | 0 | bar |
+| épaisseur atmosphérique | 0 | km |
+| Période de révolution | 57.1 | jours |
+| Durée de jour sidéral | 116.2 | h |
+| Inclinaison | 1.70 | ° |
+| rotation | rétrograde/progradre | |
+
+
+#### Athmosphere
+
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| ? | ? | % |
+
+
+#### Biomes
+
+### Tarsis V.M6
+
+#### Description
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune ? | |
+| Masse | 1.342 | M🜨 |
+| Rayon | 10023 | Km |
+| Température de jour | 183.4 | K° |
+| Température de nuit |  189.0 | K° |
+| Periapsis  | 3412311.0 | km |
+| Apoapsis  | 3412311.0 | km |
+| Pression atmosphérique | 1.132 | bar |
+| épaisseur atmosphérique | 24.3 | km |
+| Période de révolution | 62.8 | jours |
+| Durée de jour sidéral | 1506.6 | h |
+| Inclinaison | 1.92 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| CO2 | 69.5 | % |
+| N2 | 30.5 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| ? | ? | % |
+
+
+#### Biomes
+
+
+=======
 :::info
 Lister les lunes avec les même informations que pour la planète
 :::
+>>>>>>> main
 
 

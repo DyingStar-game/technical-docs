@@ -64,6 +64,26 @@
 
 ## Biomes
 
+<<<<<<< HEAD
+| nom | Composition |
+|----------|----------|
+| ice_Crevasse | méthane |
+|Ice_Plain | méthane, Azote |
+| Ice_Geyser | Azote |
+| Snow | méthane |
+|désert rocheux | méthane |
+| Glacier | méthane |
+| cryovolcanique | méthane |
+| Hydrocarbon_dune |  |
+| Nitrogen_Ice | Azote |
+| Ice_pick | méthane | 
+| ice_Crevasse | |
+| Sublimation_Pit | méthane |
+| Mud | Méthane, Ammoniac |
+| Sandy_Desert | Tholins (méthane) |
+| Crater |  |
+| Rocky_Desert |  |
+=======
 :::info
 Définition des biomes
 :::
@@ -74,5 +94,6 @@ Définition des biomes
 :::info
 Lister les lunes avec les même informations que pour la planète
 :::
+>>>>>>> main
 
 
