@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 # Tarsis III
-=======
-# Tarsis II
->>>>>>> main
 
 ## Description
 
 
 ## Informations
 
-<<<<<<< HEAD
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | Gaea | |
@@ -25,18 +20,13 @@
 | Durée de jour sidéral | 24.0 | h |
 | Inclinaison | 1.0 | ° |
 | rotation | rétrograde/progradre | |
-=======
-:::info
-Lister les informations telle que la distance à l'étoile, rayon de la planète....
-:::
->>>>>>> main
+
 
 
 ## Composition
 
 ### Athmosphere
 
-<<<<<<< HEAD
 | champ | valeur | unité |
 |----------|----------|----------|
 | N2 | 77.6 | % |
@@ -49,11 +39,6 @@ Lister les informations telle que la distance à l'étoile, rayon de la planète
 | CH4 | 0.0002 | % |
 | O3 | 0.000003 | % |
 
-=======
-:::info
-Composition de la planète, matériaux
-:::
->>>>>>> main
 
 ### Sol
 
@@ -67,15 +52,3 @@ Composition de la planète, matériaux
 :::info
 Définition des biomes
 :::
-
-<<<<<<< HEAD
-=======
-
-## Lunes
-
-:::info
-Lister les lunes avec les même informations que pour la planète
-:::
-
-
->>>>>>> main
