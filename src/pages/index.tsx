@@ -24,6 +24,22 @@ function HomepageHeader() {
             Global Project Overview
           </Link>
         </div>
+        <br/>
+        <div className={styles.buttons}>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/project/GVD/">
+            Game Vision Document
+          </Link>
+        </div>
+        <br/>
+        <div className={styles.buttons}>
+          <Link
+            className="button button--secondary button--lg"
+            to="/docs/project/GCD/introduction/">
+            Game Conception Document
+          </Link>
+        </div>
       </div>
     </header>
   );

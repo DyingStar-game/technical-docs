@@ -64,6 +64,7 @@
 
 ## Biomes
 
+<<<<<<< HEAD
 | nom | Composition |
 |----------|----------|
 | ice_Crevasse | méthane |
@@ -82,5 +83,17 @@
 | Sandy_Desert | Tholins (méthane) |
 | Crater |  |
 | Rocky_Desert |  |
+=======
+:::info
+Définition des biomes
+:::
+
+
+## Lunes
+
+:::info
+Lister les lunes avec les même informations que pour la planète
+:::
+>>>>>>> main
 
 

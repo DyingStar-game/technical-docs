@@ -53,11 +53,18 @@
 
 ## Biomes
 
+<<<<<<< HEAD
 Ocean
+=======
+:::info
+Définition des biomes
+:::
+>>>>>>> main
 
 
 ## Lunes
 
+<<<<<<< HEAD
 ### Tarsis VI.M1
 
 #### Description
@@ -143,5 +150,10 @@ Ocean
 
 
 #### Biomes
+=======
+:::info
+Lister les lunes avec les même informations que pour la planète
+:::
+>>>>>>> main
 
 
