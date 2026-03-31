@@ -73,6 +73,8 @@
 | puddle | sodium |
 | Lava_Lake | obsidien |
 | Viscous_rock | obsidien |
+| Volcanic_Basalt | basalt |
+| Lava_Field | obsidien |
 
 
 
@@ -84,7 +86,16 @@
 | obsidian_Field | obsidien |
 | Lava_River | obsidien | 
 | Lava_Lake | obsidien |
-| Lapiaz | Carbonatite |
+| perforated_limestone | Calcaire |
+| Rocky_Desert | obsidien |
+| Iron_Desert | obsidien |
+| Rocky_Desert | obsidien |
+| Iron_Desert | Fer |
 
 
 
+#  terminateur
+| fumarole | CO2, Soufre |
+| Active_Volcano | basalt |
+| Cliff | multi |
+| Canyon | multi |

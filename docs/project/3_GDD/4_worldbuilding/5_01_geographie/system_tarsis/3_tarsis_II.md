@@ -69,5 +69,7 @@
 | fumerolle | CO2, Soufre |
 | Sulfur_Plain | Soufre |
 | Sandy_Desert | anorthosite, basalte, feldspaths, pyroxènes |
+| Iron_Desert | obsidien |
+| Active_Volcano | basalt |
 
 
