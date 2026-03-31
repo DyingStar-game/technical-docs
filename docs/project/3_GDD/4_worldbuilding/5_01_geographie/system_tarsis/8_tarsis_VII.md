@@ -66,7 +66,7 @@
 | nom | Composition |
 |----------|----------|
 | ice_Crevasse | méthane |
-|Ice_Plain | méthane |
+|Ice_Plain | méthane, Azote |
 | Ice_Geyser | Azote |
 | Snow | méthane |
 |désert rocheux | méthane |
@@ -75,7 +75,11 @@
 | Hydrocarbon_dune |  |
 | Nitrogen_Ice | Azote |
 | Ice_pick | méthane | 
+| ice_Crevasse | |
 | Sublimation_Pit | méthane |
 | Mud | Méthane, Ammoniac |
 | Sandy_Desert | Tholins (méthane) |
+| Crater |  |
+| Rocky_Desert |  |
+| Permafrost |  |
 
