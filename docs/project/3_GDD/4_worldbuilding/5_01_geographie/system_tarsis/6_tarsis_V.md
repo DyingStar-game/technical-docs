@@ -281,8 +281,8 @@ Ocean
 | Type | Lune ? | |
 | Masse | 0.001 | M🜨 |
 | Rayon | 809 | Km |
-| Température de jour | 183.4 <!> | K° |
-| Température de nuit |  232.3 <!> | K° |
+| Température de jour | 183.4 ! | K° |
+| Température de nuit |  232.3 ! | K° |
 | Periapsis  | 3204491.0 | km |
 | Apoapsis  | 3204491.0 | km |
 | Pression atmosphérique | 0 | bar |
