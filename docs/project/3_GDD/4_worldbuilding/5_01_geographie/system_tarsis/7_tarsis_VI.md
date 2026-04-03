@@ -23,6 +23,7 @@
 
 ## Composition
 
+
 ### Athmosphere
 
 | champ | valeur | unité |
@@ -51,9 +52,6 @@
 | Methane | 0.0 | % |
 
 
-## Biomes
-
-Ocean
 
 
 
@@ -99,10 +97,28 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| H2O | 45 | % |
+| Silicate | 35 | % |
+| Methane (glace) | 12 | % |
+| Azote (glace) | 5 | % |
+| Tholins | 3 | % |
 
 
 #### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Snow | Azote |
+| Dune (tholins) | Azote |
+| Cryovolcan | H20 |
+| Canyon | Silicate |
+| lava_dome (clathrates) | Methane |
+| River | ethane |
+| Ice_Crevasse | H20 |
+| Ice_Plain | H20 |
+| lava_dome | Methane |
+| Lunar_pool | H20,Silicate |
+
 
 ### Tarsis VI.M2
 
@@ -141,10 +157,24 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| Silicate | 62 | % |
+| H2O | 25 | % |
+| Methane (liquide) | 6.5 | % |
+| ethane (liquide) | 3.5 | % |
+| Fer | 2 | % |
+| Nickel | 1 | % |
 
 
 #### Biomes
 
+
+| nom | Composition |
+|----------|----------|
+| Raw_Mountain | Silicate |
+| Lunar_Ground | Silicate |
+| Lunar_pool | Silicate |
+| caprock | Silicate |
+| Methane_lake | (Methane+ethane) |
+| River | (Methane+ethane) |
 
 

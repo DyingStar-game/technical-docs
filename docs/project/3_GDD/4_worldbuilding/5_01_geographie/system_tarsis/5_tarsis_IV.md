@@ -2,6 +2,12 @@
 
 ## Description
 
+La planète Sandbox était considérée comme une planète inhabitable.  
+Seuls certains hauts plateaux sont visibles du ciel.
+Le reste est recouvert d'une tempête permanente de poussières de corindons qu'on trouve dans la basse altitude. 
+La planète minière est composée principalement de roche de corindon.
+Elle est le siège social et la propriété de la société Ares.
+
 
 ## Informations
 
@@ -99,6 +105,10 @@
 
 #### Description
 
+Korax est la premiere lune de Sandbox. 
+Elle resemble plus a un noyau planétaire depourvu de son manteau. 
+
+
 
 #### Informations
 
@@ -119,6 +129,7 @@
 | Inclinaison | 1.5 | ° |
 | rotation | synchrone | |
 
+
 #### Sol
 
 | champ | valeur | unité |
@@ -136,10 +147,25 @@
 | Cuivre | 0.000064 | % |
 
 #### Biomes
+| Crater | |
+| Lunar_Ground | |
+| Lunar_pool | |
+| Cliff | Fer, Nickel |
+| Canyon | Fer, Nickel |
+| Iron_Desert | Fer, Nickel |
+| Metal_Plain | Fer, Nickel |
+| Mining_Cave | Fer, Nickel |
+| Cliff | Fer, Nickel |
+| Cave | Fer, Nickel |
+
 
 ### Tarsis IV.M2
 
 #### Description
+
+Xarok est la seconde lune de Sandbox. 
+Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui retient son humidité.
+
 
 
 #### Informations
@@ -147,7 +173,7 @@
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | Xarok | |
-| Type | Lune glacée | |
+| Type | Lune Chondrite Carbonée Hydratée | |
 | Masse | 0.000601 | M🜨 |
 | Rayon | 700 | Km |
 | Température de jour | 278.7 | K° |
@@ -161,13 +187,28 @@
 | Inclinaison | 0.5 | ° |
 | rotation | synchrone | |
 
+
 #### Sol
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Fer | ?? | % |
+| Phyllosilicate | 40 | % |
+| H2O | 30.0 | % |
+| Sulfate | 7.5 | % |
+| Cabonate | 7.5 | % |
+| Magnesium | 10 | % |
+| Fer | 5 | % |
 
 #### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Crater | |
+| Lunar_Ground | |
+| Lunar_pool | |
+| Sandy_Desert | gypse |
+| Chlorinated_Field | Magnesium |
+| Travertin | Magnesium, Calcaire |
 
 
 

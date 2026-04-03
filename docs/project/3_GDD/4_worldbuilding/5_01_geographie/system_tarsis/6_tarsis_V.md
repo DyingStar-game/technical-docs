@@ -89,6 +89,8 @@ Ocean
 
 #### Description
 
+Tarsis V.M1 se trouve dans l'anneau de la planete.
+
 
 #### Informations
 
@@ -144,15 +146,16 @@ Ocean
 
 #### Description
 
+Une Super lune de glace avec des lacs d'ethane et un sol rouge. 
 
 #### Informations
 
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune Métallique | |
+| Type | Super Lune de glace | |
 | Masse | 0.274 | M🜨 |
-| Rayon | 0.9261 | Km |
+| Rayon | 5900 | Km |
 | Température de jour | 184.0 | K° |
 | Température de nuit |  183.2 | K° |
 | Periapsis  | 843272.0 | km |
@@ -178,10 +181,25 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| H2O (glace) | 45 | % |
+| Ethane (mer) | 25 | % |
+| Tholins (poussiere) | 12 | % |
+| Fer | 9 | % |
+| Nickel | 6 | % |
+| Silicium | 3 | % |
 
 
 #### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Liquid_hydrocarbon_areas | éthane |
+| ice_Crevasse | H2O |
+| Ice_Plain | H2O |
+| Ice_Geyser | H2O |
+| Sandy_Desert | Tholins (méthane) |
+| Crater |  |
+
 
 ### Tarsis V.M3
 
@@ -196,8 +214,8 @@ Ocean
 | Type | Lune ? | |
 | Masse | 0.118 | M🜨 |
 | Rayon | 3632 | Km |
-| Température de jour | 183.4 | K° |
-| Température de nuit |  190.3 | K° |
+| Température de jour | 190.3 | K° |
+| Température de nuit |  183.4 | K° |
 | Periapsis  | 1604945.0 | km |
 | Apoapsis  | 1604945.0 | km |
 | Pression atmosphérique | 1.86 | bar |
@@ -221,14 +239,31 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| Silicate | 47 | % |
+| Fluorite | 23 | % |
+| Souffre | 13 | % |
+| Chlore | 10 | % |
+| H2O | 7 | % |
 
 
 #### Biomes
 
+| nom | Composition |
+|----------|----------|
+| Crystalline_Fields (vert, violet ou bleu autoluminescant bleu ) | Fluorite |
+| fumarole | soufre |
+| Sulfur_Plain | soufre |
+| Sulphur_Volcano | soufre |
+| Canyon | basalt noir + sel blanc |
+| Stalagmites | H2O, amoniaque, fluorite |
+| Dusty_Plain | basalts, chlorure, fluorite |
+
+
 ### Tarsis V.M4
 
 #### Description
+
+Les piques d'iode le jour se subliment, créant des fumées mauves.
 
 
 #### Informations
@@ -263,15 +298,32 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Fer | ? | % |
+| Silicates | 43 | % |
+| CO2 (glace) | 27 | % |
+| H2O | 10 | % |
+| Iode | 17 | % |
+| Fer | 1.5 | % |
+| Magnesium | 1.5 | % |
 
 
 #### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Ice_pick | soufre |
+| Lunar_Ground (regolithe) | silicate |
+| Salt_Desert (noir/mauve) | Iode, Fer, Magnesium |
+| fumerole (noir/mauve) | Iode |
+| Rocky_Desert (jaune/orangé) | Iode |
+| Tar_Basin (noir/mauve) | Iode |
+
+
 
 ### Tarsis V.M5
 
 #### Description
 
+Une patatoide de carbonne.
 
 #### Informations
 
@@ -281,8 +333,8 @@ Ocean
 | Type | Lune ? | |
 | Masse | 0.001 | M🜨 |
 | Rayon | 809 | Km |
-| Température de jour | 183.4 ! | K° |
-| Température de nuit |  232.3 ! | K° |
+| Température de jour | 232.3 ! | K° |
+| Température de nuit | 183.4 | K° |
 | Periapsis  | 3204491.0 | km |
 | Apoapsis  | 3204491.0 | km |
 | Pression atmosphérique | 0 | bar |
@@ -301,10 +353,21 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| Tholins | 45 | % |
+| Graphite (carbone) | 35 | % |
+| Silicate | 15 | % |
+| Goudron | 5 | % |
 
 
 #### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Tar_Basin | Goudron |
+| Crater | Graphite |
+| Lunar_Ground | Graphite, Tholins |
+| Lunar_pool | Graphite |
+
 
 ### Tarsis V.M6
 
@@ -319,8 +382,8 @@ Ocean
 | Type | Lune ? | |
 | Masse | 1.342 | M🜨 |
 | Rayon | 10023 | Km |
-| Température de jour | 183.4 | K° |
-| Température de nuit |  189.0 | K° |
+| Température de jour | 189.0 | K° |
+| Température de nuit | 183.4 | K° |
 | Periapsis  | 3412311.0 | km |
 | Apoapsis  | 3412311.0 | km |
 | Pression atmosphérique | 1.132 | bar |
@@ -343,10 +406,16 @@ Ocean
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| ? | ? | % |
+| H2O (glace) | 48 | % |
+| Silicate | 38.5 | % |
+| Fer | 4.5 | % |
+| Nickel | 4 | % |
+| Amoniac | 0.5 | % |
 
 
 #### Biomes
-
+| ice_Crevasse | H2O |
+| Ice_Plain | H2O |
+| Ice_Geyser | H2O |
 
 
