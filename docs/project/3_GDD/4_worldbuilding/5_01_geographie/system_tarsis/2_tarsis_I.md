@@ -98,6 +98,8 @@ Un côté nuit composé de basalt recouvert de cheveux et de larmes de pelé. Le
 
 
 #  terminateur
+| nom | Composition |
+|----------|----------|
 | fumarole | CO2, Soufre |
 | Active_Volcano | basalt |
 | Cliff | multi |
