@@ -2,6 +2,9 @@
 
 ## Description
 
+Seule planète synchrone du système Tarsis. 
+Elle se divise en deux faces. Un côté jour rougeoyant composé d'océan de lave et d'obsidian surchauffé.
+Un côté nuit composé de basalt recouvert de cheveux et de larmes de pelé. Le ciel est traversé par des lueurs incandescentes. 
 
 ## Informations
 
