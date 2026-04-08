@@ -105,7 +105,7 @@ Elle est le siège social et la propriété de la société Ares.
 
 #### Description
 
-Korax est la premiere lune de Sandbox. 
+**Korax** est la premiere lune de Sandbox. 
 Elle resemble plus a un noyau planétaire depourvu de son manteau. 
 
 
@@ -147,6 +147,9 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 | Cuivre | 0.000064 | % |
 
 #### Biomes
+
+| nom | Composition |
+|-----|-------------|
 | Crater | |
 | Lunar_Ground | |
 | Lunar_pool | |
@@ -163,7 +166,7 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 
 #### Description
 
-Xarok est la seconde lune de Sandbox. 
+**Xarok** est la seconde lune de Sandbox. 
 Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui retient son humidité.
 
 
