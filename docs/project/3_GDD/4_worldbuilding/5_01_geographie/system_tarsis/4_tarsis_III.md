@@ -52,3 +52,62 @@ Composition de la planète, matériaux
 :::info
 Définition des biomes
 :::
+
+
+## Lunes
+
+### Tarsis III.M1
+
+#### Description 
+
+
+#### Informations
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Name | ? | |
+| Type | Lune ? | |
+| Masse | 0.0058 | M🜨 |
+| Rayon | 1146.42 | Km |
+| Température de jour | 393 | K° |
+| Température de nuit |  100 | K° |
+| Periapsis  | 264000 | km |
+| Apoapsis  | 264000 | km |
+| Pression atmosphérique | 0 | bar |
+| épaisseur atmosphérique | 302 | km |
+| Période de révolution | 14.8 | jours |
+| Durée de jour sidéral | 355.2 | h |
+| Inclinaison | 5.14 | ° |
+| rotation | synchrone | |
+
+
+#### Athmosphere
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Ar | 57 | % |
+| Ne | 22 | % |
+| H2 | 21 | % |
+
+
+#### Sol
+
+| champ | valeur | unité |
+|----------|----------|----------|
+| Oxygene | 38 | % |
+| Fer | 17.5 | % |
+| Silicium | 17.5 | % |
+| Titane | 8.5 | % |
+| Magnesium | 7 | % |
+| Calcium | 5.5 | % |
+| Aluminium | 4.5 | % |
+| Nickel | 1 | % |
+
+
+#### Biomes
+
+| nom | Composition |
+|----------|----------|
+| Raw_Mountain | Basalt |
+| Lunar_Ground | Basalt |
+| Lunar_pool | Basalt |
