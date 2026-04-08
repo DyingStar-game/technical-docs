@@ -19,19 +19,6 @@
 | Durée de jour sidéral | 57.7596236145087 | h |
 | Inclinaison | 10.602 | ° |
 | rotation | rétrograde/progradre | |
-=======
-Type | Tellurique Silicatées | |
-Masse | 0.110521 | M🜨 |
-Rayon  |   3515 | Km |
-Température de jour | 73 | K° |
-Température de nuit |  72 | K° |
-Distance  | 8.084611 UA
-Pression atmosphérique | 0.0186631574274241 | bar |
-épaisseur atmosphérique | 45.0904402809602 | km |
-Période de révolution | 9640.0544043535 | jours |
-Durée de jour sidéral | 57.7596236145087 | h |
-Inclinaison | 10.602 | ° | 
-rotation | rétrograde/progradre | |
 
 
 ## Composition
@@ -44,11 +31,6 @@ rotation | rétrograde/progradre | |
 | CO2 | 14.4147464713476 | % |
 | CH4 | 14.2238215906503 | % |
 | H2O | 1.82533145029983 | % |
-=======
-| N2 : 69.5361004877023 | % |
-| CO2 : 14.4147464713476 | % |
-| CH4 : 14.2238215906503 | % |
-| H2O : 1.82533145029983 | % |
 
 
 ### Sol
