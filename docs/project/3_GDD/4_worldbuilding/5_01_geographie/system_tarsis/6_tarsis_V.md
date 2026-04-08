@@ -414,6 +414,9 @@ Une patatoide de carbonne.
 
 
 #### Biomes
+
+| nom | Composition |
+|-----|-------------|
 | ice_Crevasse | H2O |
 | Ice_Plain | H2O |
 | Ice_Geyser | H2O |
