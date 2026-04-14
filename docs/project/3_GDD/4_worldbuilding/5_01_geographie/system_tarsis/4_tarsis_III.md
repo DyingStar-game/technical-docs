@@ -22,7 +22,6 @@
 | rotation | rétrograde/progradre | |
 
 
-
 ## Composition
 
 ### Athmosphere
@@ -42,16 +41,58 @@
 
 ### Sol
 
-:::info
-Composition de la planète, matériaux
-:::
+| champ | valeur | unité |
+|----------|----------|----------|
+| Oxygene | 46.6 | % |
+| Silicium | 27.7 | % |
+| Aluminium | 8.1 | % |
+| Fer | 5 | % |
+| Calcium | 3.6 | % |
+| Sodium | 2.8 | % |
+| Potassium | 2.1 | % |
+| Magnesium | 2.3 | % |
+
 
 
 ## Biomes
 
-:::info
-Définition des biomes
-:::
+| nom | Composition |
+|----------|----------|
+| Ocean | H2O |
+| Lake | H2O |
+| Delta | H20 |
+| Beach |  |
+| Sandy_Desert | Silicium |
+| Rocky_Desert | Silicium |
+| Salt_Desert |  |
+| Meadow |  |
+| Raw_Mountain |  |
+| Alpine_Mountain |  |
+| Cliff |  |
+| Canyon |  |
+| Active_Volcano |  |
+| Volcanic_Basalt |  |
+| Lava_Field |  |
+| Lava_Lake |  |
+| fumarole |  |
+| Geothermal |  |
+| Ash_Desert |  |
+| Magmatic_Crust |  |
+| Ice_Plain |  |
+| Dry_River_Bed |  |
+| Terraformed_Grass |  |
+| Terraformed_Forest |  |
+| Ruins |  |
+| Urban |  |
+| Agricultural_Land |  |
+| landing_Pad |  |
+| River |  |
+| Lava_River |  |
+| Boue |  |
+| Travertin |  |
+| Tuf |  |
+| pylone hoodoo |  |
+| cannelure |  |
 
 
 ## Lunes
