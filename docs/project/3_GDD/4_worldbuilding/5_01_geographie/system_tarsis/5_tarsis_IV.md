@@ -82,13 +82,10 @@ Elle est le siège social et la propriété de la société Ares.
 | Cave |  |
 | Mining_Cave |  |
 | Crystalline_Fields |  |
-| Sulphur_Volcano |  |
-| Sulfur_Plain |  |
 | Pressure_Canyon |  |
 | Magmatic_Crust |  |
 | Ash_Desert |  |
 | fumarole |  |
-| Obsidian_Field |  |
 | Lava_Lake |  |
 | Lava_Field |  |
 | Volcanic_Basalt |  |

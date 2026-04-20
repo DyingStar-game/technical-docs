@@ -26,3 +26,51 @@ Mg + Ca
 
 ### Illustration
 ![rocky desert Calcium magnesium](/img/biome/rocky_desert_calcium_magnesium.jpg)
+
+
+## Desert de pierre de hematite 
+
+### Description
+Ce desert est riche en hematite. (Oxyde de fer III)
+
+### Coposition
+Fe2O3
+
+### Illustration
+![rocky desert hematite](/img/biome/rocky_desert_hematite.jpg)
+
+
+## Desert de pierre de hematite 
+
+### Description
+Ce desert est riche en hematite. (Oxyde de fer III)
+
+### Coposition
+Fe2O3
+
+### Illustration
+![rocky desert hematite](/img/biome/rocky_desert_hematite.jpg)
+
+
+## Desert de pierre de Ilmenite 
+
+### Description
+Ce desert est riche en Ilménite. 
+
+### Coposition
+FeTiO3
+
+### Illustration
+![rocky desert ilmenite](/img/biome/rocky_desert_ilmenite.jpg)
+
+
+## Desert de pierre de Phosphure d'aluminium 
+
+### Description
+Ce desert est riche en phosphure d'aluminium. 
+
+### Coposition
+FeTiO3
+
+### Illustration
+![rocky desert phosphure aluminium](/img/biome/rocky_desert_phosphure_aluminium.jpg)
