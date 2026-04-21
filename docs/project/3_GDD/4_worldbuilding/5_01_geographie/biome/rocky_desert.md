@@ -40,18 +40,6 @@ Fe2O3
 ![rocky desert hematite](/img/biome/rocky_desert_hematite.jpg)
 
 
-## Desert de pierre de hematite 
-
-### Description
-Ce desert est riche en hematite. (Oxyde de fer III)
-
-### Coposition
-Fe2O3
-
-### Illustration
-![rocky desert hematite](/img/biome/rocky_desert_hematite.jpg)
-
-
 ## Desert de pierre de Ilmenite 
 
 ### Description
