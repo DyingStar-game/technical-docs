@@ -10,9 +10,10 @@ Un côté nuit composé de basalt recouvert de cheveux et de larmes de pelé. Le
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Type | Tellurique Silicatées | |
+| Type | Tellurique Silicatée | |
 | Masse | 0.318718 | M🜨 |
 | Rayon | 4679 | Km |
+| Gravité | 5.803525677 | m/s |
 | Température de jour | 1040 | K° |
 | Température de nuit |  502 | K° | 
 | Distance | 0.054036 | UA |

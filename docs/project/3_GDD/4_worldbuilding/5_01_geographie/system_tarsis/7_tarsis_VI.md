@@ -10,6 +10,7 @@
 | Type | Géante de glace | | 
 | Masse | 38.450652 | M🜨 |
 | Rayon  | 26806 | Km |
+| Gravité | 21,32945451 | m/s |
 | Température de jour | 61 | K° |
 | Température de nuit |  61 | K° | 
 | Distance  | 6.466886 | UA |
@@ -68,9 +69,10 @@
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune de glace | |
 | Masse | 0.257 | M🜨 |
 | Rayon | 5775 | Km |
+| Gravité | 3.07163221 | m/s |
 | Température de jour | 81.6 | K° |
 | Température de nuit |  77.9 | K° |
 | Periapsis  | 3820451.0 | km |
@@ -130,9 +132,10 @@
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune Silicatée | |
 | Masse | 0.111 | M🜨 |
 | Rayon | 3568 | Km |
+| Gravité | 3.475468481 | m/s |
 | Température de jour | 81.6 | K° |
 | Température de nuit |  77.9 | K° |
 | Periapsis  | 9556588.0 | km |

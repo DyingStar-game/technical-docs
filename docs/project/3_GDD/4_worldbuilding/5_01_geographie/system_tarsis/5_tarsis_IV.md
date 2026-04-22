@@ -17,6 +17,7 @@ Elle est le siège social et la propriété de la société Ares.
 | Type | Tellurique Alumineux | |
 | Masse | 0.788 | M🜨 |
 | Rayon | 6356 | Km |
+| Gravité | 7.774966156 | m/s |
 | Température de jour | 290 | K° |
 | Température de nuit |  275 | K° |
 | Distance | 0.65 | UA |
@@ -115,6 +116,7 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 | Type | Lune Métallique | |
 | Masse | 0.007102 | M🜨 |
 | Rayon | 1500 | Km |
+| Gravité | 1.258166787 | m/s |
 | Température de jour | 287.5 | K° |
 | Température de nuit |  257.5 | K° |
 | Periapsis  | 108900 | km |
@@ -176,6 +178,7 @@ Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui re
 | Type | Lune Chondrite Carbonée Hydratée | |
 | Masse | 0.000601 | M🜨 |
 | Rayon | 700 | Km |
+| Gravité | 0.4888982231 | m/s |
 | Température de jour | 278.7 | K° |
 | Température de nuit | 248.7 | K° |
 | Periapsis  | 313600 | km |

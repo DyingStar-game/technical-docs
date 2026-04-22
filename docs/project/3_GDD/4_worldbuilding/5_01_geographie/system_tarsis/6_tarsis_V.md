@@ -10,13 +10,14 @@
 | Type | Géante gazeuse | |
 | Masse | 133.781995 | M🜨 |
 | Rayon  |   69292 | Km |
+| Gravité | 11.10635479 | m/s |
 | Température de jour | 160 | K° | 
 | Température de nuit |  160 | K° | 
 | Distance | 1.10928 | UA |
 | Pression atmosphérique | 96.7239349660605 | bar |
 | épaisseur atmosphérique | 530.605684443984 | km |
-| Période de révolution | 24.0382857053076 | jours |
-| Durée de jour sidéral | 57.7596236145087 | h |
+| Période de révolution | 489.950649477058 | jours |
+| Durée de jour sidéral | 11.7372607297228 | h |
 | Inclinaison | 1.608 | ° |
 | Rotation | rétrograde/prograde | |
 
@@ -100,6 +101,7 @@ Tarsis V.M1 se trouve dans l'anneau de la planete.
 | Type | Lune Alumineux | |
 | Masse | 0.038 | M🜨 |
 | Rayon | 2552.0 | Km |
+| Gravité | 2.325746218 | m/s |
 | Température de jour | ? | K° |
 | Température de nuit |  ? | K° |
 | Periapsis  | ? | km |
@@ -156,6 +158,7 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 | Type | Super Lune de glace | |
 | Masse | 0.274 | M🜨 |
 | Rayon | 5900 | Km |
+| Gravité | 3.137520747 | m/s |
 | Température de jour | 184.0 | K° |
 | Température de nuit |  183.2 | K° |
 | Periapsis  | 843272.0 | km |
@@ -211,9 +214,10 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune Silicatée | |
 | Masse | 0.118 | M🜨 |
 | Rayon | 3632 | Km |
+| Gravité | 3.565581719 | m/s |
 | Température de jour | 190.3 | K° |
 | Température de nuit |  183.4 | K° |
 | Periapsis  | 1604945.0 | km |
@@ -271,9 +275,10 @@ Les piques d'iode le jour se subliment, créant des fumées mauves.
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune Silicatée | |
 | Masse | 0.383 | M🜨 |
 | Rayon | 7757 | Km |
+| Gravité | 2.537179875 | m/s |
 | Température de jour | 183.4 | K° |
 | Température de nuit |  182.3 | K° |
 | Periapsis  | 2247097.0 | km |
@@ -330,9 +335,10 @@ Une patatoide de carbonne.
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune de tholin | |
 | Masse | 0.001 | M🜨 |
 | Rayon | 809 | Km |
+| Gravité | 0.6090360829 | m/s |
 | Température de jour | 232.3 ! | K° |
 | Température de nuit | 183.4 | K° |
 | Periapsis  | 3204491.0 | km |
@@ -379,9 +385,10 @@ Une patatoide de carbonne.
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | ? | |
-| Type | Lune ? | |
+| Type | Lune de glace | |
 | Masse | 1.342 | M🜨 |
 | Rayon | 10023 | Km |
+| Gravité | 5.324724249 | m/s |
 | Température de jour | 189.0 | K° |
 | Température de nuit | 183.4 | K° |
 | Periapsis  | 3412311.0 | km |
