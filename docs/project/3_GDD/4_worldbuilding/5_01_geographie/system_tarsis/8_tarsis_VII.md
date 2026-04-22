@@ -7,9 +7,10 @@
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Type | Tellurique Silicatées | |
+| Type | Tellurique Silicatée | |
 | Masse | 0.110521 | M🜨 |
 | Rayon | 3515 | Km |
+| Gravité | 3.565613077 | m/s |
 | Température de jour | 73 | K° |
 | Température de nuit |  72 | K° |
 | Distance | 8.084611 | UA |
