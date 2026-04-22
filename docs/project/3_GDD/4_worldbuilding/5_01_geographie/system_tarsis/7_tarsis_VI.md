@@ -10,7 +10,7 @@
 | Type | Géante de glace | | 
 | Masse | 38.450652 | M🜨 |
 | Rayon  | 26806 | Km |
-| Gravité | 21,32945451 | m/s |
+| Gravité | 21.32945451 | m/s |
 | Température de jour | 61 | K° |
 | Température de nuit |  61 | K° | 
 | Distance  | 6.466886 | UA |
