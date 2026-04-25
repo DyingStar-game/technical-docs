@@ -177,61 +177,86 @@ Toutes les variables vont de 0 à 100 avec un bonus maximal de 10 % et malus max
 
 *Faim/Soif* : ces valeurs augmentent ou diminue le maximum de la variable (Emport, fatigue,faim/soif) qu'il affecte ou sa consommation (endurance)
 
-  0 / -20%
- 10 / -10%
- 30 / -5%
- 50 / 0%
- 65 / +10%
- 80 / 0%
-100 / -10%
+*NOTE : Ces données sont des points, il faudrait que ça soit une courbe dans les calculs du jeu*
 
-Emport : affecte l’endurance et la fatigue sur sa consommation 
-  0 / 0%
- 15 / 0%
- 30 / +50%
- 65 / +100%
- 80 / déplacement impossible
+| barre (pourcentage) | bonus / malus de la faim / soif | Commentaire |
+| ------------------- | ------------------------------- | ----------- |
+| 0  | -20% | malus car a trop faim / soif |
+| 10 | -10% | malus aussi |
+| 30 | -5% | tout petit malus |
+| 50 | 0% | mode normal |
+| 65 | +10% | petit bonus |
+| 80 | 0% | mode normal |
+| 100 | -10% | malus car a trop mangé / bu |
+
+
+Emport (le poids qu'on peut porter) : affecte l’endurance et la fatigue sur sa consommation 
+
+| barre (pourcentage) | bonus / malus de l'emport | Commentaire |
+| ------------------- | ------------------------------- | ----------- |
+| 0  | 0% |  |
+| 15 | 0% |  |
+| 30 | +50% |  |
+| 65 | +100% |  |
+| 80 | erreur |  |
+
 
 Endurance : augmente la consommation faim, soif, fatigue
-l'endurance consomme au moment de se recharger elle prend la valeur rechargée plus sons modificateur
-  0 / -40%
- 10 / -30%
- 30 / -20%
- 50 / 10%
- 65 / 0%
- 80 / 0%
-100 / 0%
+l'endurance consomme au moment de se recharger elle prend la valeur rechargée plus son modificateur
+
+| barre (pourcentage) | bonus / malus de l'endurance | Commentaire |
+| ------------------- | ---------------------------- | ----------- |
+|  0 | -40% |  |
+| 10 | -30% |  |
+| 30 | -20% |  |
+| 50 | 10%  |  |
+| 65 | 0%   |  |
+| 80 | 0%   |  |
+| 100 | 0%  |  |
+
 
 Fatigue : diminue le maximum des variables 
-  0 / -20%
- 10 / -20%
- 30 / -15%
- 50 / -10%
- 65 / -5%
- 80 / 0%
-100 / +10%
+
+| barre (pourcentage) | bonus / malus de la fatigue | Commentaire |
+| ------------------- | --------------------------- | ----------- |
+|  0 | -20% |  |
+| 10 | -20% |  |
+| 30 | -15% |  |
+| 50 | -10% |  |
+| 65 | -5%  |  |
+| 80 | 0%   |  |
+|100 | +10% |  |
+
 
 vie : diminue le maximum des variables
-  0 / -20%
- 10 / -20%
- 30 / -15%
- 50 / -10%
- 65 / -5%
- 80 / 0%
-100 / 0%
+
+| barre (pourcentage) | bonus / malus | Commentaire |
+| ------------------- | ------------- | ----------- |
+|  0 | -20% |  |
+| 10 | -20% |  |
+| 30 | -15% |  |
+| 50 | -10% |  |
+| 65 | -5%  |  |
+| 80 | 0%   |  |
+|100 | 0%   |  |
 
 ### Consommation de base
 
-Faim : -1.875 par heure
-Soif : -3.75 par heure
-Fatigue : 4 par heure
+Faim : -1.875% par heure
+Soif : -3.75% par heure
+Fatigue : 4% par heure
 
 ### Consommation due à l'endurance
+
 Pour 1 d'endurance avant malus.
 
-Faim : -0.000,2 
-Soif : -0.000,3 
-Fatigue : -0.000,1 
+j'ai une barre d'endurance, je la vide parce que je l'utilise
+quand ça remonte, on perd ces valeurs en pourcentage pour chaque pourcentage d'endurance qui remonte
+
+
+Faim : -0.0002%
+Soif : -0.0003%
+Fatigue : -0.0001%
 
 ## Lexique dev
 
