@@ -1,7 +1,7 @@
 # Plaine de cuivre
 
 ## Description
-Étendue ayant une forte quantité de cuivre dans le sol. 
+Étendue ayant une majeur quantité de cuivre dans le sol. 
 
 ## Coposition
 cuivre (Cu) 
@@ -15,7 +15,7 @@ cuivre (Cu)
 ### Dendrites de cuivre 
 
 ## Description
-Les structures de dentrites peuvent monter de 2m à 3m sur gravité de 1g
+Les structures de dendrites peuvent monter de 2m à 3m sur gravité de 1g
 Sur une lune elle peuvent monter bien plus haut.
 C'est des structures très fragiles. 
 
@@ -27,7 +27,7 @@ Presence de cuivre.
 Très fragile (Seul les buissons existeront à la surface d'une lune.) 
 
 ## Illustration
-![Dentrites de cuivre](/img/biome/cooper_dentrite.jpg)
+![Dendrites de cuivre](/img/biome/cooper_dendrite.jpg)
 
 
 ### Cristaux de Cupride 
