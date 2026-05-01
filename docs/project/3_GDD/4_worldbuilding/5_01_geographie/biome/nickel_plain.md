@@ -12,21 +12,19 @@ Nickel (Ni)
 
 ## Composants
 
-### Dendrites de cuivre 
+### Cristaux de bunsenite 
 
 ## Description
-Les structures de dentrites peuvent monter de 2m à 3m sur gravité de 1g
-Sur une lune elle peuvent monter bien plus haut.
-C'est des structures très fragiles. 
+Oxydation du Nickel. de couleur vert pistache.
 
 ## Composition
-cuivre
+nickel (Ni)
 
 ## Condition
-Presence de cuivre.
-Très fragile (Seul les buissons existeront à la surface d'une lune.) 
+Presence de Nickel.
+Presence d'oxygene 
 
 ## Illustration
-![rocky desert corindon cameleon laiteux](/img/biome/rocky_desert_corindon_cameleon_laiteux.jpg)
+![Bunsenite](/img/biome/bunsenite_nickel.jpg)
 
 
