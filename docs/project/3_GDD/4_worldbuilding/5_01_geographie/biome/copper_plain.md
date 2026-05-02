@@ -7,7 +7,7 @@
 cuivre (Cu) 
 
 ## Illustration
-![Plaine de cuivre](/img/biome/cooper_plain.jpg)
+![Plaine de cuivre](/img/biome/copper_plain.jpg)
 
 
 ## Composants
@@ -27,7 +27,7 @@ Presence de cuivre.
 Très fragile (Seul les buissons existeront à la surface d'une lune.) 
 
 ## Illustration
-![Dendrites de cuivre](/img/biome/cooper_dendrite.jpg)
+![Dendrites de cuivre](/img/biome/copper_dendrite.jpg)
 
 
 ### Cristaux de Cupride 
@@ -90,7 +90,7 @@ Presence de cuivre
 Presence d'oxygene
 
 #### Illustration
-![sol de cuivre orange](/img/biome/cooper_plain.jpg)
+![sol de cuivre orange](/img/biome/copper_plain.jpg)
 
 ### Sol de cuivre rose  
 

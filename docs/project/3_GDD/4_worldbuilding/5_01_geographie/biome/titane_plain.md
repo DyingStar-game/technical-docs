@@ -48,6 +48,25 @@ Temerature de formation de 873K minimum.
 ![Cristaux Rutile](/img/biome/rutile_titane.jpg)
 
 
+### Cristaux de Brookite 
+
+#### Description
+Les rutiles et un minerale cristalin de titane. Elles pourrait atteindre 10 à 20 cm de couleur brun. 
+
+
+#### Composition
+TiO2
+
+#### Condition
+Presence de titane.
+Presence d'oxygene.
+Formation entre 400°C et 700°C pendant des milliers d'années dans une fente hydrothermal.
+
+
+#### Illustration
+![Cristaux Brookite](/img/biome/brookite_titane.jpg)
+
+
 ### Cristaux d'Anatase
 
 #### Description

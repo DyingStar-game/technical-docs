@@ -17,5 +17,5 @@ Aluminium
 ![Nickel aluminium](/img/biome/nickel_aluminium_plain_3.jpg)
 ![Nickel aluminium](/img/biome/nickel_aluminium_plain_4.jpg)
 
-## Composants
+
 
