@@ -7,7 +7,7 @@
 titane (Ti)
 
 ## Illustration
-![Plaine de titane](/img/biome/titane_plain.jpg)
+![Plaine de titane](/img/biome/titane_plain.png)
 
 
 ## Composants
