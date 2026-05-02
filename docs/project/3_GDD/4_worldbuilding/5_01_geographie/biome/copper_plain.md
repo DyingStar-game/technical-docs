@@ -7,7 +7,7 @@
 cuivre (Cu) 
 
 ## Illustration
-![Plaine de cuivre](/img/biome/copper_plain.jpg)
+![Plaine de cuivre](/img/biome/copper_plain.png)
 
 
 ## Composants
@@ -90,7 +90,7 @@ Presence de cuivre
 Presence d'oxygene
 
 #### Illustration
-![sol de cuivre orange](/img/biome/copper_plain.jpg)
+![sol de cuivre orange](/img/biome/copper_plain.png)
 
 ### Sol de cuivre rose  
 
