@@ -7,7 +7,7 @@
 Nickel (Ni)
 
 ## Illustration
-![Plaine de nickel](/img/biome/rocky_desert_corindon_cameleon_laiteux.jpg)
+![Plaine de nickel](/img/biome/nickel_plain.jpg)
 
 
 ## Composants
@@ -18,7 +18,7 @@ Nickel (Ni)
 Oxydation du Nickel. de couleur vert pistache.
 
 ## Composition
-nickel (Ni)
+oxyde de nickel (NiO)
 
 ## Condition
 Presence de Nickel.

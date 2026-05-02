@@ -12,4 +12,10 @@ Aluminium
 
 
 ## Illustration
-![Plaine de bronze d'aluminium](/img/biome/nickel_aluminium_plain.jpg)
+![Nickel aluminium](/img/biome/nickel_aluminium_plain.jpg)
+![Nickel aluminium](/img/biome/nickel_aluminium_plain_2.jpg)
+![Nickel aluminium](/img/biome/nickel_aluminium_plain_3.jpg)
+![Nickel aluminium](/img/biome/nickel_aluminium_plain_4.jpg)
+
+## Composants
+
