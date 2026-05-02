@@ -7,7 +7,7 @@
 Nickel (Ni)
 
 ## Illustration
-![Plaine de nickel](/img/biome/nickel_plain.jpg)
+![Plaine de nickel](/img/biome/nickel_plain.png)
 
 
 ## Composants
