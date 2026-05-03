@@ -102,8 +102,8 @@ Tarsis V.M1 se trouve dans l'anneau de la planete.
 | Masse | 0.038 | M🜨 |
 | Rayon | 2552.0 | Km |
 | Gravité | 2.325746218 | m/s |
-| Température de jour | ? | K° |
-| Température de nuit |  ? | K° |
+| Température de jour | 210 | K° |
+| Température de nuit |  150 | K° |
 | Periapsis  | ? | km |
 | Apoapsis  | 554327.0 | km |
 | Pression atmosphérique | 0.017 | bar |
@@ -143,6 +143,21 @@ Tarsis V.M1 se trouve dans l'anneau de la planete.
 
 
 #### Biomes
+Bronze aluminium plain
+Copper plain
+Corundum dusty plain
+Corundum plateau
+Corundum sand desert
+Corundum Rocky desert
+Cuprotitane plain
+Ilmenite sand desert
+Monel plain
+Nickel aluminium plain
+Nickel plain
+Nitrol plain
+Titane aluminium plain
+Titane plain 
+
 
 ### Tarsis V.M2
 
