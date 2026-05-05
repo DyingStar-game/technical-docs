@@ -12,22 +12,6 @@ titane (Ti)
 
 ## Composants
 
-### Cristaux d'Anatase
-
-#### Description
-C'est de petit groupe de cristaux de 1 cm à 10 cm bleu.
-Si la temperature depasse un seuil il se transforme en Rutile. 
-
-#### Composition
-TiO2
-
-#### Condition
-Titane
-Oxygene
-Temerature basse (si la chaleur depasse 873K longtemps 1183K rapide il se transforme en Rutile)
-
-#### Illustration
-![Cristaux Anatase](/img/biome/anatase_titane.jpg)
 
 ### Cristaux de Rutile 
 
