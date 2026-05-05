@@ -4,11 +4,11 @@
 Mélange de Fluore et de calcium. 
 
 ## Coposition
-Fluore + Calcium (Fl, Ca)
+Fluore + Calcium (CaCl2)
 
 ## Condition
-Fluore 
-Calcium
+Chlore (Cl)
+Calcium (Ca)
 
 
 ## Illustration

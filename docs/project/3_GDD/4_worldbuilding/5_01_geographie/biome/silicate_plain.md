@@ -1,17 +1,16 @@
 # Plaine de silicate
 
 ## Description
-Plaine de silicate. 
+Plaine de silicate.
 
 ## Coposition
 Silicate (Si)
 
 ## Condition
-Silicate
-
+Silicate (Si)
 
 ## Illustration
-![Nickel aluminium](/img/biome/silicate_plain.jpg)
+![Plain de silicate](/img/biome/silicate_plain.jpg)
 
 
 
