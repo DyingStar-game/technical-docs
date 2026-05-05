@@ -9,7 +9,7 @@ Il forme des structures cristalline est cubique.
 fluorure de calcium (CaF2) 
 
 ## Illustration
-![Plaine de fluorite](/img/biome/fluorite_naturel.png)
+![Plaine de fluorite](/img/biome/fluorite_naturel.jpg)
 
 
 ## Composants
