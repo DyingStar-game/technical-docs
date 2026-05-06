@@ -282,7 +282,7 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 
 #### Description
 
-Les piques d'iode le jour se subliment, créant des fumées mauves.
+
 
 
 #### Informations
