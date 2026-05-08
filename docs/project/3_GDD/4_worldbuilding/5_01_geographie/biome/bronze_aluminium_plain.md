@@ -1,10 +1,10 @@
 # Plaine de bronze d'aluminium
 
 ## Description
-Mélange rare de bronze d'aluminium. 
+Plaine recouverte d'un mélange rare de bronze et d'aluminium. 
 
 ## Coposition
-Aluminium + Cuivre (Ti, Cu)
+Aluminium + Cuivre (Al, Cu)
 
 ## Condition
 aluminium

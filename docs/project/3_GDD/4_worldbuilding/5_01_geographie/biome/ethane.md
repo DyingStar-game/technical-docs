@@ -1,15 +1,13 @@
-# Mer d'ethane
+# Mer d'éthane
 
 ## Description
-éthane pur est incolor.
-éthane est plus fluide que l'eau. 
+Mer constituée d'éthane pur. Cet éthane pur est incolore et plus fluide que l'eau.
 
-## Coposition
-ethane
-trace de methane 
+## Composition
+Éthane et trace de méthane
 
 ## Condition
-pure la température doit etre de 90,4 K à 184,5 K pour 1 bar de pression. 
+Pour être présent sous forme liquide, l'éthane pur doit être sous une température comprise entre 90,4 K à 184,5 K pour 1 bar de pression. 
 
 
 
@@ -19,19 +17,16 @@ pure la température doit etre de 90,4 K à 184,5 K pour 1 bar de pression.
 
 ## Composants
 
-### Mer d'ethane et tholins 
+### Mer d'éthane et tholins 
 
 ## Description
-La mer d'ethane lesive les cotes de tholin. rendant la couche inferieur visible.
-La mer aura alors des reflets rouge.  
+La mer d'éthane lessive les côtes de tholin, rendant la couche inferieur visible. La mer aura alors des reflets rouge.  
 
 ## Composition
-ethane
-tholin
+Éthane, tholin
 
 ## Condition
-Presence d'ethane.
-Presence tholins.
+Présence d'éthane et de tholins.
 
 ## Illustration
 ![mer ethane tholin](/img/biome/ethane_tholin_mer.jpg)

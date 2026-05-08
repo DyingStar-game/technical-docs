@@ -1,9 +1,9 @@
 # Plaine de nickel
 
 ## Description
-Étendue ayant une majeur de quantité de nickel dans le sol. 
+Étendue ayant une composition majoritairement faite de nickel dans le sol. 
 
-## Coposition
+## Composition
 Nickel (Ni)
 
 ## Illustration
@@ -15,14 +15,13 @@ Nickel (Ni)
 ### Cristaux de bunsenite 
 
 ## Description
-Oxydation du Nickel. de couleur vert pistache.
+Structures cristalines issues de l'oxydation du Nickel, de couleur vert pistache.
 
 ## Composition
-oxyde de nickel (NiO)
+Oxyde de nickel (NiO)
 
 ## Condition
-Presence de Nickel.
-Presence d'oxygene 
+Présence combinée de Nickel et d'oxygène 
 
 ## Illustration
 ![Bunsenite](/img/biome/bunsenite_nickel.jpg)

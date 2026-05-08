@@ -1,16 +1,15 @@
 # Rivière de lave
 
 ## Description
-Chenal d'écoulement actif transportant de la roche en fusion (magma extrusif). Contrairement au champ de lave stationnaire, la rivière est caractérisée par une vitesse de flux définie
+Chenal d'écoulement actif transportant de la roche en fusion (magma extrusif). Contrairement au champ de lave stationnaire, la rivière est caractérisée par une vitesse de flux définie.
 
 
-## Rivière de lave Corindon Caméléon Laiteux 
+## Rivière de lave de Corindon Caméléon Laiteux 
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
+Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement ce qui provoque un changement de couleur. Le jour, la couleur de la pierre est bleu-vert. La nuit, elle est de couleur pourpre.
 
-### Coposition
+### Composition
 Coridon Caméléon (Al2-x-yCrxVy)O3 
 
 ### Illustration

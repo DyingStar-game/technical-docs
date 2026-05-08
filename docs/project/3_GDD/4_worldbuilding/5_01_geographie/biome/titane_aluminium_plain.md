@@ -1,14 +1,13 @@
-# Plaine de titane d'aluminium
+# Plaine de Titane d'Aluminium
 
 ## Description
-Mélange de titane d'aluminium. 
+Plaine recouverte d'un mélange de Titane d'Aluminium. 
 
-## Coposition
+## Composition
 Titane + Aluminium (Ti, Al)
 
 ## Condition
-Titane 
-Aluminium
+Présence de Titane et d'Aluminium
 
 
 ## Illustration

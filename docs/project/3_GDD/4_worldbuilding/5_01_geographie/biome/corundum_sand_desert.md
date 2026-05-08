@@ -1,15 +1,14 @@
 # Désert sablonneux
 
 ## Description
-Région hyper-aride dominée par l'accumulation de grains de quartz ou de silicates. La topographie est régie par l'édification de dunes (barkhanes, seifs) naturelles
+Région hyper-aride dominée par l'accumulation de grains de quartz ou de silicates. La topographie est régie par l'édification de dunes (barkhanes, seifs) naturelles.
 
-## Désert Corindon Caméléon Laiteux
+## Désert de Corindon Caméléon Laiteux
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
+Le Corindon Caméléon contient des impuretés de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement, ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit, elle est de couleur pourpre.
 
-### Coposition
+### Composition
 Coridon Caméléon (Al2-x-yCrxVy)O3 
 
 ### Illustration

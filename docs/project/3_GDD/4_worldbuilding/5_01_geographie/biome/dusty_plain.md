@@ -1,13 +1,12 @@
-# plaine poussièreuse
+# Plaine poussièreuse
 
 ## Description
-Étendue de basse altitude couverte de particules très fine (limons, argiles). Sensible aux tempêtes de poussière
+Étendue de basse altitude couverte de particules très fine (limons, argiles) très sensibles aux vents et provoquant des tempêtes de poussière.
 
-## Plaine poussièreuse Corindon Caméléon Laiteux 
+## Plaine poussièreuse de Corindon Caméléon Laiteux 
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
+Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement, ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit, elle est de couleur pourpre.
 
 ### Coposition
 Coridon Caméléon (Al2-x-yCrxVy)O3 

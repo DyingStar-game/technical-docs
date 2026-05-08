@@ -1,16 +1,15 @@
-# volcanique actif
+# Volcanique actif
 
 ## Description
-Édifice géologique en phase d'éruption ou présentant une activité magmatique interne manifeste. Caractérisé par des émissions de téphras, de gaz et de chaleur
+Édifice géologique en phase d'éruption ou présentant une activité magmatique interne manifeste. Caractérisé par des émissions de téphras, de gaz et de chaleur.
 
 
-## volcan actif de Corindon Caméléon Laiteux 
+## Volcan actif de Corindon Caméléon Laiteux 
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
+Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement ce qui provoque un changement de couleur. Le jour, la couleur de la pierre est bleu-vert. La nuit, elle est de couleur pourpre.
 
-### Coposition
+### Composition
 Coridon Caméléon (Al2-x-yCrxVy)O3 
 
 ### Illustration

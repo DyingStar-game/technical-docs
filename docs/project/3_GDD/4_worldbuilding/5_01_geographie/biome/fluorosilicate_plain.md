@@ -3,7 +3,7 @@
 ## Description
 Mélange de Fluore et de calcium. 
 
-## Coposition
+## Composition
 Fluore + Calcium (CaCl2)
 
 ## Condition

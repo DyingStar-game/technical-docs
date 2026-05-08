@@ -1,9 +1,9 @@
 # Plaine de Nickel d'aluminium
 
 ## Description
-Mélange de nickel d'aluminium. 
+Plaines recouvertes de mélange de nickel d'aluminium. 
 
-## Coposition
+## Composition
 Nickel + Aluminium (Ni, Al)
 
 ## Condition

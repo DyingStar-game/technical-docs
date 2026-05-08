@@ -1,14 +1,13 @@
 # Plaine de cuprotitane
 
 ## Description
-Mélange de cuivre et de titane. 
+Étendue parsemées de cuprotitaine, un mélange de cuivre et de titane. 
 
-## Coposition
+## Composition
 Titane + Cuivre (Ti, Cu)
 
 ## Condition
-titane
-Cuivre
+Présence de titane et de cuivre
 
 
 ## Illustration

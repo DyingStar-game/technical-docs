@@ -1,9 +1,9 @@
-# Plaine de silicate
+# Plaine de Silicate
 
 ## Description
-Plaine de silicate.
+Plaine recouverte de silicate.
 
-## Coposition
+## Composition
 Silicate (Si)
 
 ## Condition
