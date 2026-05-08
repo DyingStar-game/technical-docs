@@ -1,9 +1,9 @@
 # Plaine de monel
 
 ## Description
-Mélange rare de nickel et de cuivre.  
+Plaines recouvertes d'un mélange rare de nickel et de cuivre.  
 
-## Coposition
+## Composition
 Nickel + Cuivre (Ni, Cu)
 
 ## Condition

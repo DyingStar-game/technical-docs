@@ -4,13 +4,12 @@
 Des plateaux élevés de roche extrêmement dure. Les parois sont tranchantes et pratiquement inaltérables par l'érosion classique.
 
 
-## Plateau Corindon Caméléon Laiteux 
+## Plateau de Corindon Caméléon Laiteux 
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
+Le Corindon Caméléon Laiteux contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement, ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit, elle est de couleur pourpre.
 
-### Coposition
+### Composition
 Coridon Caméléon (Al2-x-yCrxVy)O3 
 
 ### Illustration
@@ -20,9 +19,9 @@ Coridon Caméléon (Al2-x-yCrxVy)O3
 ## Plateau Corindon Fer Laiteux 
 
 ### Description
-Le Fer donne une couleur jaune/blanc à la pierre. 
+La présence de Fer donne une couleur jaune/blanc à la pierre.
 
-### Coposition
+### Composition
 Coridon Caméléon (Al2-xFex)O3 
 
 ### Illustration

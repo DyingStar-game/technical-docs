@@ -1,13 +1,13 @@
-# Plaine de soufre
+# Plaine de Soufre
 
 ## Description
-Plaine de soufre 
+Plaine recouverte de soufre, d'un aspect jaune très prononcé, très présent dans les zones de volcanisme.
 
-## Coposition
+## Composition
 Soufre (So)
 
 ## Condition
-Soufre
+Soufre, conditions volcaniques
 
 
 ## Illustration

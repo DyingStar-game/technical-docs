@@ -1,10 +1,10 @@
 # Plaine de Nitinol
 
 ## Description
-Le Nitinol est un alliage à mémoire de forme.
+Plaines constituées de Nitinol, est un alliage de Nickel et de Titane offrant une mémoire de forme et une hyper-élasticité.
 
 
-## Coposition
+## Composition
 Nickel + Titane (Ni, Cu)
 
 ## Condition

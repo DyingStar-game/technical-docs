@@ -1,14 +1,14 @@
-# Plaine de Nickel d'aluminium
+# Plaine de Silicate de Fluor
 
 ## Description
-Plaine de silicate se détériore par la presence du fluore. 
+Plaine recouverte de Silicate se détériorant par la présence du Fluor. 
 
-## Coposition
+## Composition
 Silicate (Si)
 
 ## Condition
-Silicate 
-Fluore
+Silicate et 
+Fluor
 
 
 ## Illustration

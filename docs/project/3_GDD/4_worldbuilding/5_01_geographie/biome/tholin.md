@@ -1,10 +1,9 @@
 # Tholin
 
 ## Description
-Les tholins sont des polymères pour decrire des composants organiques azotés qu'on trouve générlement sur les corps glacé.
-Elle sont synthetiser par decomposition de certain gazs azotés. 
+Les tholins sont des polymères pour décrire des composants organiques azotés qu'on trouve généralement sur des corps glacés. Elles sont synthétisées par décomposition de certains gazs azotés. 
 
-## Coposition
+## Composition
 ???
 
 
@@ -12,21 +11,17 @@ Elle sont synthetiser par decomposition de certain gazs azotés.
 
 ## Composants
 
-### Tholin nitrogénée 
+### Tholin nitrogéné
 
 ## Description
-Couleur Orange vif à brun. 
-Sous forme de poussière fine ou aérosol.
-Elle se forme dans une athmosphere riche en methane et d'Azote
+Présent sous forme de poussière fine ou aérosol, de couleur orange vif à brun. Il se forme dans une athmosphère riche en Méthane et en Azote.
 
 ## Composition
 Azote (N2) 95%
 Méthane (CH4) 5%
 
 ## Condition
-Presence athmosphere d'azote.
-Presence athmosphere de Méthane 
-Rayon UV (magnestosphère planete)
+Présence d'une atmosphère d'Azote et de Méthane soumise à des rayons UV (magnestosphère planète)
 
 ## Illustration
 ![tholin nitrogenee](/img/biome/tholin_nitrogenee.jpg)
@@ -34,20 +29,17 @@ Rayon UV (magnestosphère planete)
 
 ## Composants
 
-### Tholin oxygénée
+### Tholin oxygéné
 
 ## Description
-Couleur rouge sang à pourpre
-Croute solide
+Couleur rouge sang à pourpre, avec une croute solide.
 
 ## Composition
 Azote  (N2)
 Monoxyde de carbone (CO)
 
 ## Condition
-Presence athmosphere d'azote.
-Presence de glace  de Monoxyde de carbone
-Rayon cosmique galactiques
+Présence d'une athmosphere d'Azote et de Monoxyde de carbone, de glace et de rayons cosmiques galactiques
 
 ## Illustration
 ![tholin oxygenee](/img/biome/tholin_oxygenee.jpg)
@@ -55,19 +47,16 @@ Rayon cosmique galactiques
 
 ## Composants
 
-### Tholin Soufrée
+### Tholin Soufré
 
 ## Description
-Couleur jaune ou vert sale.
-Goudron visqueu
+Couleur jaune ou vert sale sous forme de goudron visqueux
 
 ## Composition
-Azote
-Soufre
+Azote et Soufre
 
 ## Condition
-Presence d'azote.
-Presence de dioxyde de souffre (SO2) ou sulfure d'hydrogène (H2S) 
+Présence d'Azote, de Dioxyde de Soufre (SO2) ou de Sulfure d'Hydrogène (H2S) 
 
 ## Illustration
 ![tholin soufree](/img/biome/tholin_soufree.jpg)

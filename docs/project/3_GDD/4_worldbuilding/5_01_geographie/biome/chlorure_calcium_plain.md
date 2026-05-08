@@ -1,11 +1,9 @@
-# Plaine de Chlorure calcium
+# Plaine de Chlorure de Calcium
 
 ## Description
-Mélange de chlorure de calcium dissous dans l'eau. 
-Couleur bronze ou brun doré
-Liquide épais et sirupeux
+Mélange de chlorure de calcium dissout dans l'eau de couleur bronze ou d'un brun doré, sous forme de liquide épais et sirupeux.
 
-## Coposition
+## Composition
 Fluore + Calcium (CaCl2, H2O)
 
 ## Condition

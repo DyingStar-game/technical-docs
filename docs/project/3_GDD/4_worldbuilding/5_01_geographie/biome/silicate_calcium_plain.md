@@ -1,14 +1,13 @@
-# Plaine de Silicate de calcium
+# Plaine de Silicate de Calcium
 
 ## Description
-Mélange de silicate et de calcium. 
+Désert recouvert d'un mélange de silicate et de calcium.
 
-## Coposition
-Silicate + Calcium (Ni, Ca)
+## Composition
+Silicate de Calcium (Ca2SiO4)
 
 ## Condition
-Presence de Silicate 
-Presence de Calcium
+Présence de Silicate de Calcium
 
 
 ## Illustration
