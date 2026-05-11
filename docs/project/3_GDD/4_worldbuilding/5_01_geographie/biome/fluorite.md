@@ -2,7 +2,7 @@
 
 ## Description
 La fluorite est un mineraux halogénures composée de fluorure de cacium. 
-Il forme des structures cristalline est cubique. 
+Il forme des structures cristalline et cubique. 
 
 
 ## Coposition
