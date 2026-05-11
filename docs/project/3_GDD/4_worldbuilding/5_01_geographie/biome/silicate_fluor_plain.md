@@ -1,4 +1,4 @@
-# Plaine de Nickel d'aluminium
+# Plaine de Silicate fluore
 
 ## Description
 Plaine de silicate se détériore par la presence du fluore. 
