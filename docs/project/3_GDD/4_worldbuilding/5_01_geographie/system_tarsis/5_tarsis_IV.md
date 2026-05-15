@@ -175,7 +175,7 @@ Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui re
 | champ | valeur | unité |
 |----------|----------|----------|
 | Name | Xarok | |
-| Type | Lune Chondrite Carbonée Hydratée | |
+| Type | Lune silicatée Hydratée | |
 | Masse | 0.000601 | M🜨 |
 | Rayon | 700 | Km |
 | Gravité | 0.4888982231 | m/s |
