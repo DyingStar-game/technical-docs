@@ -11,4 +11,4 @@ Presence de dioxyde de carbone
 température inferieur à 195,15 sous 1g
 
 ## Illustration
-![plain de glace carbonique](/img/biome/glace_carbonique.png)
+![plain de glace carbonique](/img/biome/glace_carbonique_sol.png)
