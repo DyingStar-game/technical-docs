@@ -1,4 +1,4 @@
-# Talc plain folié
+# Désert de roche de Talc
 
 ## Description
 Le paysage de talc est blanchatre très claire. Constitué de couche de phyllosilicate. 
