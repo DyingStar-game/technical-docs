@@ -13,4 +13,4 @@ Oxygene (O)
 Magnésium (Mg)
 
 ## Illustration
-![Sol d'olivine](/img/biome/olivine.png)
+![Sol d'olivine](/img/biome/olivine_sol.png)
