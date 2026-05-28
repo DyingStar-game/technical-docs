@@ -4,7 +4,7 @@
 Des surfaces de sable peut se former.
 Elles se situent dans les failles ou au pied des escarpements.
 Elles sont composées de chrysotile (amiante) de couleur gris vert très pâle.
-Autement toxique elle peut
+Autement toxiques et volatiles elles sont très abrasive pour les equipements.
 Sur un astre avec athosphere il peut se former de grand desert.
 Su un astre sans athmosphere ils se concentre proche de leurs formations.
 
