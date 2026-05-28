@@ -31,7 +31,7 @@ Presence de Nickel
 Presence de Aluminium
 
 ## Illustration
-![Aluminium Nickel](/img/biome/aluminium_nickel_equilibre.jpg)
+![Aluminium Nickel](/img/biome/nickel_aluminium_equimolaire.png)
 
 ### Plaine de nickel 3 d'aluminium
 
@@ -60,14 +60,14 @@ Il forme des rochers tres fragile et chaotique et acidenté.
  
 
 ## Composition
-Nickel 3 + Aluminium (Ni3Al)
+Nickel + Aluminium 3 (NiAl3)
 
 ## Condition
 Presence de Nickel
 Presence de Aluminium
 
 ## Illustration
-![Nickel Aluminium3](/img/biome/nickel3_aluminium_real.png)
+![Nickel Aluminium3](/img/biome/nickel_aluminium3.png)
 
 
 ### Plaine de nickel et d'aluminium
