@@ -36,8 +36,7 @@ Oxygène (O)
 Eau (H2O)
 
 #### Illustration
-![Cronstedidite](/img/biome/cronstedtite.png)
-![Cronstedidite](/img/biome/cronstedtite_2.png)
+![cronstedtite](/img/biome/cronstedtite.png)
 
 
 ### Epsomite 
