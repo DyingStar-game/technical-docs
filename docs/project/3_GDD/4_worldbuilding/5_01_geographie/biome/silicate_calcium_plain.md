@@ -4,7 +4,7 @@
 Mélange de silicate et de calcium. 
 
 ## Coposition
-Silicate + Calcium (Ni, Ca)
+Silicate + Calcium (Si, Ca)
 
 ## Condition
 Presence de Silicate 

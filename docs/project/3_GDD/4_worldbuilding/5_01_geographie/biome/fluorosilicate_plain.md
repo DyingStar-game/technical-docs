@@ -4,11 +4,12 @@
 Mélange de Fluore et de calcium. 
 
 ## Coposition
-Fluore + Calcium (CaCl2)
+Fluore + Calcium + Silicium (CaF6Si)
 
 ## Condition
-Chlore (Cl)
+Fluore (F)
 Calcium (Ca)
+Silicium (Si)
 
 
 ## Illustration
