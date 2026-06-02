@@ -5,7 +5,7 @@ Le Nitinol est un alliage à mémoire de forme.
 
 
 ## Coposition
-Nickel + Titane (Ni, Cu)
+Nickel + Titane (Ni, Ti)
 
 ## Condition
 Nickel : 50% 

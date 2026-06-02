@@ -6,7 +6,7 @@ Couleur bronze ou brun doré
 Liquide épais et sirupeux
 
 ## Coposition
-Fluore + Calcium (CaCl2, H2O)
+Chlorure + Calcium (CaCl2, H2O)
 
 ## Condition
 chlorure (Ca)
