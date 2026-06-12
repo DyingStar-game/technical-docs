@@ -153,6 +153,14 @@ receives the scene **without** its placement and spawns the object at the world 
 `(0,0,0)`. Keep `scenename`, `position` and `parent_id` within the **same** `distance`.
 :::
 
+:::danger[Always declare zone 6 — the deletion channel]
+Object deletion is sent on **channel 6**. Every prop type's def **must** include a `zone 6`
+entry (it carries `scenename`). Without it, deleting the object fails with
+`Channel 6 not defined for object <uuid>`: it is removed server-side and from GORC, but the
+**delete never reaches the clients**, so it stays on screen (a "ghost"). When you add a new
+prop type, copy the `zone 6` block from `box_def.json` / `miningrock_def.json`.
+:::
+
 ## Spawning a prop from the game server
 
 If the game server creates a prop at runtime (not through the normal spawn flow), registering
