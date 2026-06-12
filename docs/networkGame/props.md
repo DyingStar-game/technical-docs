@@ -96,7 +96,56 @@ Be careful, the int value sent by the server is a float when it arrives, so you 
 
 ## Delete prop
 
-To delete a prop, the function *_exit_tree* sends the signal to the client, and the client deletes the scene; it's automatic!
+Deletion is **server-authoritative**: a prop is removed by freeing its node **on the Godot
+server** — never directly by a client. When the node leaves the tree, its `_exit_tree` emits
+`hs_server_prop_delete` and the rest is automatic:
+
+1. the Godot server sends a `props/delete_object` message to Horizon,
+2. Horizon removes the object from GORC, so every nearby client gets a zone-exit and despawns
+   the scene (the prop disappears for everyone),
+3. Horizon forwards the deletion to the **persistence** service, which removes the row from the
+   database — so the prop does **not** respawn after a restart.
+
+### Triggering a deletion (server side)
+
+Free the prop node on the server — e.g. the mining depot consuming a deposited rock:
+
+```
+func _collect_rock(rock: Node) -> void:
+	rock.queue_free()  # _exit_tree -> hs_server_prop_delete -> GORC + database
+```
+
+### Requesting a deletion from a client
+
+A client never deletes a prop itself: it sends an action (the same channel as any other action,
+see [Player network management](./player.md)); the server validates it and frees the node.
+
+```
+# client
+client_send_action_to_server({"action": "delete_prop", "type": type_name, "uuid": uuid})
+
+# server, in server_action_received(data)
+"delete_prop":
+	var prop := _find_deletable_prop(str(data.get("uuid", "")))
+	if prop != null:
+		prop.queue_free()  # held locally -> _exit_tree replicates the delete
+	else:
+		# Not held as a node by THIS server (e.g. loaded from the database elsewhere): send the
+		# delete message to Horizon directly so it still leaves GORC and the database.
+		_on_prop_delete(str(data.get("uuid", "")), str(data.get("type", "")))
+```
+
+:::note[The delete message vs the trigger]
+What actually deletes the object is the `props/delete_object` message sent to Horizon. Freeing
+the node via `_exit_tree` is just the usual trigger; a server can also send that message directly
+for a prop it does not currently hold as a node.
+:::
+
+:::warning[Database deletion needs the bridge subscription]
+For the deletion to reach the database, the `ds_bridge` persistence service must be subscribed to
+`plugin:genericprops:delete_object` in `plugins.toml`. The Docker config (`.docker/plugins.toml`)
+already is; a bare-metal `plugins.toml` may not be.
+:::
 
 ## Replication definition files
 
