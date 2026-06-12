@@ -131,44 +131,12 @@ the def and **rebuild Horizon**.
 
 ## Dashboard — optional in-cab screen
 
-To show live data (speed, RPM, load…) on a screen in the cab, use Godot's "GUI in 3D" pattern: a
-2D UI is rendered through a `SubViewport` and displayed on a mesh via a `ViewportTexture`. The
-mining depot's screen (`mining_depot.tscn`) is the reference.
+Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D-screen pattern —
+see **[GUI on a 3D screen](./in-3d-screen.md)** for the setup (SubViewport, ViewportTexture, and
+the Local-to-Scene / viewport-path gotchas).
 
-The pieces:
-
-- a **UI scene** (a `Control` / `Panel` with your `Label`s) with `vehicle_dashboard.gd`
-  (`VehicleDashboard`) on its root — it finds its owning `Vehicle` in the tree and shows its data
-  each frame (reusable; the vehicle knows nothing about it),
-- a **`SubViewport`** holding that UI scene,
-- a **screen `MeshInstance3D`** whose material displays the SubViewport via a `ViewportTexture`,
-- `scenes/interactables/gui_3d.tscn` — the reusable helper that forwards mouse/touch to the
-  viewport (only needed once the screen is interactive).
-
-Setup:
-
-1. Build the UI scene (Labels named `speed`, `RPM`, `Load`, `Overloaded`, `Elec_THerm`,
-   `Transmission`, or adjust the names in `vehicle_dashboard.gd`) and put `vehicle_dashboard.gd`
-   on its root.
-2. Under the vehicle, add a `Gui3D` (instance of `gui_3d.tscn`) with a child `SubViewport`
-   containing your UI scene, plus the screen mesh.
-3. `SubViewport` → **Update Mode = Always** (otherwise the screen freezes).
-4. Screen mesh → `StandardMaterial3D`:
-   - **Resource → Local to Scene = On** (required, see below),
-   - **Albedo → Texture → New ViewportTexture → Viewport = this vehicle's `Gui3D/SubViewport`**,
-   - **Shading = Unshaded** (or use Emission) so it stays readable.
-5. On the `Gui3D`: `node_viewport` = the SubViewport, `node_quad` = the screen mesh, `node_area` =
-   the touch `Area3D` (for interactivity).
-
-:::warning[The screen material must be "Local to Scene"]
-A `ViewportTexture` resolves its viewport per scene instance, so the material holding it (and any
-resource containing it) must have **Local to Scene** enabled — otherwise Godot refuses to create
-the ViewportTexture ("…not local to the scene").
-:::
-
-:::danger[Point the ViewportTexture at THIS vehicle's SubViewport]
-If you copy a screen from another scene, its `ViewportTexture` keeps the **old** `viewport_path`
-(e.g. `miningdepot/Gui3D/SubViewport`). A path that does not exist in this scene shows a blank
-screen and throws `common_parent is null` **when you save**. Re-pick the Viewport so it points to
-this vehicle's own `SubViewport`.
-:::
+The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
+(`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
+the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
+is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
+`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission` (or adjust them in the script).
