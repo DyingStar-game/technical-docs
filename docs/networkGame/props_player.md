@@ -7,9 +7,12 @@ sidebar_position: 2
 
 The player and every generic prop replicate their state to nearby players through the
 **same** mechanism: the game server sends property updates to Horizon, which keeps an
-authoritative copy of each object and forwards the changes to the clients in range. The
-player is simply an object of type `player` — there is no longer a player-specific update
-path.
+authoritative copy of each object and forwards the changes to the clients in range.
+
+The only thing **specific to the player** is that it is the entity *your* client controls —
+it sends inputs/actions up to the server. Everything else (how its state reaches the other
+clients) works **exactly like a prop**. So this page covers the player's specifics first,
+then the generic prop mechanism, which the player simply reuses.
 
 Which properties are actually replicated (and how far / how often) is **not** decided in
 your GDScript: it is declared in a per-type **definition file**. See
@@ -17,7 +20,12 @@ your GDScript: it is declared in a per-type **definition file**. See
 it first, because a property that is not declared there will silently never reach the
 clients.
 
-## Player management
+## The player
+
+The player is the only object the client **controls**, so the player-specific part is the
+input/action channel: the client sends actions up, the server applies them and sends results
+back down. How the player's resulting state is then replicated to *other* clients is **not**
+special — see [Props](#props) below; the player simply has its own `player_def.json`.
 
 ### Update properties
 
@@ -79,7 +87,11 @@ health = data["health"]
 ```
 
 
-## Generic props management
+## Props
+
+Everything below describes generic props — and it applies to the **player too** for the
+replication of its state to other clients (the player is just an object of type `player`, with
+its own `player_def.json`).
 
 ### What is a generic prop?
 
