@@ -1,106 +1,28 @@
 ---
-title: Props and player network management
-sidebar_position: 2
+title: Props network management
+sidebar_position: 3
 ---
 
-# Props and player network management
+# Props network management
 
-The player and every generic prop replicate their state to nearby players through the
-**same** mechanism: the game server sends property updates to Horizon, which keeps an
-authoritative copy of each object and forwards the changes to the clients in range.
+Generic props replicate their state through the same mechanism as the player: the game server
+sends property updates to Horizon, which keeps an authoritative copy and forwards them to the
+clients in range. This page also covers the **player's replication** to other clients — the
+player is just an object of type `player` (with its own `player_def.json`); only its
+input/action channel is specific (see [Player network management](./player.md)).
 
-The only thing **specific to the player** is that it is the entity *your* client controls —
-it sends inputs/actions up to the server. Everything else (how its state reaches the other
-clients) works **exactly like a prop**. So this page covers the player's specifics first,
-then the generic prop mechanism, which the player simply reuses.
+Which properties are actually replicated (and how far / how often) is **not** decided in your
+GDScript: it is declared in a per-type **definition file**. See
+[Replication definition files](#replication-definition-files) below — read it first, because a
+property that is not declared there will silently never reach the clients.
 
-Which properties are actually replicated (and how far / how often) is **not** decided in
-your GDScript: it is declared in a per-type **definition file**. See
-[Replication definition files](#replication-definition-files) below — read
-it first, because a property that is not declared there will silently never reach the
-clients.
-
-## The player
-
-The player is the only object the client **controls**, so the player-specific part is the
-input/action channel: the client sends actions up, the server applies them and sends results
-back down. How the player's resulting state is then replicated to *other* clients is **not**
-special — see [Props](#props) below; the player simply has its own `player_def.json`.
-
-### Update properties
-
-
-#### Client sends update to server
-
-To update properties or actions from the client to the Godot server, you need to call the function *client_send_action_to_server*.
-
-This is an example for a jump request:
-
-```
-client_send_action_to_server({"action": "jump"})
-```
-
-You can add more than one property in the argument.
-
-#### Server receive update
-
-The properties / actions received on the Godot server (can be sent by the client or by a Horizon service), these properties arrive in the function *server_action_received*. You need to manage the key => values.
-
-For example, for the *jump* action received, we have:
-
-```
-func server_action_received(data: Dictionary) -> void:
-match data["action"]:
-"jump":
-is_jumping = true
-```
-
-
-#### Server sends update to client
-
-The server can send updated properties to the client, for example, the health.
-
-To do that, call the function *server_send_properties_to_client*.
-
-For example: 
-
-```
-server_send_properties_to_client({"health": 80})
-```
-
-:::warning[Declare the property first]
-`health` will only reach the clients if it is listed in the player definition file
-(`player_def.json`). A property that is not whitelisted there is dropped silently. See
-[Replication definition files](#replication-definition-files).
-:::
-
-#### Client receives update
-
-The client receives all properties modified in the function *client_channel_data_update*, such as the new position and health.
-
-For example: 
-
-```
-func client_channel_data_update(data: Dictionary) -> void:
-if data.has("health"):
-health = data["health"]
-```
-
-
-## Props
-
-Everything below describes generic props — and it applies to the **player too** for the
-replication of its state to other clients (the player is just an object of type `player`, with
-its own `player_def.json`).
-
-### What is a generic prop?
+## What is a generic prop?
 
 A generic prop is any scene spawned in the game, except for the player scene (*normal_player.tscn*).
 
 It can be a planet, a box, a building, a car...
 
-
-### Writing a generic prop
+## Writing a generic prop
 
 The recommended way is to make your prop **extend `GenericProp`**
 (`scenes/globals/generic_prop.gd`). It already provides everything a networked, carriable
@@ -129,7 +51,7 @@ Build the scene (a body + collision shape + mesh), attach the script, and declar
 `<type>_def.json` (see [Replication definition files](#replication-definition-files)). Done —
 no boilerplate to copy.
 
-#### Complex props
+### Complex props
 
 A prop with special behaviour may stay a standalone script (extending whatever body it needs)
 and implement the contract itself, but it should still call `PropNet.server_tick(self)` from
@@ -137,11 +59,9 @@ its `_physics_process` so replication and carry-follow stay consistent. Example:
 rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
 piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
 
+## Update properties
 
-### Update properties
-
-
-#### Server sends update to client
+### Server sends update to client
 
 The server can send updated properties to the client, for example, a LED state.
 
@@ -162,8 +82,7 @@ has_parent
 In the argument where we have *led*, we can put many properties.
 All other arguments are the same.
 
-
-#### Client receives update
+### Client receives update
 
 The client receives the properties updated by the server in the function *client_channel_data_update*.
 
@@ -175,11 +94,9 @@ You can update or do what you want with the value.
 Be careful, the int value sent by the server is a float when it arrives, so you need to convert it to int before use.
 :::
 
-
-### Delete prop
+## Delete prop
 
 To delete a prop, the function *_exit_tree* sends the signal to the client, and the client deletes the scene; it's automatic!
-
 
 ## Replication definition files
 
@@ -236,7 +153,6 @@ receives the scene **without** its placement and spawns the object at the world 
 `(0,0,0)`. Keep `scenename`, `position` and `parent_id` within the **same** `distance`.
 :::
 
-
 ## Spawning a prop from the game server
 
 If the game server creates a prop at runtime (not through the normal spawn flow), registering
@@ -250,4 +166,3 @@ helper does both:
 ```
 NetworkOrchestrator.spawn_prop_authoritative(data)  # data must hold "uuid" and "type"
 ```
-
