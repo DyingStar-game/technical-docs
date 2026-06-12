@@ -88,87 +88,42 @@ A generic prop is any scene spawned in the game, except for the player scene (*n
 It can be a planet, a box, a building, a car...
 
 
-### Structure of the gd file
+### Writing a generic prop
 
-For each generic prop scene, it **MUST HAVE A GD SCRIPT ATTACHED**.
+The recommended way is to make your prop **extend `GenericProp`**
+(`scenes/globals/generic_prop.gd`). It already provides everything a networked, carriable
+prop needs:
 
-This GD script must have at a minimum the following data inside (you can copy the content and paste it):
+- the replication signals (`hs_server_prop_update` / `hs_server_prop_delete`),
+- the `uuid` / `type_name` / position state,
+- server -> client replication every physics frame via `PropNet.server_tick(self)` —
+  including **following the carrier** while the prop is held,
+- the `"carriable"` group and the carry contract (`interact()` / `set_carried()`, which also
+  disables the prop's collision while it is carried),
+- reparenting and delete-on-exit.
+
+So a carriable prop is just:
 
 ```
-# TODO Change the class_name
 class_name Box50cm
-
-# TODO Update to the right node
-extends RigidBody3D
-
-signal hs_server_prop_update
-signal hs_server_prop_delete
-
-@export var uuid: String = ""
-
-# TODO change the type
-var type_name = "box"
-
-var spawn_position: Vector3 = Vector3.ZERO
-var spawn_rotation: Vector3 = Vector3.UP
-
-var server_last_position = Vector3.ZERO
-var server_last_rotation = Vector3.ZERO
-
-var has_parent: bool = false
+extends GenericProp
 
 func _ready() -> void:
-	position = spawn_position
-
-func _physics_process(_delta: float) -> void:
-	if GameOrchestrator.is_server():
-    # this part send the position or rotation if changed since last frame
-		var my_position = snapped(position, Vector3(0.001, 0.001, 0.001))
-		var my_rotation = snapped(rotation, Vector3(0.0001, 0.0001, 0.0001))
-		if server_last_position != my_position or server_last_rotation != my_rotation:
-			emit_signal(
-				"hs_server_prop_update",
-				uuid,
-				{
-					"position": my_position,
-					"rotation": my_rotation,
-				},
-				type_name,
-				has_parent
-			)
-			server_last_position = my_position
-			server_last_rotation = my_rotation
-
-func _exit_tree() -> void:
-	if GameOrchestrator.is_server():
-    # send the information to the client the server delete this scene
-		emit_signal(
-			"hs_server_prop_delete",
-			uuid,
-			type_name
-		)
-
-# manage the parent changes
-func client_parent_change(parent: Node) -> void:
-	reparent(parent)
-	has_parent = true
-
-# receive the update from server, in this example, we manage position and rotation properties
-func client_channel_data_update(data: Dictionary) -> void:
-	if data.has("position"):
-		position = Vector3(
-			data["position"]["x"],
-			data["position"]["y"],
-			data["position"]["z"]
-		)
-	if data.has("rotation"):
-		rotation = Vector3(
-			data["rotation"]["x"],
-			data["rotation"]["y"],
-			data["rotation"]["z"]
-		)
-
+	type_name = "box"
+	super()
 ```
+
+Build the scene (a body + collision shape + mesh), attach the script, and declare a
+`<type>_def.json` (see [Replication definition files](#replication-definition-files)). Done —
+no boilerplate to copy.
+
+#### Complex props
+
+A prop with special behaviour may stay a standalone script (extending whatever body it needs)
+and implement the contract itself, but it should still call `PropNet.server_tick(self)` from
+its `_physics_process` so replication and carry-follow stay consistent. Example: the mining
+rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
+piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
 
 
 ### Update properties
