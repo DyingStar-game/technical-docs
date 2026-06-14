@@ -73,11 +73,13 @@ Truck (VehicleBody3D, vehicle.gd)
 You don't wire anything: the `Vehicle` discovers its seats automatically, and each seat
 auto-detects the player (its collision mask is set in code). Standing in a box shows
 `[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; the driver gets free mouse look while
-driving and exits with **Y**.
+driving and exits with **Y**. A taken driver seat shows `Driver seat taken` instead, the prompt is
+hidden while you are seated, and on exit you are dropped beside the seat you used.
 
 :::tip[Seats are server-authoritative]
-A seat refuses a second occupant. The driver/passenger logic lives in the **networked** path, so
-test seats in the game (F5), not the standalone bench.
+A seat refuses a second occupant, and if a seated player disconnects the server frees their seat
+automatically. The driver/passenger logic lives in the **networked** path, so test seats in the
+game (F5), not the standalone bench.
 :::
 
 ## 4. Configure the powertrain
@@ -111,8 +113,9 @@ A vehicle only replicates if the network layer knows it:
 
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
-   `scenename`, `parent_id`, `pilot_uuid`, `steering`). If you reuse the `vehicle` type, there is
-   nothing to add. A brand-new type needs its own `<type>_def.json` — see
+   `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`,
+   `mass`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its
+   own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
 :::warning[Rebuild Horizon after touching a def]
@@ -129,6 +132,35 @@ the def and **rebuild Horizon**.
   driver or passenger, drive, **Y** to leave. This is the only place seats and passengers are
   faithful.
 
+## Cargo bed
+
+The blockout body generates a **cargo bay** zone (tune it via the **Cargo** export group:
+`cargo_bay_size`, `cargo_bay_offset`, `max_payload`, `overload_immobilize`). Any loose prop (a
+crate, a mined rock…) that comes to rest inside the bay is **loaded**: the server freezes it,
+parents it to the vehicle so it rides along, and folds its mass into the load. The bay detects
+cargo through its mask only and is kept off every collision layer, so it never blocks the player's
+interact ray.
+
+- **Load** = bed cargo **+ seated players**. Over `max_payload` the HUD shows `OVERLOADED`; past
+  `max_payload × overload_immobilize` the vehicle won't move.
+- **Retrieve**: aim at a loaded item and press **E** (`[E] Carry`) — it is removed from the load
+  and goes into your hands, like any [carriable](./props.md#carriables-carry--drop).
+- Another **vehicle** is never loaded as cargo (so you can't swallow a truck with a truck).
+
+:::warning[Dropping a bed-sourced item — known issue]
+An item **just retrieved from a bed** can stay visually in the carrier's hands on the client after
+it is dropped (the server drops it correctly — it is authoritative). This is a Horizon/GORC
+replication quirk on the *bed → retrieve → drop* cycle, to fix server-side. Work around it by
+re-aiming/re-taking the item or moving away.
+:::
+
+## Hand brake
+
+The driver toggles a parking **hand brake** with a **long press of Space under 3 km/h** (released
+by throttle). It holds the vehicle still on flat ground and slopes, stays dynamic so a real impact
+can still push it, and **stays engaged after the driver leaves**. It shows on the HUD and on the
+dashboard (the `hanbreak` label below).
+
 ## Dashboard — optional in-cab screen
 
 Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D-screen pattern —
@@ -139,4 +171,5 @@ The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
 (`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
 the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
 is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission` (or adjust them in the script).
+`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak` (or adjust them in the
+script).

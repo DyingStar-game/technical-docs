@@ -32,8 +32,8 @@ prop needs:
 - the `uuid` / `type_name` / position state,
 - server -> client replication every physics frame via `PropNet.server_tick(self)` —
   including **following the carrier** while the prop is held,
-- the `"carriable"` group and the carry contract (`interact()` / `set_carried()`, which also
-  disables the prop's collision while it is carried),
+- the `"carriable"` group and the carry contract (`interact()` / `set_carried()` — see
+  [Carriables](#carriables-carry--drop)),
 - reparenting and delete-on-exit.
 
 So a carriable prop is just:
@@ -58,6 +58,32 @@ and implement the contract itself, but it should still call `PropNet.server_tick
 its `_physics_process` so replication and carry-follow stay consistent. Example: the mining
 rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
 piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
+
+## Carriables (carry / drop)
+
+Any prop in the `"carriable"` group can be picked up. The flow is **server-authoritative**: the
+client only aims, the server decides.
+
+- **Aiming** — the client casts its interact ray (areas only) and sends the `uuid` it looks at.
+  Hands free, it shows `[E] Carry` when the target's `interact()` allows it; while holding
+  something it shows `[E] Drop`.
+- **Pick up** (server) — the prop is frozen, parented to the player and marked carried
+  (`set_carried(true)`). `PropNet.server_tick` then re-sends its `position` + `parent_id` every
+  frame so it follows the carrier (and Horizon keeps its GORC global fresh).
+- **Drop** (server) — the prop is un-frozen, reparented back to the world, and
+  `set_carried(false)`.
+
+`interact(interactor) -> bool` is the gate (default: not already carried; the mining rock also
+requires a fully-fractured piece). `set_carried(bool)` now only flips the flag — a carried prop
+**keeps its collision** (it stays solid to the world and to other players); the carrier instead
+adds an `add_collision_exception_with()` so it is not blocked by what it holds (removed on drop).
+
+:::note[parent_id is replicated, and only re-applied on change]
+A carriable rides its carrier purely through `parent_id` (the player's, or a vehicle's bed — see
+[Vehicles → Cargo bed](./vehicles.md#cargo-bed)). The client reparents **only when `parent_id`
+actually changes** (it rides the fast zone-0 channel), and the server re-sends it for a few frames
+on a change so a single lost message can't strand the prop under its old parent.
+:::
 
 ## Update properties
 
