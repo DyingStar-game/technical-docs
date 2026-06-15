@@ -73,17 +73,36 @@ ChatNetwork.set_id_provider(DirectChat.ChannelE.GROUP, func() -> String:
 `ChatNetwork` then resolves `chat/group/<id>`, subscribes to it, and `DirectChat` shows the
 channel as selectable — no other change needed.
 
-## Authentication (roadmap)
+## Authentication
 
-In local dev the broker runs **anonymous**. In production it authenticates with the **same JWT
-the player already uses to join the game** (Discord → Keycloak), so it is transparent — no
-second login. The client passes that token (`network_agent.token`, from the `--token=` launch
-argument) as the MQTT password; the broker validates it.
+The chart has two auth modes (`mosquitto.auth.mode`):
 
-The planned setup is **`mosquitto-go-auth` validating the JWT locally** against Keycloak's
-public key (JWKS), with **topic ACLs derived from the JWT claims** (e.g. you may only
-subscribe to `chat/group/<id>` if your token carries that group). Those claims are the same
-"sockets" the channel id-providers fill on the client side.
+- **anonymous** — no auth. Default for local dev (the official `eclipse-mosquitto` image).
+- **jwt** — clients authenticate with the **same JWT they already use to join the game**
+  (Discord → Keycloak), so it is transparent: no second login. Used for preprod/prod.
+
+In jwt mode the broker runs `mosquitto-go-auth` (remote backend) and delegates every
+user/ACL decision to the small **chat-auth** adapter (`services/chatAuth`). The adapter
+validates the token's **RS256 signature against Keycloak's JWKS** and checks the issuer —
+the broker never holds the signing key, and key rotation is handled automatically.
+
+Wiring details that matter:
+
+- The client sends the token as the **MQTT username** (not the password); go-auth forwards
+  it to the adapter as `Authorization: Bearer`. The player token is `network_agent.token`
+  (from the `--token=` launch argument); `ChatNetwork` sets it as the username.
+- **ACL** lives in the adapter. It is permissive today (any authenticated player may use
+  `chat/#`) and will tighten **per JWT claims** later (e.g. allow `chat/group/<id>` only if
+  the token carries that group) — the same "sockets" the channel id-providers fill on the
+  client side.
+
+### Testing it locally
+
+The broker validation was verified end-to-end against the dev Keycloak realm (`dyingstar`):
+deploy the chart with `--set mosquitto.auth.mode=jwt`, mint a token from the local Keycloak
+(a service-account client via the admin API), then connect with `mosquitto_pub/sub` using the
+token as username. Anonymous and invalid tokens are refused; a valid token exchanges messages
+on `chat/#`; non-chat topics are denied by the ACL.
 
 ## Infrastructure
 
