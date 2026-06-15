@@ -179,3 +179,28 @@ the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, tra
 is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
 `RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light` (or adjust them in
 the script).
+
+## Rear-view camera & mirrors
+
+A live camera feed on an in-cab screen — a **drop-in** (`scenes/vehicles/rear_camera.tscn`),
+reusable and **client-only** (no render on the headless server). Use it for a reversing camera and
+for side / rear-view mirrors (the GDD allows "mirrors **or** relayed cameras"). Godot has no cheap
+real reflective surface, so a mirror is just a camera too.
+
+**Setup** (no code):
+
+1. Instance `rear_camera.tscn` under the vehicle.
+2. `RearCamera` **is** a Camera3D — place and frame it in the editor (gizmo / **Preview**), at the
+   back looking behind (or at a side mirror, looking back/outward). It never renders to the player's
+   view; a twin camera inside its `SubViewport` (sharing the main `world_3d`) copies its pose + fov
+   and renders the feed.
+3. Add a screen surface — a `MeshInstance3D` with a **`QuadMesh`** (clean `0..1` UVs) — in the cab
+   and set it as the `RearCamera`'s **`screen`**. The feed material is applied at runtime and is
+   **double-sided** (so a wrong-facing quad is never blank).
+4. **`mirror`**: off = a reversing camera (true view); on = a mirror (reverses left/right).
+5. **`resolution`**: match its aspect to the screen quad to avoid stretching.
+
+:::warning[Performance]
+Each `RearCamera` renders the whole world again every frame. A rear cam + two mirrors = three extra
+renders. Keep resolutions small; consider disabling the feeds when no one is driving.
+:::
