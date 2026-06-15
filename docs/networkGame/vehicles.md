@@ -114,7 +114,7 @@ A vehicle only replicates if the network layer knows it:
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
    `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`,
-   `mass`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its
+   `mass`, `headlights`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its
    own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
@@ -146,13 +146,26 @@ interact ray.
 - **Retrieve**: aim at a loaded item and press **E** (`[E] Carry`) — it is removed from the load
   and goes into your hands, like any [carriable](./props.md#carriables-carry--drop).
 - Another **vehicle** is never loaded as cargo (so you can't swallow a truck with a truck).
+- **Rollover**: if the vehicle tips past `cargo_unlock_tilt_deg` (default 65°), the bed unlocks and
+  spills its whole load (GDD: the lock releases on a certain inclination).
 
 ## Hand brake
 
 The driver toggles a parking **hand brake** with a **long press of Space under 3 km/h** (released
-by throttle). It holds the vehicle still on flat ground and slopes, stays dynamic so a real impact
-can still push it, and **stays engaged after the driver leaves**. It shows on the HUD and on the
+by throttle). It holds the vehicle still on flat ground and slopes — once stopped it is **frozen**
+so it can't creep — and **stays engaged after the driver leaves**. Shown on the HUD and on the
 dashboard (the `hanbreak` label below).
+
+## Head lights
+
+Head lights are a **drop-in** like seats: add any **`Light3D`** (e.g. a `SpotLight3D` at the front
+facing the vehicle's local `-Z`) to the group **`vehicle_light`** anywhere under the scene — no
+code. The driver toggles them with **L**; the state is server-authoritative and replicated, so
+every client (and other players) sees them. Shown on the HUD (`[L] lights`) and on the dashboard
+(the `Light` label). The truck ships with two front SpotLights as the example.
+
+`L` is **contextual**: it drives the **head lights** while seated as driver, and the player's
+**flashlight** on foot — the two never fire at once.
 
 ## Dashboard — optional in-cab screen
 
@@ -164,5 +177,5 @@ The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
 (`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
 the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
 is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak` (or adjust them in the
-script).
+`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light` (or adjust them in
+the script).
