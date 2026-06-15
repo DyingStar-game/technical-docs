@@ -147,13 +147,6 @@ interact ray.
   and goes into your hands, like any [carriable](./props.md#carriables-carry--drop).
 - Another **vehicle** is never loaded as cargo (so you can't swallow a truck with a truck).
 
-:::warning[Dropping a bed-sourced item — known issue]
-An item **just retrieved from a bed** can stay visually in the carrier's hands on the client after
-it is dropped (the server drops it correctly — it is authoritative). This is a Horizon/GORC
-replication quirk on the *bed → retrieve → drop* cycle, to fix server-side. Work around it by
-re-aiming/re-taking the item or moving away.
-:::
-
 ## Hand brake
 
 The driver toggles a parking **hand brake** with a **long press of Space under 3 km/h** (released

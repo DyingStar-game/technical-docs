@@ -249,3 +249,32 @@ helper does both:
 ```
 NetworkOrchestrator.spawn_prop_authoritative(data)  # data must hold "uuid" and "type"
 ```
+
+## Moving or reparenting a prop on the Horizon side (GORC)
+
+Most prop work is done from the game server (Godot). But if you ever **change an object's
+position inside a Horizon plugin** (a move, a drop, a reparent, or recomputing a child's world
+position), there is one rule that is **essential** — getting it wrong silently breaks replication.
+
+:::warning[Always emit GORC zone events when an object moves]
+In a Horizon handler, update an object's position through
+**`events.update_object_position(...)`**, never `gorc_instances.update_object_position(...)`
+directly.
+
+`gorc_instances.update_object_position` moves the object but **discards the GORC zone
+entry/exit events**. So a player who comes within range of the object's *new* position is never
+subscribed to it and stops receiving its updates — the symptom is an object that "teleported"
+on the server but is stale on a client (e.g. a dropped item that stays glued to the carrier's
+hand). `events.update_object_position` recomputes the zones **and delivers** the entry/exit
+messages, so nearby clients (re)subscribe.
+
+For a **child** object (e.g. cargo riding in a vehicle bed), compute its world position as
+`parent_global + child_LOCAL` — read the child's **local** position from its zone data, not its
+already-global `position()`, otherwise you double-count the parent's position.
+:::
+
+This is the root cause of the old *"can't drop an item retrieved from a bed"* bug
+(horizonserver `Fix reparent`, `ds_genericprops/src/handlers/update.rs`). Note it is **not**
+fixable from the game server: re-sending the data more often does nothing if the client was never
+zone-subscribed — this kind of "update never reaches a client after the prop moved" is always a
+**GORC subscription** issue, so it belongs in Horizon, not in the Godot prop.
