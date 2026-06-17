@@ -51,6 +51,14 @@ Build the scene (a body + collision shape + mesh), attach the script, and declar
 `<type>_def.json` (see [Replication definition files](#replication-definition-files)). Done —
 no boilerplate to copy.
 
+:::note[Set the prop's mass]
+Set the `RigidBody3D` **Mass** on your prop's scene (Inspector). It is the prop's weight
+everywhere in the game — its physics behaviour, and what a vehicle bed counts as cargo load
+(see [Cargo — loading the bed](./vehicles.md)). A prop left at the default **1 kg** feels
+weightless and barely registers as cargo, so give it a realistic value. (The mining rock sets
+this per-piece from its volume instead of a fixed value.)
+:::
+
 ### Complex props
 
 A prop with special behaviour may stay a standalone script (extending whatever body it needs)
