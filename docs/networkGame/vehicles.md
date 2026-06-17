@@ -70,10 +70,12 @@ Truck (VehicleBody3D, vehicle.gd)
   **camera eye**, so place it at head height inside the cab, facing forward (the vehicle's local
   `-Z`).
 
-You don't wire anything: the `Vehicle` discovers its seats automatically, and each seat
-auto-detects the player (its collision mask is set in code). Standing in a box shows
-`[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; the driver gets free mouse look while
-driving and exits with **Y**.
+You don't wire anything: the `Vehicle` discovers its seats automatically. The seat box is
+**passive** — it never monitors. Instead the **player's own detector** is the single monitor that
+reports when it walks into a seat zone. This avoids every seat of every vehicle running a
+broad-phase overlap test each physics frame, and it works identically on client and server.
+Standing in a box shows `[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; the driver gets
+free mouse look while driving and exits with **Y**.
 
 :::tip[Seats are server-authoritative]
 A seat refuses a second occupant. The driver/passenger logic lives in the **networked** path, so
@@ -128,6 +130,30 @@ the def and **rebuild Horizon**.
 - **In game (F5)** — the full flow: spawn the vehicle, walk into a seat box, **E** to board as
   driver or passenger, drive, **Y** to leave. This is the only place seats and passengers are
   faithful.
+
+## Cargo — loading the bed
+
+A vehicle with a bed carries cargo, and the load counts toward `max_payload` (the overload limiter
+shown on the dashboard).
+
+- **Loading** — carry a prop (a crate, a mining rock) and **drop it while standing in the bed**.
+  The carrier hands it to the truck: the prop is frozen, parented to the vehicle and rides with it.
+  Like the seats, the bed is a **passive zone** — it does not poll every frame; the carrier, who
+  knows it is standing in the bed, loads the prop on drop. Retrieve it with **E**.
+- **A held prop passes through vehicles** while carried, so a held box can't shove or flip a much
+  heavier truck — you load by dropping, not by ramming.
+- **What counts as load**:
+  - the props locked in the bed — each prop's weight is its `RigidBody` **mass**;
+  - **on-foot players** standing in the bed (their body mass), **plus whatever they hold** in their
+    hands.
+- **A mining rock's mass scales with its size**: a whole rock keeps the mass set on its scene
+  `RigidBody` (the GameDesigner value); a cut piece weighs that scaled by its volume ratio (a half
+  ≈ half, a quarter ≈ a quarter), so smaller pieces load the bed less.
+
+:::note[Riding a moving bed]
+Standing in the bed adds the weight, but **walking** in a *moving* bed (riding it on foot) is not
+supported yet — it needs client-side prediction. A moving truck currently leaves a walker behind.
+:::
 
 ## Dashboard — optional in-cab screen
 
