@@ -73,3 +73,23 @@ func client_channel_data_update(data: Dictionary) -> void:
 if data.has("health"):
 health = data["health"]
 ```
+
+## Server-authoritative interaction (carry example)
+
+Interaction must be decided by the **server**, never trusted from the client — this is an MMO,
+so the server is the anti-cheat authority. The client may show prompts and predictions for
+instant feedback, but the server re-checks everything before acting.
+
+The carry/pickup illustrates the pattern:
+
+- **Reachability + line of sight** are checked **on the server** (it owns the collisions; the
+  client often has none — e.g. server-only terrain). Before granting a pickup the server
+  raycasts from the player's eye to the prop and refuses if any solid body (a wall/building)
+  is in between, so a thin wall can't be exploited to grab through it. The prop itself and its
+  holder (a vehicle bed, a depot, the ground it rests on) are ignored, so taking a crate out
+  of a bed still works.
+- **The prompt is server-driven.** The server computes `[E] Carry` / `[E] Drop` (reachable, in
+  line of sight, not already carried by someone else) and replicates it to the owning client,
+  which only displays it — the client never decides the prompt itself.
+- Because that prompt is a replicated player property, it must be whitelisted in
+  `player_def.json` (see the warning above) or Horizon drops it.
