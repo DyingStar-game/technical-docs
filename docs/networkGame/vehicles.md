@@ -136,15 +136,27 @@ the def and **rebuild Horizon**.
 
 ## Cargo — loading the bed
 
-The blockout body generates a **cargo bay** zone (tune it via the **Cargo** export group:
-`cargo_bay_size`, `cargo_bay_offset`, `max_payload`, `overload_immobilize`). The load counts toward
-`max_payload`, the overload limiter shown on the dashboard.
+Two **designer-placed** zones drive cargo (no per-vehicle code):
 
-- **Loading** — carry a prop (a crate, a mined rock) and **drop it while standing in the bed**. The
-  carrier hands it to the truck: the prop is frozen, parented to the vehicle so it rides along, and
-  its mass is folded into the load. Like the seats, the bed is a **passive zone** — it never polls;
-  the carrier, who knows it is standing in the bed, loads the prop on drop (so the bay never blocks
-  the interact ray either).
+- **`cargo_bay`** — where cargo *sits*. Tune it via the **Cargo** export group (`cargo_bay_size`,
+  `cargo_bay_offset`, `max_payload`, `overload_immobilize`). It is also the passive zone the player's
+  detector overlaps to count their weight while standing in the bed.
+- **`Cargo_loading_zone`** — where dropping is *allowed to load* (it sticks). Add a `CollisionShape3D`
+  with a `BoxShape3D` named `Cargo_loading_zone` (or assign it to the `Vehicle`'s **Cargo loading
+  zone** export), sized a bit larger than the bay so reaching over the wall counts. Its physics
+  collision is turned off at runtime — it is only a zone marker. If unset, the `cargo_bay` box is
+  used as a fallback.
+
+The load counts toward `max_payload`, the overload limiter shown on the dashboard.
+
+- **Loading** — carry a prop (a crate, a mined rock) and **drop it inside the loading zone** —
+  whether you stand in the bed *or* reach over from outside; the zone (not your position) decides. The
+  `[E]` prompt reads **`[E] Cargo`** when dropping would load it (it sticks) and **`[E] Drop`**
+  otherwise. The carrier hands it to the truck: the prop is frozen, parented to the vehicle so it
+  rides along, and its mass is folded into the load. The bed never polls — loading happens on drop.
+- **Placed in the bay** — a loaded item is tucked **entirely inside** the `cargo_bay` (using its real
+  collision bounds, so any size or off-centre pivot fits) and rested on the bed floor, even when
+  dropped from far / over the rim.
 - **A held prop passes through vehicles** while carried, so a held box can't shove or flip a much
   heavier truck — you load by dropping, not by ramming.
 - **Retrieve** — aim at a loaded item and press **E** (`[E] Carry`); it leaves the load and goes
@@ -165,6 +177,41 @@ The blockout body generates a **cargo bay** zone (tune it via the **Cargo** expo
 :::note[Riding a moving bed]
 Standing in the bed adds the weight, but **walking** in a *moving* bed (riding it on foot) is not
 supported yet — it needs client-side prediction. A moving truck currently leaves a walker behind.
+:::
+
+### How the load rides the truck (freeze mode)
+
+A loaded crate must follow the truck **rigidly** — and it is a `RigidBody3D`, which the physics engine
+places in **global** space, *not* by inheriting its parent's transform. So parenting a crate under the
+truck is **not enough**; how it is frozen matters.
+
+:::warning[Use FREEZE_MODE_KINEMATIC for a body riding a moving parent — never STATIC]
+A frozen `RigidBody3D` has two modes:
+
+- **`FREEZE_MODE_STATIC`** (the default for a frozen body) behaves like a `StaticBody`: the physics
+  server keeps **rewriting its world transform every physics frame**. Under a moving parent it stays
+  put in the world while the truck drives off — the *"cargo left behind at speed"* bug.
+- **`FREEZE_MODE_KINEMATIC`** is *animatable*: the body **follows its node's transform**
+  (`parent_global × local`), so as the truck moves, the crate rides with it.
+
+The crate is set **KINEMATIC** on both sides: the server does it when it locks the crate, and each
+client does it for the replica **derived from the parent** — when a prop is reparented under a
+`Vehicle` it switches to KINEMATIC, and back to STATIC when it returns to the world (`PropNet.apply_ride_freeze_mode`). Nothing extra is replicated for this: the client reads it from `parent_id`, which already travels.
+:::
+
+On top of that, two pins keep it perfectly stuck:
+
+- **Server pin** — each physics frame the vehicle re-asserts every locked crate's **constant local
+  pose** in the bed (`_pin_locked_cargo`), so a KINEMATIC body can't drift relative to the moving
+  truck. The replicated local position therefore stays constant.
+- **Client pin** — each render frame the prop re-asserts that same local pose
+  (`PropNet.ride_pin`), so the crate tracks the **render-interpolated** truck without stepping at the
+  physics rate (which would jitter). A direct set, not a lerp.
+
+:::note[Cargo debug envelope]
+Turn on **Settings → General → Cargo debug** to draw a green envelope around every crate that is
+*really* locked in a bed (i.e. reparented under the vehicle). An item merely resting loose in the bed
+gets none — a quick way to tell "stuck" from "just sitting there".
 :::
 
 ## Hand brake
@@ -214,11 +261,21 @@ real reflective surface, so a mirror is just a camera too.
    and renders the feed.
 3. Add a screen surface — a `MeshInstance3D` with a **`QuadMesh`** (clean `0..1` UVs) — in the cab
    and set it as the `RearCamera`'s **`screen`**. The feed material is applied at runtime and is
-   **double-sided** (so a wrong-facing quad is never blank).
+   **one-sided** (shows only on the quad's front face). If a screen is blank, the quad faces the
+   wrong way — tick **Flip Faces** on its mesh or rotate it 180°. (Flip Faces only changes which side
+   is visible; it does **not** flip the image left/right — that is the `mirror` flag below.)
 4. **`mirror`**: off = a reversing camera (true view); on = a mirror (reverses left/right).
 5. **`resolution`**: match its aspect to the screen quad to avoid stretching.
+6. **`max_distance`** / **`refresh_hz`**: see Performance below.
 
-:::warning[Performance]
-Each `RearCamera` renders the whole world again every frame. A rear cam + two mirrors = three extra
-renders. Keep resolutions small; consider disabling the feeds when no one is driving.
+:::warning[Performance — each feed is a second full render]
+Each `RearCamera` renders the whole world again, so a rear cam + two mirrors = three extra renders.
+Two built-in limiters keep this cheap on weak GPUs (the screens still stay live for everyone):
+
+- **`max_distance`** — beyond this distance from the viewer the feed stops rendering (keeps its last
+  image; it is unreadable from afar anyway). `0` disables the distance cull.
+- **`refresh_hz`** — how many times per second the feed re-renders (default 20, not the full frame
+  rate). `0` renders every frame.
+
+Also keep `resolution` small.
 :::
