@@ -74,12 +74,14 @@ You don't wire anything: the `Vehicle` discovers its seats automatically. The se
 **passive** — it never monitors. Instead the **player's own detector** is the single monitor that
 reports when it walks into a seat zone. This avoids every seat of every vehicle running a
 broad-phase overlap test each physics frame, and it works identically on client and server.
-Standing in a box shows `[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; the driver gets
-free mouse look while driving and exits with **Y**.
+Standing in a box shows `[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; a taken driver
+seat shows `Driver seat taken` instead. The driver gets free mouse look while driving and exits
+with **Y**; the prompt is hidden while seated, and on exit you are dropped beside the seat you used.
 
 :::tip[Seats are server-authoritative]
-A seat refuses a second occupant. The driver/passenger logic lives in the **networked** path, so
-test seats in the game (F5), not the standalone bench.
+A seat refuses a second occupant, and if a seated player disconnects the server frees their seat
+automatically. The driver/passenger logic lives in the **networked** path, so test seats in the
+game (F5), not the standalone bench.
 :::
 
 ## 4. Configure the powertrain
@@ -113,8 +115,9 @@ A vehicle only replicates if the network layer knows it:
 
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
-   `scenename`, `parent_id`, `pilot_uuid`, `steering`). If you reuse the `vehicle` type, there is
-   nothing to add. A brand-new type needs its own `<type>_def.json` — see
+   `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`, `mass`,
+   `headlights`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs
+   its own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
 :::warning[Rebuild Horizon after touching a def]
@@ -133,15 +136,19 @@ the def and **rebuild Horizon**.
 
 ## Cargo — loading the bed
 
-A vehicle with a bed carries cargo, and the load counts toward `max_payload` (the overload limiter
-shown on the dashboard).
+The blockout body generates a **cargo bay** zone (tune it via the **Cargo** export group:
+`cargo_bay_size`, `cargo_bay_offset`, `max_payload`, `overload_immobilize`). The load counts toward
+`max_payload`, the overload limiter shown on the dashboard.
 
-- **Loading** — carry a prop (a crate, a mining rock) and **drop it while standing in the bed**.
-  The carrier hands it to the truck: the prop is frozen, parented to the vehicle and rides with it.
-  Like the seats, the bed is a **passive zone** — it does not poll every frame; the carrier, who
-  knows it is standing in the bed, loads the prop on drop. Retrieve it with **E**.
+- **Loading** — carry a prop (a crate, a mined rock) and **drop it while standing in the bed**. The
+  carrier hands it to the truck: the prop is frozen, parented to the vehicle so it rides along, and
+  its mass is folded into the load. Like the seats, the bed is a **passive zone** — it never polls;
+  the carrier, who knows it is standing in the bed, loads the prop on drop (so the bay never blocks
+  the interact ray either).
 - **A held prop passes through vehicles** while carried, so a held box can't shove or flip a much
   heavier truck — you load by dropping, not by ramming.
+- **Retrieve** — aim at a loaded item and press **E** (`[E] Carry`); it leaves the load and goes
+  into your hands, like any [carriable](./props.md#carriables-carry--drop).
 - **What counts as load**:
   - the props locked in the bed — each prop's weight is its `RigidBody` **mass**;
   - **on-foot players** standing in the bed (their body mass), **plus whatever they hold** in their
@@ -149,11 +156,34 @@ shown on the dashboard).
 - **A mining rock's mass scales with its size**: a whole rock keeps the mass set on its scene
   `RigidBody` (the GameDesigner value); a cut piece weighs that scaled by its volume ratio (a half
   ≈ half, a quarter ≈ a quarter), so smaller pieces load the bed less.
+- Over `max_payload` the HUD shows `OVERLOADED`; past `max_payload × overload_immobilize` the
+  vehicle won't move. Another **vehicle** is never loaded as cargo (no swallowing a truck with a
+  truck).
+- **Rollover** — if the vehicle tips past `cargo_unlock_tilt_deg` (default 65°), the bed unlocks and
+  spills its whole load (GDD: the lock releases past a certain inclination).
 
 :::note[Riding a moving bed]
 Standing in the bed adds the weight, but **walking** in a *moving* bed (riding it on foot) is not
 supported yet — it needs client-side prediction. A moving truck currently leaves a walker behind.
 :::
+
+## Hand brake
+
+The driver toggles a parking **hand brake** with a **long press of Space under 3 km/h** (released by
+throttle). It holds the vehicle still on flat ground and slopes — once stopped it is **frozen** so
+it can't creep — and **stays engaged after the driver leaves**. Shown on the HUD and on the
+dashboard.
+
+## Head lights
+
+Head lights are a **drop-in** like seats: add any **`Light3D`** (e.g. a `SpotLight3D` at the front
+facing the vehicle's local `-Z`) to the group **`vehicle_light`** anywhere under the scene — no
+code. The driver toggles them with **L**; the state is server-authoritative and replicated, so every
+client sees them. Shown on the HUD (`[L] lights`) and on the dashboard. The truck ships with two
+front SpotLights as the example.
+
+`L` is **contextual**: it drives the **head lights** while seated as driver, and the player's
+**flashlight** on foot — the two never fire at once.
 
 ## Dashboard — optional in-cab screen
 
@@ -165,4 +195,30 @@ The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
 (`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
 the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
 is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission` (or adjust them in the script).
+`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light` (or adjust them in
+the script).
+
+## Rear-view camera & mirrors
+
+A live camera feed on an in-cab screen — a **drop-in** (`scenes/vehicles/rear_camera.tscn`),
+reusable and **client-only** (no render on the headless server). Use it for a reversing camera and
+for side / rear-view mirrors (the GDD allows "mirrors **or** relayed cameras"). Godot has no cheap
+real reflective surface, so a mirror is just a camera too.
+
+**Setup** (no code):
+
+1. Instance `rear_camera.tscn` under the vehicle.
+2. `RearCamera` **is** a Camera3D — place and frame it in the editor (gizmo / **Preview**), at the
+   back looking behind (or at a side mirror, looking back/outward). It never renders to the player's
+   view; a twin camera inside its `SubViewport` (sharing the main `world_3d`) copies its pose + fov
+   and renders the feed.
+3. Add a screen surface — a `MeshInstance3D` with a **`QuadMesh`** (clean `0..1` UVs) — in the cab
+   and set it as the `RearCamera`'s **`screen`**. The feed material is applied at runtime and is
+   **double-sided** (so a wrong-facing quad is never blank).
+4. **`mirror`**: off = a reversing camera (true view); on = a mirror (reverses left/right).
+5. **`resolution`**: match its aspect to the screen quad to avoid stretching.
+
+:::warning[Performance]
+Each `RearCamera` renders the whole world again every frame. A rear cam + two mirrors = three extra
+renders. Keep resolutions small; consider disabling the feeds when no one is driving.
+:::

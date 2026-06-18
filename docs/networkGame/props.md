@@ -32,8 +32,8 @@ prop needs:
 - the `uuid` / `type_name` / position state,
 - server -> client replication every physics frame via `PropNet.server_tick(self)` —
   including **following the carrier** while the prop is held,
-- the `"carriable"` group and the carry contract (`interact()` / `set_carried()`, which also
-  disables the prop's collision while it is carried),
+- the `"carriable"` group and the carry contract (`interact()` / `set_carried()` — see
+  [Carriables](#carriables-carry--drop)),
 - reparenting and delete-on-exit.
 
 So a carriable prop is just:
@@ -66,6 +66,33 @@ and implement the contract itself, but it should still call `PropNet.server_tick
 its `_physics_process` so replication and carry-follow stay consistent. Example: the mining
 rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
 piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
+
+## Carriables (carry / drop)
+
+Any prop in the `"carriable"` group can be picked up. The flow is **server-authoritative**: the
+client only aims, the server decides.
+
+- **Aiming** — the client casts its interact ray (areas only) and sends the `uuid` it looks at.
+  Hands free, it shows `[E] Carry` when the target's `interact()` allows it; while holding
+  something it shows `[E] Drop`.
+- **Pick up** (server) — the prop is frozen, parented to the player and marked carried
+  (`set_carried(true)`). `PropNet.server_tick` then re-sends its `position` + `parent_id` every
+  frame so it follows the carrier (and Horizon keeps its GORC global fresh).
+- **Drop** (server) — the prop is un-frozen, reparented back to the world, and `set_carried(false)`.
+  Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle instead (see
+  [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
+
+`interact(interactor) -> bool` is the gate (default: not already carried; the mining rock also
+requires a fully-fractured piece). `set_carried(bool)` only flips the flag — a carried prop **keeps
+its collision** (it stays solid to the world and to other players); the carrier instead adds an
+`add_collision_exception_with()` so it is not blocked by what it holds (removed on drop), and a held
+prop also ignores every **vehicle** so it can't shove a much heavier truck.
+
+:::note[parent_id is replicated, and only re-applied on change]
+A carriable rides its carrier purely through `parent_id` (the player's, or a vehicle's bed). The
+client reparents **only when `parent_id` actually changes**, and the server re-sends it for a few
+frames on a change so a single lost message can't strand the prop under its old parent.
+:::
 
 ## Update properties
 
@@ -231,3 +258,30 @@ helper does both:
 ```
 NetworkOrchestrator.spawn_prop_authoritative(data)  # data must hold "uuid" and "type"
 ```
+
+## Moving or reparenting a prop on the Horizon side (GORC)
+
+Most prop work is done from the game server (Godot). But if you ever **change an object's position
+inside a Horizon plugin** (a move, a drop, a reparent, or recomputing a child's world position),
+there is one rule that is **essential** — getting it wrong silently breaks replication.
+
+:::warning[Always emit GORC zone events when an object moves]
+In a Horizon handler, update an object's position through **`events.update_object_position(...)`**,
+never `gorc_instances.update_object_position(...)` directly.
+
+`gorc_instances.update_object_position` moves the object but **discards the GORC zone entry/exit
+events**. So a player who comes within range of the object's *new* position is never subscribed to
+it and stops receiving its updates — the symptom is an object that "teleported" on the server but
+is stale on a client (e.g. a dropped item glued to the carrier's hand). `events.update_object_position`
+recomputes the zones **and delivers** the entry/exit messages, so nearby clients (re)subscribe.
+
+For a **child** object (e.g. cargo riding in a vehicle bed), compute its world position as
+`parent_global + child_LOCAL` — read the child's **local** position from its zone data, not its
+already-global `position()`, otherwise you double-count the parent's position.
+:::
+
+This is the root cause of the old *"can't drop an item retrieved from a bed"* bug (horizonserver
+`Fix reparent`, `ds_genericprops/src/handlers/update.rs`). It is **not** fixable from the game
+server: re-sending the data more often does nothing if the client was never zone-subscribed — this
+kind of "update never reaches a client after the prop moved" is always a **GORC subscription**
+issue, so it belongs in Horizon, not in the Godot prop.
