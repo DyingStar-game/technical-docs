@@ -30,8 +30,10 @@ prop needs:
 
 - the replication signals (`hs_server_prop_update` / `hs_server_prop_delete`),
 - the `uuid` / `type_name` / position state,
-- server -> client replication every physics frame via `PropNet.server_tick(self)` —
-  including **following the carrier** while the prop is held,
+- server -> client replication driven by `PropNet.server_tick(self)`, which sends an update
+  **only when** the prop's local position/rotation/parent actually changes (not every frame); a
+  held or loaded prop does **not** re-announce itself — Horizon rebuilds its world position from
+  its parent (see [Carriables](#carriables-carry--drop)),
 - the `"carriable"` group and the carry contract (`interact()` / `set_carried()` — see
   [Carriables](#carriables-carry--drop)),
 - reparenting and delete-on-exit.
@@ -76,8 +78,9 @@ client only aims, the server decides.
   Hands free, it shows `[E] Carry` when the target's `interact()` allows it; while holding
   something it shows `[E] Drop`.
 - **Pick up** (server) — the prop is frozen, parented to the player and marked carried
-  (`set_carried(true)`). `PropNet.server_tick` then re-sends its `position` + `parent_id` every
-  frame so it follows the carrier (and Horizon keeps its GORC global fresh).
+  (`set_carried(true)`). Its `parent_id` becomes the player, so Horizon keeps its GORC global
+  fresh by recomputing it from the carrier — the prop follows **without** re-sending its
+  transform every frame (`PropNet.server_tick` emits only on a real change).
 - **Drop** (server) — the prop is un-frozen, reparented back to the world, and `set_carried(false)`.
   Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle instead (see
   [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
@@ -90,8 +93,9 @@ prop also ignores every **vehicle** so it can't shove a much heavier truck.
 
 :::note[parent_id is replicated, and only re-applied on change]
 A carriable rides its carrier purely through `parent_id` (the player's, or a vehicle's bed). The
-client reparents **only when `parent_id` actually changes**, and the server re-sends it for a few
-frames on a change so a single lost message can't strand the prop under its old parent.
+server replicates `parent_id` **only when it actually changes**, and the client reparents only
+then. Delivering that single message reliably is Horizon's job — the prop does not re-send it
+"just in case".
 :::
 
 ## Update properties
