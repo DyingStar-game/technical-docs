@@ -87,7 +87,9 @@ The carry/pickup illustrates the pattern:
   raycasts from the player's eye to the prop and refuses if any solid body (a wall/building)
   is in between, so a thin wall can't be exploited to grab through it. The prop itself and its
   holder (a vehicle bed, a depot, the ground it rests on) are ignored, so taking a crate out
-  of a bed still works.
+  of a bed still works. Very small or fragmented props (e.g. a mining rock) are **exempt** from
+  the line-of-sight check: their thin, broken-up colliders made the ray report a false block, so
+  the server skips the wall test for them and relies on reach alone.
 - **The prompt is server-driven.** The server computes `[E] Carry` / `[E] Drop` (reachable, in
   line of sight, not already carried by someone else) and replicates it to the owning client,
   which only displays it — the client never decides the prompt itself.
