@@ -96,6 +96,13 @@ So one texture set feeds **two** outputs — keep both in the mineral's folder:
 
 ## Notes & gotchas
 
+:::note[A rock's mass is a rock property, not a mineral one]
+The `MineralDef` is **look only**. A mining rock's **mass** (its weight as truck cargo) is a
+rock-physics property: it comes from the `RigidBody` mass set on the rock scene (the GameDesigner
+value), scaled by each cut piece's **volume** — a half weighs ~half, a quarter ~a quarter. See
+[Cargo — loading the bed](../networkGame/vehicles.md). Swapping the mineral never changes it.
+:::
+
 :::caution[A metal shows its reflection, not its texture]
 With `metallic = 1` the surface displays the **reflected environment**, not the albedo: under a
 **blue sky** it reads blue-grey, in the **dark** it reads black — it only looks gold with a

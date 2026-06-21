@@ -86,6 +86,13 @@ user/ACL decision to the small **chat-auth** adapter (`services/chatAuth`). The 
 validates the token's **RS256 signature against Keycloak's JWKS** and checks the issuer —
 the broker never holds the signing key, and key rotation is handled automatically.
 
+:::note[Broker image — maintained fork]
+The jwt broker image is the maintained **`ghcr.io/ajnasz/mosquitto-go-auth`** fork; the original
+`iegomez/mosquitto-go-auth` is unmaintained. The fork keeps the same `go-auth.so` path and
+`auth_opt_*` options, so the mosquitto config is unchanged — only `mosquitto.goauthImage` in the
+chart values points at the fork (pinned to a stable release bundling mosquitto 2.0.x).
+:::
+
 Wiring details that matter:
 
 - The client sends the token as the **MQTT username** (not the password); go-auth forwards
