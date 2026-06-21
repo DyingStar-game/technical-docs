@@ -1,5 +1,23 @@
 # Ares
 
+## Description
+Création : 
+Forme juridique : méga-corporation
+Action : 
+Slogan : 
+Siège social : 
+Direction : 
+Actionaires : 
+Activité : service de sécurité, constructeur, exploitations minières, banques , entreprises chimiques, ,  groupes de transports et logistiques, ...
+Produits : équipementier automobile
+Filiales : 
+Effectif :  
+Site web :  
+Chiffre d'affaire : 
+Résultat net : 
+
+
+
 ### I. Origines et Modèle de Contrôle Corporatiste 
 
 L'A.R.E.S. Corporation est une méga-corporation d'origine Terrienne. Initialement fondée par 4 grandes sociétés et leurs familles respectives, elle a connu une croissance sans précédent. Elle s'est transformée en un conglomérat militaro-industriel au fil des alliances des familles dirigeantes, intégrant des filiales dans les mines, banques, chimie et transport. Le développement de la filiale ARES Défense a été un levier clé pour la protection de ses infrastructures et la conduite d'actions hostiles (renseignement, espionnage). A.R.E.S est une entité monolithique, verticale et tentaculaire. Son nom (ARES, dieu grec) et son architecture (gréco-romaine, aseptisée) suggèrent une culture occidentale et impérialiste.
@@ -90,3 +108,5 @@ L'image d'ARES est ambivalente et dépend de la position sociale de l'individu :
     
 
 La perception des réfugiés est tout aussi complexe : ARES est à la fois le sauveur (pour les avoir accueillis) et le futur exploiteur (pour la nature du Contrat Piégé). Cette ambivalence entretient une méfiance permanente au sein de la nouvelle population.**
+
+## 
