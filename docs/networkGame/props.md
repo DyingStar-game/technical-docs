@@ -30,8 +30,11 @@ prop needs:
 
 - the replication signals (`hs_server_prop_update` / `hs_server_prop_delete`),
 - the `uuid` / `type_name` / position state,
-- server -> client replication every physics frame via `PropNet.server_tick(self)` —
-  including **following the carrier** while the prop is held,
+- server -> client replication driven by `PropNet.server_tick(self)`, which sends an update
+  **only when the prop's local position/rotation/parent actually changes** — not every frame.
+  While the prop is held (parented to a player) or loaded (parented to a vehicle), it does
+  **not** re-announce itself: Horizon rebuilds its world position from its parent, so it rides
+  along for free (see [the parents section](#positions-are-relative-to-a-parent)),
 - the `"carriable"` group and the carry contract (`interact()` / `set_carried()`, which also
   disables the prop's collision while it is carried),
 - reparenting and delete-on-exit.
@@ -58,6 +61,41 @@ and implement the contract itself, but it should still call `PropNet.server_tick
 its `_physics_process` so replication and carry-follow stay consistent. Example: the mining
 rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
 piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
+
+## Positions are relative to a parent
+
+A prop never stores its absolute world position. It stores a **local** position plus a
+`parent_id` — the uuid of the object it is attached to (a planet, a city, a vehicle, the player
+carrying it…). Horizon rebuilds the real world position by walking the chain
+(`world = parent's world + local`). See [the introduction](./intro.md#the-backbone-parents-parent_id)
+for the why; this section is what it means when you write a prop.
+
+Three rules follow from it:
+
+- **A child of a moving thing does not re-announce its position.** When a truck drives, the box
+  in its bed keeps the *same* local position, so `PropNet.server_tick` sends nothing — and that
+  is correct. Horizon moves the box because its **parent** moved. Re-sending the box every frame
+  "to keep it fresh" is wrong: it floods the network for no reason (it was a real cause of the
+  game freezing under load).
+
+- **Re-parenting is a server decision.** Only the game server changes a prop's (or a player's)
+  parent and replicates the new `parent_id`; clients **apply** it, they never decide it. On the
+  client, after applying a new parent to a node, call `reset_physics_interpolation()` on it, or
+  it will visually slide in from its previous world position.
+
+- **Deleting a parent? Re-attach its children first.** Before freeing a prop that has replicated
+  children (a warehouse full of crates, a vehicle with cargo, a rock about to break apart),
+  move those children up to the deleted prop's own parent. Otherwise they are left pointing at
+  an object that no longer exists, their world position becomes wrong, and they turn into
+  collision-less **ghosts** on the other clients.
+
+:::tip[Only replicate what changed]
+`PropNet.server_tick` compares the prop's position/rotation/parent to the last values it sent
+and emits **only on a real change** — and, for multi-field objects like a vehicle, only the
+fields that changed. When you write your own replication, do the same: never send a full
+snapshot every frame. A lost message is solved by reliable change-detection, not by re-sending
+"just in case".
+:::
 
 ## Update properties
 
