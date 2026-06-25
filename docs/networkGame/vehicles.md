@@ -42,16 +42,50 @@ Create a scene whose **root is a `VehicleBody3D`** and attach `vehicle.gd` to it
 
 You have two options for the body:
 
-- **Real 3D model** — add your `MeshInstance3D` model and a `CollisionShape3D` matching it, as
-  children of the root.
-- **Parametric blockout (placeholder)** — `vehicle.gd` can generate a box-built body, chassis
-  collision, four wheels, cameras and the cargo bay from its exported dimensions (`@tool`, so it
-  rebuilds live in the editor). This is what the truck uses while waiting for the real model.
-  Tune it via the **Body / Cab / Bed / Wheels** export groups, and carve the cab opening with
-  **Cab → Cab Cutout Size / Offset**.
+- **Real 3D model (GLB)** — instance the artist's `.glb` as a child of the root and add it to the
+  group **`vehicle_model`**. That switches the procedural blockout **off** automatically (no flag),
+  and `vehicle.gd` wires the model's parts **by name** at runtime: wheels, steering wheel and doors.
+  See **[Using a real 3D model](#using-a-real-3d-model-glb)** below, and the modeler-facing
+  [Vehicle 3D models](../creativeConcept/vehicle_models.md) page for the naming / pivot / UV rules.
+- **Parametric blockout (placeholder)** — with no real model, `vehicle.gd` generates a box-built
+  body, chassis collision, four wheels, cameras and the cargo bay from its exported dimensions
+  (`@tool`, so it rebuilds live in the editor). Tune it via the **Body / Cab / Bed / Wheels** export
+  groups, and carve the cab opening with **Cab → Cab Cutout Size / Offset**.
 
-The generated nodes are transient (no owner), so the `.tscn` stays minimal — only the root, its
-script and your designer-placed nodes (the seats below) are saved.
+:::tip[Use the blockout to prototype a vehicle *before* the 3D model exists]
+The blockout is not just a leftover — it's the **"design without a GLB yet"** path. A developer can
+create a new vehicle (rover, car, bike…) and test **driving, physics, seats and cargo** right away,
+while the 3D artist is still making the model. When the GLB lands, drop it in the `vehicle_model`
+group and the blockout visual switches off — no code change. So keep it: removing it would force
+every new vehicle to wait for a finished model.
+:::
+
+Either way, collision, cameras and the cargo bay are still built; only the **visual** body and the
+procedural tires are skipped when a real model is present. The generated nodes are transient (no
+owner), so the `.tscn` stays minimal — only the root, its script and your designer-placed nodes (the
+seats, the GLB instance, door handles…) are saved.
+
+### Scene layout at a glance
+
+The finished truck — the artist's GLB body wrapped by the Godot **rig**:
+
+![The truck assembled in the Godot viewport](./static_files/truck_model.png)
+
+Its scene tree — the GLB `Model` plus the rig nodes you add around it:
+
+![Truck scene hierarchy in Godot](./static_files/truck_hierarchy.png)
+
+- **`Model`** (group `vehicle_model`) — the GLB: body, `*_wheel`s, `Steering_wheel`, `Front_*_door`s
+  and the screen meshes. Everything **below** it is the rig you add in Godot.
+- **`SeatDriver` / `SeatPassenger`** (`VehicleSeat`) — the boarding zones (§3).
+- **`Gui3D → SubViewport →` dashboard UI** — the in-cab screen (§Dashboard).
+- **`Light`** — the `vehicle_light` lamps (head / brake / cabin).
+- **`RearCamera_*`** — reversing camera + mirrors.
+- **`Cargo_loading_zone`** — where dropping loads the bed.
+- **`Handle_FL` / `Handle_FR`** (`VehicleDoorHandle`) — the door handles (§Doors).
+
+Note the handles are placed at the **root** (siblings of `Model`), each on its door's visible handle.
+At runtime the code re-parents each one **under its door mesh** so it swings with the door.
 
 ## 3. Add the seats
 
@@ -122,8 +156,8 @@ A vehicle only replicates if the network layer knows it:
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
    `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`, `mass`,
-   `headlights`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs
-   its own `<type>_def.json` — see
+   `headlights`, `doors`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type
+   needs its own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
 :::warning[Rebuild Horizon after touching a def]
@@ -139,6 +173,120 @@ the def and **rebuild Horizon**.
 - **In game (F5)** — the full flow: spawn the vehicle, walk into a seat box, **E** to board as
   driver or passenger, drive, **Y** to leave. This is the only place seats and passengers are
   faithful.
+
+## Using a real 3D model (GLB)
+
+Instance the artist's `.glb` under the `VehicleBody3D` root and add it to the group
+**`vehicle_model`**. The blockout visual turns off and `vehicle.gd` wires the parts **by name** at
+runtime — every part is **optional** (one that isn't there is simply skipped). The naming / pivot /
+UV rules the artist follows are on the [Vehicle 3D models](../creativeConcept/vehicle_models.md) page.
+
+:::warning[Disable node-type name suffixes on the model import]
+Godot's glTF import treats trailing tokens like `_wheel` / `-wheel` (also `-col`, `-rigid`…) as
+**node-type suffixes**: a part named `Steering_wheel` is silently turned into a `VehicleWheel3D` and
+**renamed** `Steering` (you'll see "VehicleWheel3D should be a child of a VehicleBody3D" warnings).
+Our code builds the physics itself, so this is unwanted. On the `.glb` → **Import** tab, untick
+**Nodes → Use Node Type Suffixes** (and **Use Name Suffixes**) and **Reimport**, so parts stay
+plain `MeshInstance3D` with their full names.
+:::
+
+### Wheels (any number)
+The game finds the wheel parts in the model — nodes already typed `VehicleWheel3D`, **or** plain
+meshes whose name contains `wheel` — reads each position, and creates a **real physics wheel as a
+direct child of the vehicle** there, reparenting the visual mesh onto it (so it rides the suspension,
+steers and spins). Front vs rear comes from the name (`front`/`rear`), else the axle nearest the cab
+steers. Tune in the **Wheels** + **Real 3D model** groups: `wheel_radius`, `suspension_rest`, and
+`real_wheel_spin_axis` (flip it if wheels spin around the wrong axis).
+
+### Steering wheel
+A mesh named `steering_wheel` turns with the steering angle — cosmetic, it reuses the already-
+replicated `steering` (nothing new on the wire). Tune `steering_wheel_axis` (column axis) and
+`steering_wheel_ratio` (lock-to-lock feel). Absent → no-op.
+
+### Doors (server-authoritative) + handles
+**State** — open/close is decided by the **server** and replicated to everyone via the `doors`
+property (a `{door_id: open}` map), so it **must be whitelisted** in `vehicle_def.json` (step 5
+above). On a change every client plays the Blender clip `<door_id>_open` / `<door_id>_close`; a door
+with no clip falls back to a code hinge-swing on the mesh named `door_id` (about `door_hinge_axis`).
+
+**Handles are placed in Godot** (like seats), not in the model. Per door:
+1. Add a **`VehicleDoorHandle`** node (an `Area3D`) under the vehicle, on the door's **visible handle**.
+2. Give it a small **`CollisionShape3D`** there (that's what the player looks at).
+3. Set its exports:
+   - **`Door Id`** — the door's mesh / clip prefix (e.g. `Front_l_door`).
+   - **`Open Angle Deg`** — fallback swing angle (used when the door has no Blender clip).
+   - **`Reverse`** — swing the other way (fallback) / play the clip backwards (anim). Two doors that
+     should open outward need **opposite** `Reverse`.
+
+The handle sits on the interact layer, so the player **looks at it** and presses **E** to toggle the
+door — no proximity zone, no per-vehicle wiring. Prompt: `[E] Open door` / `[E] Close door`.
+
+:::tip[The handle rides the door automatically]
+Place each handle where the door's handle is **when the door is shut**. At runtime the code re-parents
+it **under its door mesh** (matched by `Door Id`), so the handle **swings with the door** — you can
+look at it and press **E** whether the door is open or closed. (Without this, a handle left on the
+body would stay at the shut position and the look-at ray would miss it once the door swings open.)
+:::
+
+**Door-gated seats — open the door before you can get in *or* out.** Set the **`Door Id`** export on
+the **`VehicleSeat`** to the door that guards it (e.g. the driver seat → `Front_l_door`). Then:
+- **Open/close** the door (look at the handle + **E**) from that seat's **boarding zone** (on foot)
+  **or while seated** — so a driver/passenger can close it from inside.
+- **E boards only once that door is open.** A closed door shows *"Open the door first (aim at the
+  handle)"* instead of the board prompt.
+- **Y leaves only once that door is open** — symmetric with boarding, so you can't step out through a
+  shut door.
+- A seat with an empty `Door Id` boards / leaves directly (no gating).
+
+Both gates are **server-authoritative**: the client checks them for the prompt, but the server
+re-checks on `enter_vehicle` / `exit_vehicle` and refuses through a shut door.
+
+### Collision (from the model)
+The collision is **generated by code**, never hand-placed in the `.tscn`. Two sources, in order:
+1. **`col_*` meshes in the GLB** (preferred) — the artist ships low-poly **convex** volumes named
+   `col_cab`, `col_bed_floor`, `col_bed_left`… (see the modeler page). Each becomes one convex collider
+   (`create_convex_shape()`) placed where it sits, and the source mesh is **hidden** (editor *and*
+   game); several pieces keep the bed hollow. This matches the real shape — a parametric box can't.
+   We use **hand-authored convex pieces** rather than automatic convex *decomposition* on the body mesh
+   on purpose: a few cubes are clean, cheap and predictable, whereas decomposition spits out many messy
+   shapes. Check them at runtime with **Debug → Visible Collision Shapes**.
+2. **Fallback boxes** — if the model has no `col_*` mesh, `vehicle.gd` builds the parametric chassis +
+   bed boxes from the **Body / Cab / Bed** exports. With a real model these now **follow the model's
+   placement** (so they sit under the body, not at the origin), but they remain a rough approximation —
+   good for a blockout, not a finished model. Tune them with **Debug → Visible Collision Shapes**.
+
+So: for a finished vehicle, author the collision in Blender (`col_*`); the boxes are just the
+no-model-yet safety net.
+
+:::note[col_ carry no weight, and don't shift the balance]
+Collision pieces have **no mass** — in Godot a collision shape never adds weight (and the *visual*
+meshes never affect physics at all; only collision shapes do). The vehicle's mass is `mass` (empty)
+**+ occupants + cargo** only (`_refresh_mass`), so `col_*` never inflate the load.
+
+They *would* normally affect the **center of mass** (a RigidBody auto-derives its COM from its
+collision shapes — a big `col_cab` at the front would pull the COM forward and the truck would
+nose-dive). To prevent that, `vehicle.gd` **pins the COM** to the **wheelbase centre** (average wheel
+position) plus the **`Center Of Mass Offset`** export — so handling stays balanced no matter how the
+collision was modeled. Lower its Y for roll stability, or shift Z for a front/rear weight bias.
+:::
+
+:::tip[See the collision — Debug → Visible Collision Shapes]
+The generated colliders are invisible by default. To check them:
+
+1. In the editor top menu: **Debug → Visible Collision Shapes** (FR: *Déboguer → Formes de collision
+   visibles*) — a checkbox, leave it ticked.
+2. **Run** the scene (**F6** bench or **F5**). It's a *runtime* overlay, so it must be enabled
+   **before** running and only shows while the game runs.
+3. The colliders draw as **cyan wireframes** over the truck. You should see your `col_*` shapes hug the
+   body (and **no** oversized fallback box) — proof the model collision is in use. If you instead see
+   one big box overhanging the model, your meshes aren't named `col_*` (so the fallback kicked in).
+:::
+
+### First-person view = the driver SitPoint
+The in-cab camera sits on the **driver seat's `SitPoint`** (the same eye point used in game), so it
+follows the real model — no blockout dependency. Place that `SitPoint` at head height in the cab,
+facing forward (`-Z`). The bench (F6) now enters in this first-person view like in game; **F4**
+toggles to the chase camera.
 
 ## Cargo — loading the bed
 
@@ -244,6 +392,15 @@ Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D
 see **[GUI on a 3D screen](./in-3d-screen.md)** for the setup (SubViewport, ViewportTexture, and
 the Local-to-Scene / viewport-path gotchas).
 
+:::tip[Use a screen mesh from the model]
+Point the `Gui3D`'s **`node_quad`** at a screen mesh in the GLB (e.g. `ScreenFront`, via *Editable
+Children* on the model). `Gui3D` now applies its `SubViewport` as a texture **by code** when the mesh
+has no `material_override` — so a model screen "just works", no hand-made ViewportTexture material.
+The mesh still needs clean `0..1` UVs and its front face toward the driver (see the
+[Vehicle 3D models](../creativeConcept/vehicle_models.md) screen rules). The dashboard is read-only,
+so `node_area` (touch) is optional.
+:::
+
 The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
 (`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
 the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
@@ -258,6 +415,11 @@ reusable and **client-only** (no render on the headless server). Use it for a re
 for side / rear-view mirrors (the GDD allows "mirrors **or** relayed cameras"). Godot has no cheap
 real reflective surface, so a mirror is just a camera too.
 
+Setting one up in the editor — select the `RearCamera`, frame it with the **Camera Preview**, and
+drag the model's screen mesh into its **`screen`** slot:
+
+![Setting up a rear camera and linking it to a model screen mesh](./static_files/rear_camera_setup.png)
+
 **Setup** (no code):
 
 1. Instance `rear_camera.tscn` under the vehicle.
@@ -265,11 +427,14 @@ real reflective surface, so a mirror is just a camera too.
    back looking behind (or at a side mirror, looking back/outward). It never renders to the player's
    view; a twin camera inside its `SubViewport` (sharing the main `world_3d`) copies its pose + fov
    and renders the feed.
-3. Add a screen surface — a `MeshInstance3D` with a **`QuadMesh`** (clean `0..1` UVs) — in the cab
-   and set it as the `RearCamera`'s **`screen`**. The feed material is applied at runtime and is
-   **one-sided** (shows only on the quad's front face). If a screen is blank, the quad faces the
-   wrong way — tick **Flip Faces** on its mesh or rotate it 180°. (Flip Faces only changes which side
-   is visible; it does **not** flip the image left/right — that is the `mirror` flag below.)
+3. Set the `RearCamera`'s **`screen`** to the surface that shows the feed. Use either a local
+   `MeshInstance3D` with a **`QuadMesh`**, **or a screen mesh from the GLB model** (e.g.
+   `Recul_Screen`, `RetroL_Screen`, `RetroD_Screen`) — select it via *Editable Children* on the model
+   and drag it into `screen`. The feed material is applied at runtime and is **one-sided** (shows on
+   the front face only). A blank screen = the face points the wrong way → fix the **normals in
+   Blender** (front face toward the driver — see the
+   [Vehicle 3D models](../creativeConcept/vehicle_models.md) screen rules), and ensure clean `0..1`
+   UVs. (The `mirror` flag below flips left/right; it does **not** fix a wrong-facing or rotated face.)
 4. **`mirror`**: off = a reversing camera (true view); on = a mirror (reverses left/right).
 5. **`resolution`**: match its aspect to the screen quad to avoid stretching.
 6. **`max_distance`** / **`refresh_hz`**: see Performance below.
