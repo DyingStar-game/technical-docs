@@ -200,8 +200,18 @@ steers. Tune in the **Wheels** + **Real 3D model** groups: `wheel_radius`, `susp
 
 ### Steering wheel
 A mesh named `steering_wheel` turns with the steering angle — cosmetic, it reuses the already-
-replicated `steering` (nothing new on the wire). Tune `steering_wheel_axis` (column axis) and
-`steering_wheel_ratio` (lock-to-lock feel). Absent → no-op.
+replicated `steering` (nothing new on the wire). It spins around **`steering_wheel_axis`** in the mesh's
+own local frame (so a tilted column still turns in-plane); `steering_wheel_ratio` sets the lock-to-lock
+feel. Absent → no-op.
+
+:::warning[The spin axis is usually `(0, 1, 0)`, not `(0, 0, 1)` — Blender Z-up → Godot Y-up]
+The disc's normal (its spin axis) is `+Z` in Blender, but the glTF export converts **Z-up → Y-up**, so
+in Godot that normal becomes local **`+Y`**. So `steering_wheel_axis` is typically **`(0, 1, 0)`** (use
+`(0, -1, 0)` if it spins the wrong way); `(0, 0, 1)` makes it wobble around the vertical instead. For an
+**angled column** this only holds if the tilt lives in the wheel's **object rotation, not baked into the
+geometry** — see the [modeler page](../creativeConcept/vehicle_models.md): keep the disc flat in local
+space, tilt the object, and **don't apply** that rotation.
+:::
 
 ### Doors (server-authoritative) + handles
 **State** — open/close is decided by the **server** and replicated to everyone via the `doors`
