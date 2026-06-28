@@ -69,6 +69,19 @@ the air:
 :::tip Apply your transforms
 Before export, **`Ctrl+A → All Transforms`** on every object (bakes scale/rotation/position). A wrong
 or unapplied scale is the #1 cause of parts arriving twisted or offset in the game.
+
+**One exception — the steering wheel of an angled column** (see below): apply Location + Scale, but
+**keep its Rotation** (don't bake it), so its spin axis stays a clean local axis.
+:::
+
+:::tip The steering wheel — keep the disc flat, tilt with the object
+The game spins the steering wheel around one of its **local axes**, so that axis must stay aligned with
+the **column**. Model the disc **flat** (its face in the local plane, normal along **local Z**), then
+angle the wheel using the **object's Rotation** (e.g. `35°` on X for a leaning column) — and **do NOT
+apply** that rotation (`Ctrl+A`), or the tilt bakes into the geometry and the local axis no longer
+follows the column. Check the **N-panel → Item → Rotation** shows your angle (not `0`). The dev then
+sets the spin axis in Godot — usually **`(0, 1, 0)`**, because the glTF export turns Blender's Z-up into
+Godot's Y-up so the disc normal (Blender `+Z`) becomes Godot `+Y`.
 :::
 
 ## Separating a part into its own object (`P`)
