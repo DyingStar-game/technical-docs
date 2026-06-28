@@ -370,10 +370,12 @@ gets none — a quick way to tell "stuck" from "just sitting there".
 
 ## Hand brake
 
-The driver toggles a parking **hand brake** with a **long press of Space under 3 km/h** (released by
-throttle). It holds the vehicle still on flat ground and slopes — once stopped it is **frozen** so
-it can't creep — and **stays engaged after the driver leaves**. Shown on the HUD and on the
-dashboard.
+Vehicles **spawn with the hand brake engaged** (parked), and the driver toggles it with a **long press
+of Space under 3 km/h** (released by throttle). It holds the vehicle still on flat ground and slopes by
+**braking the wheels and cancelling drift** — **not** by freezing the body (freezing a `VehicleBody3D`
+collapses the wheel suspension, so the wheels sink into the ground). It **stays engaged after the
+driver leaves**. A moving vehicle left with **no driver and no hand brake** coasts to a stop on its own
+(it never keeps driving off). Shown on the HUD and on the dashboard.
 
 ## Head lights
 
