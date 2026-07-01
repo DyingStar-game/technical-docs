@@ -84,6 +84,21 @@ sets the spin axis in Godot — usually **`(0, 1, 0)`**, because the glTF export
 Godot's Y-up so the disc normal (Blender `+Z`) becomes Godot `+Y`.
 :::
 
+**How to check it in Blender.** Select the steering wheel, then switch the **transform-orientation
+gizmo** (top of the viewport header) between **Global** and **Local** to compare the two frames:
+
+- In **Global**, the gizmo stays world-aligned (Z straight up). You can see the disc is **tilted** with
+  respect to the world axes — that's expected for an angled column:
+
+![Steering wheel with the Global transform orientation — world axes, the disc is visibly tilted](./static_files/steering_wheel_axis_global.png)
+
+- In **Local**, the gizmo **tilts with the object** and follows the column. The disc normal is now a
+  clean **local axis** — this is the axis Godot spins the wheel around. If the gizmo is *not* tilted in
+  Local (it looks the same as Global), the rotation was baked with `Ctrl+A` and the local axis no longer
+  follows the column — undo the apply and keep the Rotation instead:
+
+![Steering wheel with the Local transform orientation — the axes tilt with the column](./static_files/steering_wheel_axis_local.png)
+
 ## Separating a part into its own object (`P`)
 
 If a screen (or any part) is currently a face of the body:

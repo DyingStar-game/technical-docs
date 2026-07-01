@@ -70,6 +70,14 @@ weightless and barely registers as cargo, so give it a realistic value. (The min
 this per-piece from its volume instead of a fixed value.)
 :::
 
+:::note[Set the prop's collision layer & mask]
+On your prop's body, set the collision **Layer** to `prop` and the **Mask** to `MASK_SOLID`
+(world + player + vehicle + prop) in the Inspector. A prop left on the default layer/mask either
+falls through the floor, gets ignored by tools, or drags down the server's frame rate. If your prop
+also has a purely **static** part (a fixed collision that never moves), put it on `world` with
+**Mask 0**. See [Collision layers & masks](./collision_layers.md) for the full table and the why.
+:::
+
 ### Complex props
 
 A prop with special behaviour may stay a standalone script (extending whatever body it needs)
