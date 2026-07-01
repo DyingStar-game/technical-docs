@@ -132,7 +132,11 @@ client only aims, the server decides.
 - **Pick up** (server) — the prop is frozen, parented to the player and marked carried
   (`set_carried(true)`). Its `parent_id` becomes the player, so Horizon keeps its GORC global
   fresh by recomputing it from the carrier — the prop follows **without** re-sending its
-  transform every frame (`PropNet.server_tick` emits only on a real change).
+  transform every frame (`PropNet.server_tick` emits only on a real change). The pickup also
+  needs a **clear line of sight**: the server casts a solids ray and the prop must be the **first
+  thing hit** (a wall, or the side of the bed it sits in, blocks it) — so you can't grab through
+  geometry you can't actually see past. The client can't check this (it has no collisions), so it
+  is the server's call.
 - **Drop** (server) — the prop is un-frozen, reparented back to the world, and `set_carried(false)`.
   Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle instead (see
   [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
