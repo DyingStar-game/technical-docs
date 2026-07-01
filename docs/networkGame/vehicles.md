@@ -221,15 +221,33 @@ with no clip falls back to a code hinge-swing on the mesh named `door_id` (about
 
 **Handles are placed in Godot** (like seats), not in the model. Per door:
 1. Add a **`VehicleDoorHandle`** node (an `Area3D`) under the vehicle, on the door's **visible handle**.
-2. Give it a small **`CollisionShape3D`** there (that's what the player looks at).
+2. Give it **two** small **`CollisionShape3D`** children — one on the door's **exterior** handle, one on
+   the **interior** side (the handle you'd reach when seated). Place each box **just proud of the body
+   surface** (see the sightline note below).
 3. Set its exports:
    - **`Door Id`** — the door's mesh / clip prefix (e.g. `Front_l_door`).
+   - **`Outdoor Shape`** — the exterior box (used when interacting **on foot**). Drag the child in.
+   - **`Indoor Shape`** — the interior box (used when interacting **seated**). Drag the child in.
    - **`Open Angle Deg`** — fallback swing angle (used when the door has no Blender clip).
    - **`Reverse`** — swing the other way (fallback) / play the clip backwards (anim). Two doors that
      should open outward need **opposite** `Reverse`.
 
 The handle sits on the interact layer, so the player **looks at it** and presses **E** to toggle the
 door — no proximity zone, no per-vehicle wiring. Prompt: `[E] Open door` / `[E] Close door`.
+
+:::tip[You can only operate the handle you can actually see]
+The interaction is **server-authoritative** and side-aware, so you can't open a door through the
+bodywork:
+- The **box you aim at** must match your side — the **outdoor** box on foot, the **indoor** box when
+  seated in that vehicle. Aiming at the far-side box (the one you couldn't reach) is ignored.
+- That box must also have a **clear line of sight** — a foreign wall, the terrain or another vehicle
+  in the way blocks it (the vehicle's *own* body doesn't count).
+
+Because a vehicle's collision is a coarse **convex** hull that encloses both boxes, the sightline check
+excludes the vehicle itself; the *side* of the box (outdoor vs indoor) is what distinguishes "I can see
+this handle" from "it's on the far side". So place each box **proud of its surface** and assign the two
+`Shape` exports. Leave them unassigned and the sightline gate is simply skipped (the door opens on look).
+:::
 
 :::tip[The handle rides the door automatically]
 Place each handle where the door's handle is **when the door is shut**. At runtime the code re-parents
