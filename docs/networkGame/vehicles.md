@@ -87,6 +87,16 @@ Its scene tree — the GLB `Model` plus the rig nodes you add around it:
 Note the handles are placed at the **root** (siblings of `Model`), each on its door's visible handle.
 At runtime the code re-parents each one **under its door mesh** so it swings with the door.
 
+:::note[Set the collision layer & mask on the rig nodes]
+The `VehicleBody3D` root goes on the `vehicle` layer with Mask `MASK_SOLID` (world + player +
+vehicle + prop). The **seat** areas go on the `zone` layer with **Mask 0** (monitoring off — they
+are passive), and the **door handles** on the `interactable` layer with **Mask 0**. This split is
+what lets a seated player's interaction ray reach the door handle to get out, instead of hitting the
+seat zone they're sitting in. Set these in the Inspector; see
+[Collision layers & masks](./collision_layers.md) for the full picture and the truck as a worked
+example.
+:::
+
 ## 3. Add the seats
 
 For each place, add a **`VehicleSeat`** node (an `Area3D` with `vehicle_seat.gd`) as a child of
