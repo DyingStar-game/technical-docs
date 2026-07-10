@@ -84,6 +84,15 @@ sets the spin axis in Godot — usually **`(0, 1, 0)`**, because the glTF export
 Godot's Y-up so the disc normal (Blender `+Z`) becomes Godot `+Y`.
 :::
 
+:::tip The road wheels — apply transforms, axle usually on local X
+Unlike the steering wheel, the **road wheels DO get all transforms applied** (`Ctrl+A → All`), origin on
+the axle center. Godot spins each wheel mesh around its **local** `real_wheel_spin_axis` — default
+**`(1, 0, 0)`** (local X), where a Blender +Y-up glTF export usually leaves the axle. If the wheels end
+up spinning **"on their edge"** (flipping over instead of rolling), the axle landed on a different local
+axis after the apply — the dev just flips `real_wheel_spin_axis` in the vehicle's Inspector to the
+matching cardinal axis. Model all wheels the same way so one axis is correct for all of them.
+:::
+
 **How to check it in Blender.** Select the steering wheel, then switch the **transform-orientation
 gizmo** (top of the viewport header) between **Global** and **Local** to compare the two frames:
 

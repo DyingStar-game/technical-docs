@@ -129,23 +129,32 @@ client only aims, the server decides.
 - **Aiming** — the client casts its interact ray (areas only) and sends the `uuid` it looks at.
   Hands free, it shows `[E] Carry` when the target's `interact()` allows it; while holding
   something it shows `[E] Drop`.
-- **Pick up** (server) — the prop is frozen, parented to the player and marked carried
-  (`set_carried(true)`). Its `parent_id` becomes the player, so Horizon keeps its GORC global
-  fresh by recomputing it from the carrier — the prop follows **without** re-sending its
-  transform every frame (`PropNet.server_tick` emits only on a real change). The pickup also
-  needs a **clear line of sight**: the server casts a solids ray and the prop must be the **first
-  thing hit** (a wall, or the side of the bed it sits in, blocks it) — so you can't grab through
-  geometry you can't actually see past. The client can't check this (it has no collisions), so it
-  is the server's call.
-- **Drop** (server) — the prop is un-frozen, reparented back to the world, and `set_carried(false)`.
-  Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle instead (see
-  [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
+- **Pick up** (server) — the prop is parented to the player and marked carried (`set_carried(true)`),
+  but it stays a **live `RigidBody3D`**: the server steers it toward a hold spot in front of the
+  player by **velocity** (gravity off, rotation locked). So a carried prop now **physically collides
+  with the world** — blocked by the ground, walls and vehicles, and it pushes lighter props (needed
+  to load a container) — instead of clipping through. Its `parent_id` becomes the player so Horizon
+  keeps its GORC global fresh, and its physics-driven transform replicates as it moves. The pickup
+  also needs a **clear line of sight**: the server casts a solids ray and the prop must be the
+  **first thing hit** (a wall, or the side of the bed it sits in, blocks it) — the client can't
+  check this (it has no collisions), so it is the server's call.
+- **Drop** (server) — the prop's normal physics is restored, it is reparented back to the world, and
+  `set_carried(false)`. Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle
+  instead (see [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
 
 `interact(interactor) -> bool` is the gate (default: not already carried; the mining rock also
-requires a fully-fractured piece). `set_carried(bool)` only flips the flag — a carried prop **keeps
-its collision** (it stays solid to the world and to other players); the carrier instead adds an
-`add_collision_exception_with()` so it is not blocked by what it holds (removed on drop), and a held
-prop also ignores every **vehicle** so it can't shove a much heavier truck.
+requires a fully-fractured piece). `set_carried(bool)` only flips the flag. A carried prop **keeps
+its collision** and stays solid to the world and to other players; only the **carrier** is excepted
+(`add_collision_exception_with()`, removed on drop) so it is not blocked by what it holds.
+
+:::note[Physics-held carry]
+Because a carried prop is driven by velocity toward the hold spot, a few behaviours fall out of the
+physics for free: the **camera pitch** raises/lowers it vertically (look up/down to place it on a
+higher shelf), a downward raycast keeps the hold spot **above the ground** (looking down to grab
+can't drive it underground), and it **auto-drops** if dragged out of grab reach (e.g. left stuck
+behind a wall while you back away). Collision is suppressed only during the brief travel into the
+hand, so nothing knocks it on the way in.
+:::
 
 :::note[parent_id is replicated, and only re-applied on change]
 A carriable rides its carrier purely through `parent_id` (the player's, or a vehicle's bed). The
