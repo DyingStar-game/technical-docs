@@ -36,7 +36,25 @@ const config: Config = {
     locales: ['en'],
   },
 
-  themes: ['@docusaurus/theme-mermaid'],
+  themes: [
+    '@docusaurus/theme-mermaid',
+    // Offline / build-time full-text search (no external service). Adds a search bar to the navbar.
+    [
+      '@easyops-cn/docusaurus-search-local',
+      {
+        hashed: true,
+        indexDocs: true,
+        indexBlog: false,
+        docsRouteBasePath: '/docs',
+        language: ['en'],
+        // Show each result's full breadcrumb (root section › page › heading) instead of the tree icons,
+        // so every role instantly sees WHICH section a hit belongs to. The custom module below then
+        // tints the first segment (the root section) a distinct colour.
+        explicitSearchResultPath: true,
+      },
+    ],
+  ],
+  clientModules: ['./src/clientModules/searchEnhancements.js'],
   markdown: {
     mermaid: true,
   },

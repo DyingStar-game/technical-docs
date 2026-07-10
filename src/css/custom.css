@@ -26,3 +26,73 @@
   --ifm-color-primary-lightest: #ffd057;
   --ifm-background-color: #151413;
 }
+
+/* ── Local search (@easyops-cn) UX tweaks ─────────────────────────────────────
+   Companion CSS to src/clientModules/searchEnhancements.js. */
+
+/* The active/hovered result: the plugin paints it brand-yellow (--ifm-color-primary)
+   and forces white text, which hides the tinted section label. Use a subtle grey
+   (like the sidebar hover) instead, so the coloured category stays readable.
+   NOTE: SearchBar.module.css hashes its class names (.suggestion → suggestion_xxx,
+   .cursor → cursor_xxx), so we match with [class*="…"] substring selectors. */
+[class*="suggestion"][class*="cursor"] {
+  background-color: var(--ifm-color-emphasis-300) !important;
+  color: var(--ifm-font-color-base) !important;
+}
+[class*="cursor"] [class*="hitTree"],
+[class*="cursor"] [class*="hitIcon"],
+[class*="cursor"] [class*="hitPath"] {
+  color: var(--search-local-muted-color, var(--ifm-color-secondary-darkest)) !important;
+}
+[class*="cursor"] mark {
+  /* keep the matched text in the brand colour, legible on the grey hover */
+  color: var(--ifm-color-primary) !important;
+}
+
+/* Root section of each result's breadcrumb (wrapped by the client module): a bold
+   rose, distinct from the yellow match highlight and readable on hover. */
+.ds-search-section {
+  color: #f06595 !important;
+  font-weight: 700;
+}
+
+/* Section filter chips injected on the /search results page (searchEnhancements.js). */
+.ds-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 1.25rem;
+}
+.ds-filters-label {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  margin-right: 2px;
+}
+.ds-filter-chip {
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: transparent;
+  color: var(--ifm-font-color-base);
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: background-color 0.1s, border-color 0.1s, color 0.1s;
+}
+.ds-filter-chip:hover {
+  border-color: var(--ifm-color-primary);
+}
+.ds-filter-chip--on {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: #151413;
+  font-weight: 600;
+}
+.ds-filter-count {
+  opacity: 0.55;
+  font-size: 0.8em;
+}
+.ds-filter-chip--on .ds-filter-count {
+  opacity: 0.85;
+}
