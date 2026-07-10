@@ -14,6 +14,8 @@ startup the server reads that JSON — coordinates, collision, name, type, per-t
 **plants** every object as a GORC network object, which Horizon then replicates to the clients in
 range.
 
+![sandbox_capital open in the Godot editor — the bare city, with no spawn apartments and no hangar](./static_files/server_props_no_hangar.png)
+
 The client only ships the **generic prop scenes** (a box, a spawn building, a warehouse…). It never
 ships **where** they are, **which** ones exist, or **how many** — so a player cannot datamine the
 client files to find secret placements or loot. The layout stays with the authoritative server.
@@ -44,6 +46,8 @@ adds a **DyingStar** menu to the editor's **top menu bar** (right before *Help /
 | **Update network definitions (GitHub)** | Fetch the full list of network type definitions (`type_def.json` files) from horizonserver's [`ds_genericprops/props`](https://github.com/DyingStar-game/horizonserver/tree/develop/ds_genericprops/props), and cache them locally. Import/Export need it (designers have no local Horizon) — it also runs **automatically when the editor starts**. |
 | **View network definitions…** | Show the cached whitelists (which properties each type replicates). |
 
+![The DyingStar menu in the editor menu bar, with its five server-props items](./static_files/server_props_menu.png)
+
 ## The `dyingstarNetwork` marker
 
 Every network object lives under one **`dyingstarNetwork`** node (a `ServerPropsRoot`), created on
@@ -61,6 +65,8 @@ Import **refuses** if the open scene's root has no `uuid`:
 
 > DyingStar import FAILED: The scene root has no uuid. Open the scene of a server prop (its root must
 > carry a uuid) before importing.
+
+![The DyingStar import-failed dialog: the scene root has no uuid](./static_files/server_props_import_error_uuid.png)
 
 Set the root's `uuid` to the **same** value as the JSON's top object (the `object_uuid` of the `city`
 above). Otherwise the anchor can't be matched: every prop would reparent to the wrong place and the
@@ -156,3 +162,11 @@ A level designer is asked to *move the hangar containers to block a road*. No JS
 5. **Clear server props (build clean)** → the scene is empty again, build-safe.
 6. Re-import to check: the crate is **still where you moved it** — the new position round-tripped
    through the JSON. At the next server start, the crates are planted on the road.
+
+Dragging a container onto the road in the editor:
+
+![A hangar container dragged onto the road in the Godot viewport](./static_files/server_props_move_container.png)
+
+After Export → Clear → re-import, the container is still on the road (the move round-tripped through the JSON):
+
+![After re-importing, the container is still on the road](./static_files/server_props_reimport_moved.png)
