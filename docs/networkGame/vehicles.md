@@ -148,6 +148,12 @@ On the root `Vehicle`, open the **Drive** export group:
 You never edit `vehicle_powertrain.gd` — the `Vehicle` copies these settings into it each frame
 (so you can tune them live while driving the bench).
 
+:::tip[Every knob]
+See **[Inspector reference — every `@export`](#inspector-reference--every-export)** at the bottom of
+this page for the full list of tunables (Drive, Steering, Body/Cab/Bed, Wheels, Real 3D model,
+Electric, Thermal gearbox, Cargo, Debug) with their defaults.
+:::
+
 ## 5. Register it on the network
 
 A vehicle only replicates if the network layer knows it:
@@ -490,3 +496,121 @@ Two built-in limiters keep this cheap on weak GPUs (the screens still stay live 
 
 Also keep `resolution` small.
 :::
+
+## Inspector reference — every `@export`
+
+Every knob below lives on the root **`Vehicle`** node, grouped in the Inspector exactly as shown.
+Listed values are the **defaults** — `truck.tscn` overrides some of them. Most apply **live** (tune
+them on the bench, F6, while driving). Changing a **dimension** (Body / Cab / Bed / Wheels) rebuilds
+the procedural blockout; with a real GLB model the blockout **visual** is skipped, but the collisions,
+cameras and cargo bay still use these numbers.
+
+### Drive
+
+| Property | Default | Role |
+|---|---|---|
+| `propulsion_type` | `ELECTRIC` | Powertrain. `ELECTRIC` = single-speed, instant torque (EV). `THERMAL` = automatic gearbox. Switches which sub-group (**Electric** / **Thermal gearbox**) the Inspector shows. |
+| `engine_power` | `1200` | Base torque per driven wheel. Total pull = this × driven wheels (× gear ratio in THERMAL). Must beat `m·g·sin(slope)` to climb. |
+| `max_speed_kmh` | `45` | Top speed (km/h). |
+| `reverse_max_kmh` | `15` | Reverse top speed (km/h). |
+| `torque_response` | `2.5` | How fast torque ramps to the throttle (1/s). Lower = gentler launch (keeps a heavy vehicle from leaping off the line). |
+| `brake_force` | `30` | Brake force per wheel. |
+| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep well **below** `brake_force`. |
+| `handbrake_hold` | `30` | Parking-brake damping (m/s per s) **above** the release speed. A real collision impulse exceeds this, so a hit parked truck still gets pushed (then re-settles). |
+| `handbrake_release_speed` | `2` | Horizontal speed (m/s) **below** which the engaged hand brake fully cancels motion — a parked truck must not move from a player bump or a gentle slope. |
+| `drive_mode` | `ALL` | Driven wheels: `FRONT` (FWD), `REAR` (RWD) or `ALL` (4×4). |
+| **Mass** | *(node)* | Not an `@export` — it's the standard `RigidBody3D` **Mass** on the node (~1 t empty; cargo physically loads on top). |
+| `center_of_mass_offset` | `(0,0,0)` | COM offset (m) from the wheelbase centre. We pin it ourselves (else the `col_` pieces drag it forward → nose-dive). Lower Y for roll stability, shift Z for a weight bias. |
+
+### Steering
+
+| Property | Default | Role |
+|---|---|---|
+| `max_steer_deg` | `30` | Maximum front-wheel steering angle (degrees). |
+| `steer_speed` | `1.6` | How fast the wheels turn toward the held direction (rad/s). Lower = more progressive. |
+| `steer_return_speed` | `3.0` | How fast the wheels re-centre on release (rad/s). A bit snappier than `steer_speed`. |
+| `steer_speed_falloff_kmh` | `80` | Above this speed the steering lock shrinks (toward `steer_min_ratio`) — agile when slow, stable when fast. `0` disables. |
+| `steer_min_ratio` | `0.35` | Fraction of the max steer angle still available at/above `steer_speed_falloff_kmh`. |
+
+**Steering wheel (visual)** sub-group — cosmetic only, no effect on driving:
+
+| Property | Default | Role |
+|---|---|---|
+| `steering_wheel_ratio` | `8.0` | Radians the volant turns per radian of front-wheel steer (real cars ~8–16 lock-to-lock). |
+| `steering_wheel_axis` | `(0,0,1)` | The steering-wheel mesh's own **local** spin axis (its disc/column axis). Try a cardinal axis until the volant spins in-plane. See [Vehicle 3D models](../creativeConcept/vehicle_models.md). |
+
+### Body / Cab / Bed (blockout dimensions, meters)
+
+Only used by (and only editable on) the **procedural blockout** — a real GLB model replaces the visual.
+Changing any of these rebuilds the blockout live.
+
+| Property | Default | Role |
+|---|---|---|
+| `body_length` | `4.6` | Blockout body length. |
+| `body_width` | `2.0` | Blockout body width. |
+| `body_height` | `0.5` | Blockout body height. |
+| `cab_length` | `1.5` | Blockout cab length. |
+| `cab_height` | `1.9` | Blockout cab height. |
+| `cab_cutout_size` | `(2.255, 0.969, 0.744)` | Windshield / door opening carved from the body (a CSG subtraction inside the body combiner). |
+| `cab_cutout_offset` | `(-0.017, 1.454, -2.062)` | Position of that cutout. |
+| `bed_wall_height` | `0.7` | Blockout bed wall height. |
+
+### Wheels
+
+| Property | Default | Role |
+|---|---|---|
+| `wheel_radius` | `0.55` | Wheel radius (blockout + physics contact). |
+| `wheel_width` | `0.35` | Blockout wheel width. |
+| `wheel_visual_drop` | `0.5` *(0–1.5)* | **Client replica only**: drops the wheel meshes to ~ground level (a replica has no physics, so `VehicleWheel3D` never lowers them). Tune so the replica's wheels touch. |
+| `wheelbase` | `3.0` | Distance between front and rear axles. |
+| `track_width` | `1.55` | Distance between left and right wheels. |
+| `suspension_rest` | `0.4` | Suspension rest length (how far the wheel hangs below its mount) → ride height. |
+| `suspension_stiffness` | `22` | Spring stiffness (a 1 t truck ~20–25). Too high + any ground penetration launches the body. |
+| `suspension_max_force` | `15000` | Max force each suspension can push (N). Must exceed the loaded static load per wheel (~5600 N at 2.3 t) with margin, or the bed bottoms out when full. |
+
+### Real 3D model (GLB drop-ins)
+
+Optional — present a GLB (group `vehicle_model`, or named wheel meshes) and the blockout visual is skipped.
+
+| Property | Default | Role |
+|---|---|---|
+| `real_wheel_spin_axis` | `(1,0,0)` | Spin axis of a real wheel mesh, **in the mesh's local space** (its axle). A Blender +Y-up export with transforms applied usually leaves the axle on local X. Change if the wheels spin around the wrong axis (e.g. "on their edge"). |
+| `door_open_angle_deg` | `75` | **Fallback only** (door with no Blender animation clip): instant open angle (degrees)… |
+| `door_hinge_axis` | `(0,1,0)` | …about this local hinge axis. The real swing is normally authored in Blender. |
+
+### Electric *(propulsion_type = ELECTRIC)*
+
+| Property | Default | Role |
+|---|---|---|
+| `base_speed_kmh` | `25` | Full torque from standstill up to this speed (constant-torque), then torque tapers to zero at `max_speed_kmh` (constant-power) — the real EV curve. |
+| `motor_max_rpm` | `4500` *(0–12000)* | Gauge RPM at top speed (single-speed, no gears). `RPM = motor_max_rpm × speed / max_speed_kmh`. |
+
+### Thermal gearbox *(propulsion_type = THERMAL)*
+
+| Property | Default | Role |
+|---|---|---|
+| `gear_ratios` | `[2.5, 1.7, 1.25, 1.0, 0.8]` | Per-gear torque multiplier, 1st→last (1st = strongest/slowest). Shifts automatically on engine RPM. |
+| `shift_up_rpm` | `3400` | Engine RPM to shift up. |
+| `shift_down_rpm` | `1400` | Engine RPM to shift down. |
+| `reverse_ratio` | `2.5` | Reverse gear torque multiplier. |
+| `idle_rpm` | `800` | Idle RPM (needle floor). |
+| `redline_rpm` | `4000` | Redline RPM (needle ceiling). |
+
+### Cargo
+
+| Property | Default | Role |
+|---|---|---|
+| `max_payload` | `1300` | Max payload (kg) before **overloaded** (load limiter). Empty ~1 t + this = full weight. |
+| `overload_immobilize` | `1.2` | Above `max_payload × this` the vehicle is immobilized (1.2 = +20 %). |
+| `cargo_bay_size` | `(2.0, 1.5, 3.1)` | Size of the cargo-bay box. A massive body that comes to rest inside is absorbed (its mass added once). **Also the on-foot bed-walker zone** — a player standing inside adds their weight, so fit it to the real bed (too low/large counts someone standing beside the truck). |
+| `cargo_bay_offset` | `(0.0, 1.0, 0.75)` | Centre of the cargo-bay box, relative to the vehicle origin. |
+| `cargo_loading_zone` | *(unset)* | Optional designer box (`CollisionShape3D` + `BoxShape3D`) marking **where a dropped item may load**. Unset → falls back to the cargo-bay box. Its physics collision is disabled at runtime (zone marker only). |
+| `cargo_settle_speed` | `0.6` | A dropped body locks into the bed once it slows below this (m/s). |
+| `cargo_unlock_tilt_deg` | `65` | Tilt (° from upright) past which the bed unlocks and spills its load (a rollover drops the cargo). `0` disables. |
+| `debug_show_cargo_bay` | `true` | Show a translucent box marking the cargo-bay zone (turn **off** on shipped vehicles). |
+
+### Debug
+
+| Property | Default | Role |
+|---|---|---|
+| `debug_color_driven_wheels` | `true` | Tint the driven wheels green (idle wheels stay dark) to see FWD / RWD / 4×4 at a glance (turn **off** on shipped vehicles). |
