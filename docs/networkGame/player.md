@@ -23,6 +23,24 @@ sends inputs/actions up to the server. Everything else (how its state reaches th
 works **exactly like a prop**: see [Props network management](./props.md), which the player
 simply reuses, with its own `player_def.json`.
 
+## The player scripts: a facade over two roles
+
+The player is one scene (`scenes/player/player.tscn`) but its script is split by responsibility
+(a Strategy pattern), so server logic and client presentation never tangle:
+
+- **`player.gd`** (`class_name Player`) — the **facade**. It owns the shared body (a `CharacterBody3D`),
+  the shared nodes (camera, interact ray…) and the public network API, and at spawn it creates **one
+  role** child node and delegates to it.
+- **`player_server.gd`** (`PlayerServer`) — runs **only on the dedicated server**: the physics tick,
+  input application, carry / line-of-sight, doors, spawns, and `server_action_received`.
+- **`player_client.gd`** (`PlayerClient`) — runs **only on a client** (both the owner *and* a remote
+  avatar): local input, camera, HUD prompts, the carry prediction, the remote name tag, and
+  `client_channel_data_update`.
+
+So the network entry points below still live on the `Player` facade, but their body has moved into
+the role: `server_action_received` is implemented in `PlayerServer`, `client_channel_data_update` in
+`PlayerClient` — the facade simply forwards to the active role.
+
 ## Update properties
 
 The player-specific part is the **input/action channel**: the client sends actions up, the

@@ -28,9 +28,11 @@ Movement (`move_forward/back/left/right`), `sprint`, `crouch`, `interact`, minin
 (`toggle_tool`, `aim`, `perforate`), chat (`toggle_chat`, `write_in_chat`) and `pause` are
 actions too — see the full list (and rebind them) in **Settings → Controls**.
 
-:::note[Cargo retrieval & lights]
-A crate in a vehicle bed is grabbed with **E** (the carry prompt shows `[E] Carry`). On the
-in-cab HUD the active shortcuts are listed live (e.g. `[L] lights`, `[Space] brake`).
+:::note[Carrying, cargo & lights]
+A crate in a vehicle bed is grabbed with **E** (the carry prompt shows `[E] Carry`). While carrying,
+**look up / down** to raise or lower the held object — to set it on the ground or stack it on a shelf —
+and it **drops on its own** if you drag it out of reach (e.g. left stuck behind a wall). On the in-cab
+HUD the active shortcuts are listed live (e.g. `[L] lights`, `[Space] brake`).
 :::
 
 ## Chat
