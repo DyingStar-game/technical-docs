@@ -163,6 +163,12 @@ const config: Config = {
         },
         {
           type: 'docSidebar',
+          sidebarId: 'engineSidebar',
+          position: 'left',
+          label: 'Engine',
+        },
+        {
+          type: 'docSidebar',
           sidebarId: 'networkGameSidebar',
           position: 'left',
           label: 'Network Game',
