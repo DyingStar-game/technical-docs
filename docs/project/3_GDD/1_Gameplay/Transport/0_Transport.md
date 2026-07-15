@@ -10,6 +10,8 @@ Le gameplay **transport** regroupe toutes les activités de déplacement des res
 
 Les deux « Ranger » désignent la même action à des échelles différentes : le chargement, l'optimisation de la place, et le rangement fin.
 
+![Boucle du transport : collecter, ranger dans le véhicule, acheminer entre villes, livrer](./static_files/image.png)
+
 ## Objectif et récompense
 
 Le joueur peut accomplir une ou plusieurs activités :
@@ -83,6 +85,8 @@ La difficulté se règle sur plusieurs axes combinables :
 - **Dangerosité** : calme, chemin compliqué (terrain / intempéries), zone dangereuse (attaque possible PNJ/joueurs), zone hostile (attaque PNJ/joueurs).
 
 Plus la réputation est haute, plus le joueur accède à des missions risquées ; les missions militarisées relèvent d'une **branche spéciale** de l'arbre de réputation transport.
+
+![Arbre des réputations du transport : colis → palettes → palettes multiples / matières dangereuses → containers → containers multiples / personnes dangereuses](./static_files/image_2.png)
 
 ## Retours d'information (feedback)
 

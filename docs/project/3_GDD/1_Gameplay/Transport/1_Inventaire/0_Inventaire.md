@@ -62,6 +62,8 @@ Dérivés :
 
 *Dimensions* : base au sol **120 × 80 cm**. Palette standard haute de **15 cm** ; les dérivés font au maximum **100 cm** ou **200 cm** de hauteur.
 
+![Dimensions des palettes](./static_files/orderbrief_containers-pallet_mesurements.png)
+
 #### Conteneur de fret
 Le plus grand conteneur ; il peut recevoir plusieurs palettes.
 
@@ -74,6 +76,14 @@ Dérivés :
 - **citerne** — cylindre pour liquides/gaz, avec indicateur ; deux valves (dessus et dessous) pour charger/décharger.
 
 *Dimensions* : base au sol **1220 × 260 cm**. Conteneur plat haut de **30 cm** ; les autres dérivés font au maximum **260 cm**. Volume de chargement interne **1200 × 240 × 220 cm**. Les parois du standard ont **8 cm** d'épaisseur (soit 2 cm de marge entre le bord des palettes et la paroi). Les conteneurs doivent pouvoir **s'empiler**. Le mécanisme d'ouverture du standard doit être atteignable de l'extérieur, de l'intérieur (si un joueur s'y retrouve enfermé) et lorsqu'il est placé le long d'un mur ; la porte doit faire au moins **220 cm** de haut pour laisser entrer une palette de 200 cm.
+
+![Dimensions du conteneur de fret (base)](./static_files/orderbrief_containers-containerbase_mesurements.png)
+
+![Dimensions du conteneur standard](./static_files/orderbrief_containers-containerstandard_mesurements.png)
+
+![Volume de chargement interne du conteneur standard](./static_files/orderbrief_containers-containerstandard_internal_mesurements.png)
+
+![Épaisseur des parois du conteneur standard](./static_files/orderbrief_containers-containerstandard_sidewall-thickness_mesurements.png)
 
 :::note Implémentation actuelle (code)
 Ces conteneurs existent déjà en jeu comme props réseau **carriables** :

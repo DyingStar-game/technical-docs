@@ -2,6 +2,8 @@
 
 Les missions de transport déclinent la boucle du gameplay (voir [Transport — vue d'ensemble](../0_Transport.md)) selon la quantité de fret, sa nature, la distance et la dangerosité.
 
+![Boucle du transport : collecter, ranger, acheminer, livrer](../static_files/image.png)
+
 ## Colis
 
 Mission de plus bas niveau : livrer un **colis** (transportable à la main) d'un point à un point de dépôt, en passant par un véhicule.
