@@ -35,6 +35,19 @@ and it **drops on its own** if you drag it out of reach (e.g. left stuck behind 
 HUD the active shortcuts are listed live (e.g. `[L] lights`, `[Space] brake`).
 :::
 
+## Developer & debug tools
+
+Handy while working on the game. Like every key, these are InputMap actions — rebind them in
+**Settings → Controls**.
+
+| Default | Action | What it does |
+|---|---|---|
+| **Alt + ²** | `toggle_debug` | Show/hide the **debug panels** — server/client stats, and (for the body you're on) your **altitude**, its **local time**, and your **longitude/latitude**. |
+| *(see Settings)* | `toggle_eva` | **EVA free-flight** — detach and fly the body freely to inspect planets, moons and the day/night terminator from afar. |
+| **Middle mouse (hold)** | `carry_free_rotate` | While carrying a prop, hold and move the mouse to **freely rotate** the held object (mouse wheel = step the yaw by 15°). |
+
+See [Lighting, day/night & the sky](/docs/planetTech/lighting_sky_daynight) for what those readouts mean.
+
 ## Chat
 
 The message log is **visible by default**; **F12** (`toggle_chat`) hides/shows the whole
