@@ -32,8 +32,8 @@ Presence de Nickel
 Presence de fer
 
 ## Illustration
-![Tetrataenite Bronze](/img/biome/cristal_tetrataenite_bronze)
-![Tetrataenite Grey](/img/biome/cristal_tetrataenite_grey)
+![Tetrataenite Bronze](/img/biome/cristal_tetrataenite_bronze.png)
+![Tetrataenite Grey](/img/biome/cristal_tetrataenite_grey.png)
 
 
 ### Pique magnétique
