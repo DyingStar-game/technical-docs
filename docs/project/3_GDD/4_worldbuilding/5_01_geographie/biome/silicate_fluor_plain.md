@@ -1,18 +1,18 @@
-# Plaine de Silicate fluore
+# Plaine de Silicate fluoré
 
 ## Description
-Plaine de silicate se détériore par la presence du fluore. 
 
-## Coposition
+Plaine de silicate qui se détériore par la présence du fluor.
+
+## Composition
+
 Silicate (Si)
 
 ## Condition
-Silicate 
-Fluore
 
+- Silicate
+- Fluor
 
 ## Illustration
+
 ![Silicate fluor](/img/biome/silicate_fluor.jpg)
-
-
-

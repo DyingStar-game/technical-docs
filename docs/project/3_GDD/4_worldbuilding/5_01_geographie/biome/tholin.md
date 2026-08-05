@@ -1,139 +1,142 @@
 # Tholin
 
 ## Description
-Les tholins sont des polymères pour decrire des composants organiques azotés qu'on trouve générlement sur les corps glacé.
-Elle sont synthetiser par decomposition de certain gazs azotés. 
 
-## Coposition
-???
-
-
-
-
-## Composants
-
-### Tholin nitrogénée 
-
-## Description
-Couleur Orange vif à brun. 
-Sous forme de poussière fine ou aérosol.
-Elle se forme dans une athmosphere riche en methane et d'Azote
+Les tholins sont des polymères désignant des composants organiques azotés que l'on trouve généralement sur les corps glacés. Ils sont synthétisés par décomposition de certains gaz azotés.
 
 ## Composition
-Azote (N2) 95%
-Méthane (CH4) 5%
 
-## Condition
-Presence athmosphere d'azote.
-Presence athmosphere de Méthane 
-Rayon UV (magnestosphère planete)
-
-## Illustration
-![tholin nitrogenee](/img/biome/tholin_nitrogenee.jpg)
-
+???
 
 ## Composants
+
+### Tholin nitrogénée
+
+#### Description
+
+Couleur orange vif à brun, sous forme de poussière fine ou d'aérosol. Elle se forme dans une atmosphère riche en méthane et en azote.
+
+#### Composition
+
+- Azote (N₂) : 95 %
+- Méthane (CH₄) : 5 %
+
+#### Condition
+
+- Présence d'une atmosphère d'azote
+- Présence d'une atmosphère de méthane
+- Rayons UV (magnétosphère de la planète)
+
+#### Illustration
+
+![Tholin nitrogénée](/img/biome/tholin_nitrogenee.jpg)
 
 ### Tholin oxygénée
 
-## Description
-Couleur rouge sang à pourpre
-Croute solide
+#### Description
 
-## Composition
-Azote  (N2)
-Monoxyde de carbone (CO)
+Couleur rouge sang à pourpre. Croûte solide.
 
-## Condition
-Presence athmosphere d'azote.
-Presence de glace  de Monoxyde de carbone
-Rayon cosmique galactiques
+#### Composition
 
-## Illustration
-![tholin oxygenee](/img/biome/tholin_oxygenee.jpg)
-![tholin oxygenee 2](/img/biome/tholin_oxygenee_2.jpg)
+- Azote (N₂)
+- Monoxyde de carbone (CO)
 
-## Composants
+#### Condition
+
+- Présence d'une atmosphère d'azote
+- Présence de glace de monoxyde de carbone
+- Rayons cosmiques galactiques
+
+#### Illustration
+
+![Tholin oxygénée](/img/biome/tholin_oxygenee.jpg)
+![Tholin oxygénée 2](/img/biome/tholin_oxygenee_2.jpg)
 
 ### Tholin Soufrée
 
-## Description
-Couleur jaune ou vert sale.
-Goudron visqueu
+#### Description
 
-## Composition
-Azote
-Soufre
+Couleur jaune ou vert sale. Goudron visqueux.
 
-## Condition
-Presence d'azote.
-Presence de dioxyde de souffre (SO2) ou sulfure d'hydrogène (H2S) 
+#### Composition
 
-## Illustration
-![tholin soufree](/img/biome/tholin_soufree.jpg)
+- Azote
+- Soufre
 
+#### Condition
+
+- Présence d'azote
+- Présence de dioxyde de soufre (SO₂) ou de sulfure d'hydrogène (H₂S)
+
+#### Illustration
+
+![Tholin soufrée](/img/biome/tholin_soufree.jpg)
 
 ### Tholins HAP
 
-## Description
-Forme Feuillets de carbone.
-Couleur noir mat
+#### Description
 
-## Composition
-Azote
-Carbone
+Forme des feuillets de carbone. Couleur noir mat.
 
-## Condition
-Pauvre en Azote
-Riche en carbone
+#### Composition
 
-## Illustration
-![tholin hap](/img/biome/tholin_hap.jpg)
+- Azote
+- Carbone
 
+#### Condition
 
-### Tholin comètaire
+- Pauvre en azote
+- Riche en carbone
 
-## Description
-Couleur noir profond.
-Texture Granuleux ou Poreux.
+#### Illustration
 
-## Composition
-Glace d'Eau (H2O)
-Glace de Méthanol (CH3OH)
-Glace d'Ammoniac (NH3)
+![Tholin HAP](/img/biome/tholin_hap.jpg)
 
-## Condition
-Presence d'Eau
-Presence de Méthanol
-Presence d'Ammoniac
-Irradiation constant plusieurs millions d'années vents solaire.
+### Tholin cométaire
 
+#### Description
 
-## Illustration
-![tholin cometaire](/img/biome/tholin_cometaire.jpg)
+Couleur noir profond. Texture granuleuse ou poreuse.
 
+#### Composition
 
-### Tholin phosphorés
+- Glace d'eau (H₂O)
+- Glace de méthanol (CH₃OH)
+- Glace d'ammoniac (NH₃)
 
-## Description
-Couleur rouge à pourpre
-Texture cireuse ou cassant si refroidi rapidement 
+#### Condition
 
+- Présence d'eau
+- Présence de méthanol
+- Présence d'ammoniac
+- Irradiation constante par les vents solaires pendant plusieurs millions d'années
 
-## Composition
-Azote (N2)
-Méthane (CH4)
-Phosphine (PH3)
+#### Illustration
 
+![Tholin cométaire](/img/biome/tholin_cometaire.jpg)
 
-## Condition
-Presence de méthane
-Presence d'Azote
-Presence de phosphine
-Pas d'oxygene
-Rayon UV (magnestosphère planete)
+### Tholin phosphoré
 
+#### Description
 
-## Illustration
-![tholin phosphore 1](/img/biome/tholin_phosphore_1.jpg)
-![tholin phosphore 2](/img/biome/tholin_phosphore_2.jpg)
+Couleur rouge à pourpre. Texture cireuse, ou cassante si refroidie rapidement.
+
+#### Composition
+
+- Azote (N₂)
+- Méthane (CH₄)
+- Phosphine (PH₃)
+
+#### Condition
+
+- Présence de méthane
+- Présence d'azote
+- Présence de phosphine
+- Pas d'oxygène
+- Rayons UV (magnétosphère de la planète)
+
+#### Illustration
+
+![Tholin phosphoré 1](/img/biome/tholin_phosphore_1.jpg)
+![Tholin phosphoré 2](/img/biome/tholin_phosphore_2.jpg)

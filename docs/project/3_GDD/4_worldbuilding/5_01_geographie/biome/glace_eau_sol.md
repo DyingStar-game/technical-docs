@@ -1,14 +1,19 @@
-# Plain de glace carbonique
+# Sol de glace d'eau
 
 ## Description
-Région constitué de glace carbonique 
 
-## Coposition
-dioxyde de carbone (CO2) 
+Région constituée de glace d'eau.
+
+## Composition
+
+Eau (H₂O)
 
 ## Condition
-Presence de dioxyde de carbone
-température inferieur à 195,15 sous 1g
+
+- Présence d'eau
+- Température inférieure à 273,15 K sous 1 g
 
 ## Illustration
-![plain de glace carbonique](/img/biome/glace_carbonique_sol.png)
+
+![Sol d'eau](/img/biome/glace_eau_sol.png)
+![Sol d'eau avec lac](/img/biome/glace_eau_lac_sol.png)

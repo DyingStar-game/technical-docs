@@ -1,35 +1,38 @@
 # Plaine d'iode
 
 ## Description
-Étendue ayant une majeur de Iode. 
-De couleur noir ou violet profond.
 
-## Coposition
+Étendue majoritairement composée d'iode, de couleur noire ou violet profond.
+
+## Composition
+
 Iode (I)
 
 ## Condition
-Presence de Iode.
+
+Présence d'iode.
 
 ## Illustration
-![Plain de Iode](/img/biome/iode_plain.jpg)
-![Iode sol](/img/biome/iode_sol.png)
 
+![Plaine d'iode](/img/biome/iode_plain.jpg)
+![Sol d'iode](/img/biome/iode_sol.png)
 
 ## Composants
 
-### Cristaux de bunsenite 
+### Cristaux de bunsenite
 
-## Description
-Pique géante constituté de iode (I2).
-C'est des cristaux de couleur noir ou violet profond qui peuvent atteindre plus 1 m de hauteur.
+#### Description
 
-## Composition
+Pics géants constitués d'iode (I₂). Ce sont des cristaux de couleur noire ou violet profond qui peuvent atteindre plus de 1 m de hauteur.
+
+#### Composition
+
 Iode (I)
 
-## Condition
-Presence de Iode.
+#### Condition
 
-## Illustration
-![Iode Cristallin metallique](/img/biome/iode_cristallin_metallique.png)
+Présence d'iode.
 
+#### Illustration
 
+![Iode cristallin métallique](/img/biome/iode_cristallin_metallique.png)

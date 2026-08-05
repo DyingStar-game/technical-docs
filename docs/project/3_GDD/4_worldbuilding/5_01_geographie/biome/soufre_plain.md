@@ -1,16 +1,17 @@
 # Plaine de soufre
 
 ## Description
-Plaine de soufre 
 
-## Coposition
-Soufre (So)
+Plaine de soufre.
+
+## Composition
+
+Soufre (S)
 
 ## Condition
+
 Soufre
 
-
 ## Illustration
-![Plaine de Soufre](/img/biome/soufre_plain.jpg)
 
-
+![Plaine de soufre](/img/biome/soufre_plain.jpg)

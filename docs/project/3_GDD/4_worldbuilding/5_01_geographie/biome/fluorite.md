@@ -1,65 +1,75 @@
 # Plaine de fluorite
 
 ## Description
-La fluorite est un mineraux halogénures composée de fluorure de cacium. 
-Il forme des structures cristalline et cubique. 
 
+La fluorite est un minéral halogénure composé de fluorure de calcium. Elle forme des structures cristallines et cubiques.
 
-## Coposition
-fluorure de calcium (CaF2) 
+## Composition
+
+Fluorure de calcium (CaF₂)
 
 ## Illustration
-![Plaine de fluorite](/img/biome/fluorite_naturel.jpg)
 
+![Plaine de fluorite](/img/biome/fluorite_naturel.jpg)
 
 ## Composants
 
-### Plaine de fluorite vert
-
-## Description
-La fluorite verte a des impureté de fer ou de cuivre
-
-## Composition
-Fluorite avec impureté de cuivre ou de fer (CaF2 : Fe,Cu)
-
-## Condition
-Presence de calcium
-Presence de Fluore
-Structure fragile qui se brise comme du verre.
-
-## Illustration
-![Fluorite vert](/img/biome/fluorite_vert.jpg)
-
-
-### Plaine de fluorite violet 
+### Plaine de fluorite verte
 
 #### Description
-La fluorite violet a des impureté de yttrium ou de cérium
+
+La fluorite verte a des impuretés de fer ou de cuivre.
 
 #### Composition
-Fluorite avec impureté de yttrium ou de cérium (CaF2 : Y,Ce)
+
+Fluorite avec impuretés de cuivre ou de fer (CaF₂ : Fe, Cu)
 
 #### Condition
-Presence de calcium
-Presence de Fluore
-Structure fragile qui se brise comme du verre.
+
+- Présence de calcium
+- Présence de fluor
+- Structure fragile qui se brise comme du verre.
 
 #### Illustration
-![Fluorite violet](/img/biome/fluorite_violet.jpg)
 
+![Fluorite verte](/img/biome/fluorite_vert.jpg)
 
-### Plaine de fluorite blanc 
+### Plaine de fluorite violette
 
 #### Description
-La fluorite blanc n'a pas d'impuerté
+
+La fluorite violette a des impuretés d'yttrium ou de cérium.
 
 #### Composition
-Fluorite (CaF2)
+
+Fluorite avec impuretés d'yttrium ou de cérium (CaF₂ : Y, Ce)
 
 #### Condition
-Presence de calcium
-Presence de Fluore
-Structure fragile qui se brise comme du verre.
+
+- Présence de calcium
+- Présence de fluor
+- Structure fragile qui se brise comme du verre.
 
 #### Illustration
-![Fluorite blanc](/img/biome/fluorite_blanc.jpg)
+
+![Fluorite violette](/img/biome/fluorite_violet.jpg)
+
+### Plaine de fluorite blanche
+
+#### Description
+
+La fluorite blanche n'a pas d'impuretés.
+
+#### Composition
+
+Fluorite (CaF₂)
+
+#### Condition
+
+- Présence de calcium
+- Présence de fluor
+- Structure fragile qui se brise comme du verre.
+
+#### Illustration
+
+![Fluorite blanche](/img/biome/fluorite_blanc.jpg)

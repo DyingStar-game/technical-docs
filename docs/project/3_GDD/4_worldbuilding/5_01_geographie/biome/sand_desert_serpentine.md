@@ -1,25 +1,20 @@
-# Desert de sable de serpentine
+# Désert de sable de serpentine
 
 ## Description
-Des surfaces de sable peut se former.
-Elles se situent dans les failles ou au pied des escarpements.
-Elles sont composées de chrysotile (amiante) de couleur gris vert très pâle.
-Autement toxiques et volatiles elles sont très abrasive pour les equipements.
-Sur un astre avec athosphere il peut se former de grand desert.
-Su un astre sans athmosphere ils se concentre proche de leurs formations.
 
+Des surfaces de sable peuvent se former dans les failles ou au pied des escarpements. Elles sont composées de chrysotile (amiante) de couleur gris-vert très pâle. Hautement toxiques et volatiles, elles sont très abrasives pour les équipements. Sur un astre avec atmosphère, de grands déserts peuvent se former ; sur un astre sans atmosphère, elles se concentrent près de leur lieu de formation.
 
+## Composition
 
-## Coposition
-Serpentine phyllosilicate ((Mg,FeII)3Si2O5(OH)4)
+Serpentine phyllosilicate ((Mg,Fe²⁺)₃Si₂O₅(OH)₄)
 
 ## Condition
-Silicium (Si)
-Fer (Fe)
-Silicium (Si)
-Oxygène (O)
-Eau (H2O)
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
+- Eau (H₂O)
 
 ## Illustration
-![Serpentine phyllosilicate](/img/biome/sand_desert_serpentine.png)
 
+![Serpentine phyllosilicate](/img/biome/sand_desert_serpentine.png)

@@ -1,14 +1,18 @@
 # Sol de Silicate
 
 ## Description
-Le Silicate est le constituant principale de la croute de la pluspart des astres telluriques.
 
-## Coposition
-dioxyde de silicium (SiO2)
+Le silicate est le constituant principal de la croûte de la plupart des astres telluriques.
+
+## Composition
+
+Dioxyde de silicium (SiO₂)
 
 ## Condition
-Presence de Silicium 
-Presence d'Oxygene
+
+- Présence de silicium
+- Présence d'oxygène
 
 ## Illustration
-![Sol de Silicate](/img/biome/silicate_sol.png)
+
+![Sol de silicate](/img/biome/silicate_sol.png)
