@@ -1,14 +1,17 @@
 # Lac de goudron
 
 ## Description
-Chaines de carbone de la decomposition du tholins.
 
-## Coposition
-tholins
+Chaînes de carbone issues de la décomposition des tholins.
+
+## Composition
+
+Tholins
 
 ## Condition
-tholins
 
+Tholins
 
 ## Illustration
-![goudron lake](/img/biome/goudron_lake.png)
+
+![Lac de goudron](/img/biome/goudron_lake.png)

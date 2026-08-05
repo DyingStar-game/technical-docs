@@ -1,16 +1,17 @@
 # Plaine de silicate
 
 ## Description
+
 Plaine de silicate.
 
-## Coposition
+## Composition
+
 Silicate (Si)
 
 ## Condition
+
 Silicate (Si)
 
 ## Illustration
-![Plain de silicate](/img/biome/silicate_plain.jpg)
 
-
-
+![Plaine de silicate](/img/biome/silicate_plain.jpg)

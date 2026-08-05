@@ -1,13 +1,17 @@
 # Plaine de graphite
 
 ## Description
-Minéral noir composé de Carbone en feuilles.  
 
-## Coposition
-Carbone C)
+Minéral noir composé de carbone en feuillets.
+
+## Composition
+
+Carbone (C)
 
 ## Condition
+
 Carbone
 
 ## Illustration
-![Graphite sol](/img/biome/graphite_sol.png)
+
+![Sol de graphite](/img/biome/graphite_sol.png)

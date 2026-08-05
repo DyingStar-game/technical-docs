@@ -1,15 +1,19 @@
 # Désert sablonneux d'ilménite
 
 ## Description
-Région hyper-aride dominée par l'accumulation de cristaux noir d'oxyde de fer et de titane. 
 
-## Coposition
- FeIITiO3 
+Région hyper-aride dominée par l'accumulation de cristaux noirs d'oxyde de fer et de titane.
+
+## Composition
+
+Ilménite (FeTiO₃)
 
 ## Condition
-Presence de titane. 
-Presence de fer. 
-Presence d'oxygene.
+
+- Présence de titane
+- Présence de fer
+- Présence d'oxygène
 
 ## Illustration
-![desert sablonneux d'ilmènite](/img/biome/ilmenite_sand_desert.jpg)
+
+![Désert sablonneux d'ilménite](/img/biome/ilmenite_sand_desert.jpg)

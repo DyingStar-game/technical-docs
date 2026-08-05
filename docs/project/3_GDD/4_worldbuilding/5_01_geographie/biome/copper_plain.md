@@ -1,111 +1,129 @@
 # Plaine de cuivre
 
 ## Description
-Étendue ayant une majeur quantité de cuivre dans le sol. 
 
-## Coposition
-cuivre (Cu) 
+Étendue ayant une quantité majeure de cuivre dans le sol.
+
+## Composition
+
+Cuivre (Cu)
 
 ## Illustration
-![Plaine de cuivre](/img/biome/copper_plain.png)
 
+![Plaine de cuivre](/img/biome/copper_plain.png)
 
 ## Composants
 
-### Dendrites de cuivre 
-
-## Description
-Les structures de dendrites peuvent monter de 2m à 3m sur gravité de 1g
-Sur une lune elle peuvent monter bien plus haut.
-C'est des structures très fragiles. 
-
-## Composition
-cuivre (Cu)
-
-## Condition
-Presence de cuivre.
-Très fragile (Seul les buissons existeront à la surface d'une lune.) 
-
-## Illustration
-![Dendrites de cuivre](/img/biome/copper_dendrite.jpg)
-
-
-### Cristaux de Cupride 
+### Dendrites de cuivre
 
 #### Description
-Un oxyde comun de cuivre. ( Les plaines de cuivre.)
+
+Les structures de dendrites peuvent monter de 2 m à 3 m sous une gravité de 1 g ; sur une lune, elles peuvent monter bien plus haut. Ce sont des structures très fragiles.
 
 #### Composition
-Oxyde de cuivre (Cu2O) 
+
+Cuivre (Cu)
 
 #### Condition
-Presence d'oxygene et de cuivre.
+
+- Présence de cuivre.
+- Très fragiles (seuls les buissons existeront à la surface d'une lune).
 
 #### Illustration
-![cristaux de cupride](/img/biome/cuprite_copper.jpg)
 
+![Dendrites de cuivre](/img/biome/copper_dendrite.jpg)
 
-### Cristaux de Ténorite 
+### Cristaux de Cupride
 
 #### Description
-Un oxyde comun de cuivre. Les vielles plaines de cuivre. (le Cu2O se decompose en (CuO) avec de O2)
+
+Un oxyde commun de cuivre (les plaines de cuivre).
 
 #### Composition
+
+Oxyde de cuivre (Cu₂O)
+
+#### Condition
+
+Présence d'oxygène et de cuivre.
+
+#### Illustration
+
+![Cristaux de cupride](/img/biome/cuprite_copper.jpg)
+
+### Cristaux de Ténorite
+
+#### Description
+
+Un oxyde commun de cuivre, présent dans les vieilles plaines de cuivre (le Cu₂O se décompose en CuO avec de l'O₂).
+
+#### Composition
+
 Oxyde de cuivre (CuO)
 
 #### Condition
-Presence de cuivre.
-Presence d'oxygene O2 dans l'ahthmosphere.
+
+- Présence de cuivre.
+- Présence d'oxygène O₂ dans l'atmosphère.
 
 #### Illustration
-![cristaux de tenorite](/img/biome/tenorite_copper.jpg)
 
+![Cristaux de ténorite](/img/biome/tenorite_copper.jpg)
 
-### Sol de malachite  
+### Sol de malachite
 
 #### Description
-Oxydation du cuivre brute par l'eau. De couleur vert
+
+Oxydation du cuivre brut par l'eau, de couleur verte.
 
 #### Composition
-(Cu2(CO3)(OH)2·6H2O)
+
+Cu₂(CO₃)(OH)₂·6H₂O
 
 #### Condition
-Presence de cuivre
-Presence d'eau
+
+- Présence de cuivre
+- Présence d'eau
 
 #### Illustration
-![sol de malachite](/img/biome/malachite_copper.jpg)
 
+![Sol de malachite](/img/biome/malachite_copper.jpg)
 
-### Sol de cuivre orange  
+### Sol de cuivre orange
 
 #### Description
-Oxydation du cuivre brute par l'oxygene. 
+
+Oxydation du cuivre brut par l'oxygène.
 
 #### Composition
+
 Cu
 
 #### Condition
-Presence de cuivre
-Presence d'oxygene
+
+- Présence de cuivre
+- Présence d'oxygène
 
 #### Illustration
-![sol de cuivre orange](/img/biome/copper_plain.png)
 
-### Sol de cuivre rose  
+![Sol de cuivre orange](/img/biome/copper_plain.png)
+
+### Sol de cuivre rose
 
 #### Description
-le cuivre brute sans oxygene est de couleur rose.
+
+Le cuivre brut sans oxygène est de couleur rose.
 
 #### Composition
+
 Cu
 
 #### Condition
-Presence de cuivre
-Oxydation incomplet (exemple athmosphere CO2)
-Abscence d'eau
+
+- Présence de cuivre
+- Oxydation incomplète (exemple : atmosphère CO₂)
+- Absence d'eau
 
 #### Illustration
-![sol de cuivre rose](/img/biome/pink_copper_plain.jpg)
 
-
+![Sol de cuivre rose](/img/biome/pink_copper_plain.jpg)

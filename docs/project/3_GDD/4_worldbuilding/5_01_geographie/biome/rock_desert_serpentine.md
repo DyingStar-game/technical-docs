@@ -1,21 +1,20 @@
-# Desert Serpentine de rocher
+# Désert de rocher de Serpentine
 
 ## Description
-Le paysage de phylosilicate.
-La couleur est verte sur terre mais gris au vert olive dans l'espace avec reflet cireux.
-La texture forme des rochers "écailleuse" la dureté est modéré. 
 
-## Coposition
-Serpentine phyllosilicate ((Mg,FeII)3Si2O5(OH)4)
+Paysage de phyllosilicate. La couleur est verte sur Terre, mais gris à vert olive dans l'espace, avec un reflet cireux. La texture forme des rochers « écailleux » d'une dureté modérée.
+
+## Composition
+
+Serpentine phyllosilicate ((Mg,Fe²⁺)₃Si₂O₅(OH)₄)
 
 ## Condition
-Silicium (Si)
-Fer (Fe)
-Silicium (Si)
-Oxygène (O)
-Eau (H2O)
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
+- Eau (H₂O)
 
 ## Illustration
+
 ![Serpentine phyllosilicate](/img/biome/serpentine_plain.png)
-
-

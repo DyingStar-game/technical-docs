@@ -1,89 +1,100 @@
 # Serpentine plain folié
 
 ## Description
-Le paysage de phylosilicate.
-La couleur est verte sur terre mais gris au vert olive dans l'espace avec reflet cireux.
-La texture forme des rochers "écailleuse" la dureté est modéré. 
 
-## Coposition
-Serpentine phyllosilicate ((Mg,FeII)3Si2O5(OH)4)
+Le paysage de phyllosilicate. La couleur est verte sur terre, mais gris à vert olive dans l'espace, avec un reflet cireux. La texture forme des rochers « écailleux » et la dureté est modérée.
+
+## Composition
+
+Serpentine phyllosilicate ((Mg,Fe²⁺)₃Si₂O₅(OH)₄)
 
 ## Condition
-Silicium (Si)
-Fer (Fe)
-Silicium (Si)
-Oxygène (O)
-Eau (H2O)
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
+- Eau (H₂O)
 
 ## Illustration
+
 ![Serpentine phyllosilicate](/img/biome/serpentine_plain.png)
 
-
-### Cronstedtite 
-
-#### Description
-C'est une forme rare de Serpentine qui ont une structure en forme d'aiguille.
-Couleur vert foncé. 
-
-#### Composition
-Serpentine phyllosilicate ((FEIII,FeII)(SiFeIII+)O5(OH)4)
-
-#### Condition
-Silicium (Si)
-Fer (Fe)
-Silicium (Si)
-Oxygène (O)
-Eau (H2O)
-
-#### Illustration
-![cronstedtite](/img/biome/cronstedtite.png)
-
-
-### Epsomite 
+### Cronstedtite
 
 #### Description
-Ajoute des veines blanc 
+
+C'est une forme rare de serpentine, avec une structure en forme d'aiguilles, de couleur vert foncé.
 
 #### Composition
-Sulfate de magnésium (Mg)2+ (SO4)2-
+
+Serpentine phyllosilicate ((Fe³⁺,Fe²⁺)(SiFe³⁺)O₅(OH)₄)
 
 #### Condition
-Presence de Magnésium
-Présence de Soufre.
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
+- Eau (H₂O)
 
 #### Illustration
-![cristaux d'epsomite](/img/biome/epsomite.png)
 
+![Cronstedtite](/img/biome/cronstedtite.png)
 
-### Calcite 
+### Epsomite
 
 #### Description
-Ajoute des veines blanc 
+
+Ajoute des veines blanches.
 
 #### Composition
-Calcite CaCO3
+
+Sulfate de magnésium (Mg²⁺ (SO₄)²⁻)
 
 #### Condition
-Presence de Calcium
-Présence de Carbone
-Présence d'Oxygène
+
+- Présence de magnésium
+- Présence de soufre
 
 #### Illustration
-![cristaux de calcite](/img/biome/calcite.png)
 
+![Cristaux d'epsomite](/img/biome/epsomite.png)
 
-### Magnétite 
+### Calcite
 
 #### Description
-Petit caill des grains noirs 
+
+Ajoute des veines blanches.
 
 #### Composition
-Oxyde de fer Fe3O4
+
+Calcite (CaCO₃)
 
 #### Condition
-Presence de Fer
-Présence d'Oxygène
+
+- Présence de calcium
+- Présence de carbone
+- Présence d'oxygène
 
 #### Illustration
-![cristaux de magnétite](/img/biome/magnetite.png)
-![cristaux de magnétite](/img/biome/magnetite_2.png)
+
+![Cristaux de calcite](/img/biome/calcite.png)
+
+### Magnétite
+
+#### Description
+
+Petits cailloux et grains noirs.
+
+#### Composition
+
+Oxyde de fer (Fe₃O₄)
+
+#### Condition
+
+- Présence de fer
+- Présence d'oxygène
+
+#### Illustration
+
+![Cristaux de magnétite](/img/biome/magnetite.png)
+![Cristaux de magnétite](/img/biome/magnetite_2.png)

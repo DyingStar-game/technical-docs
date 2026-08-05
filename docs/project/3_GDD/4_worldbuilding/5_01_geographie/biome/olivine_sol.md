@@ -1,16 +1,20 @@
-# Sol d'olivine 
+# Sol d'olivine
 
 ## Description
-l'olivine est un mineraux magmatique comun. (comprend plusieurs mineraux comme la fayalite)
 
-## Coposition
-forstérite et fayalite (Mg2,Fe)2SiO4
+L'olivine est un minéral magmatique commun (il comprend plusieurs minéraux comme la fayalite).
+
+## Composition
+
+Forstérite et fayalite ((Mg,Fe)₂SiO₄)
 
 ## Condition
-Silicium (Si)
-Fer (Fe)
-Oxygene (O)
-Magnésium (Mg)
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
+- Magnésium (Mg)
 
 ## Illustration
+
 ![Sol d'olivine](/img/biome/olivine_sol.png)

@@ -1,15 +1,19 @@
-# Sol de fayalite (Silicate fereux)
+# Sol de fayalite (Silicate ferreux)
 
 ## Description
-Melange comun de silicate et de fer ou fayalite
 
-## Coposition
-Silicate fereux (FeSiO4)
+Mélange commun de silicate et de fer, ou fayalite.
+
+## Composition
+
+Silicate ferreux (FeSiO₄)
 
 ## Condition
-Silicium (Si)
-Fer (Fe)
-Oxygene (O)
+
+- Silicium (Si)
+- Fer (Fe)
+- Oxygène (O)
 
 ## Illustration
+
 ![Sol de fayalite](/img/biome/silicate_fereux_sol.png)

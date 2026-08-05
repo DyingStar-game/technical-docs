@@ -4,6 +4,12 @@ import { themes as prismThemes } from 'prism-react-renderer';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+// Directories (relative to the docs folder) whose sidebar entries are sorted
+// by the page title (first "# ..." heading) instead of the file name.
+const SORT_BY_TITLE_DIRS = new Set([
+  'project/3_GDD/4_worldbuilding/5_01_geographie/biome',
+]);
+
 const config: Config = {
   title: 'DyingStar - Docs',
   tagline: 'Technical Documentation for DyingStar',
@@ -100,6 +106,46 @@ const config: Config = {
           // Remove this to remove the "edit this page" links.
           editUrl:
             'https://github.com/DyingStar-game/technical-docs/tree/main/',
+          sidebarItemsGenerator: async ({
+            defaultSidebarItemsGenerator,
+            ...args
+          }) => {
+            const sidebarItems = await defaultSidebarItemsGenerator(args);
+            const docById = new Map(args.docs.map((doc) => [doc.id, doc]));
+
+            type SidebarItem = (typeof sidebarItems)[number];
+
+            const titleOf = (item: SidebarItem): string => {
+              if (item.type === 'doc') {
+                const doc = docById.get(item.id);
+                return item.label ?? doc?.title ?? item.id;
+              }
+              return 'label' in item && item.label ? item.label : '';
+            };
+
+            const isInSortedDir = (item: SidebarItem): boolean =>
+              item.type === 'doc' &&
+              SORT_BY_TITLE_DIRS.has(docById.get(item.id)?.sourceDirName ?? '');
+
+            const sortByTitle = (items: SidebarItem[]): SidebarItem[] => {
+              const result = items.map((item) =>
+                item.type === 'category'
+                  ? { ...item, items: sortByTitle(item.items) }
+                  : item,
+              );
+              if (result.some(isInSortedDir)) {
+                result.sort((a, b) =>
+                  titleOf(a).localeCompare(titleOf(b), 'fr', {
+                    sensitivity: 'base',
+                    numeric: true,
+                  }),
+                );
+              }
+              return result;
+            };
+
+            return sortByTitle(sidebarItems);
+          },
         },
         blog: false,
         theme: {

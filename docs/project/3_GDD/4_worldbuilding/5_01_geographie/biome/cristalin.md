@@ -1,16 +1,19 @@
-# champ cristallin
+# Champ cristallin
 
 ## Description
+
 Des étendues recouvertes de macro-cristaux.
 
-## champ cristallin Corindon Caméléon Laiteux 
+## Champ cristallin Corindon Caméléon Laiteux
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
 
-### Coposition
-Coridon Caméléon (Al2-x-yCrxVy)O3 
+Le corindon caméléon contient des impuretés de vanadium qui absorbent la lumière jaune. Le chrome renforce cet effet, ce qui provoque un changement de couleur : le jour, la pierre est bleu-vert ; la nuit, elle devient pourpre.
+
+### Composition
+
+Corindon caméléon : (Al₂₋ₓ₋ᵧCrₓVᵧ)O₃
 
 ### Illustration
-![champ cristallin corindon cameleon laiteux](/img/biome/cristalin_corindon_cameleon_laiteux.jpg)
+
+![Champ cristallin corindon caméléon laiteux](/img/biome/cristalin_corindon_cameleon_laiteux.jpg)

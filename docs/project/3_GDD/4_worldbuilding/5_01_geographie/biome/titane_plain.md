@@ -1,90 +1,97 @@
 # Plaine de titane
 
 ## Description
-Étendue ayant une majeur de quantité de titane dans le sol. 
 
-## Coposition
-titane (Ti)
+Étendue ayant une quantité majeure de titane dans le sol.
+
+## Composition
+
+Titane (Ti)
 
 ## Illustration
-![Plaine de titane](/img/biome/titane_plain.png)
 
+![Plaine de titane](/img/biome/titane_plain.png)
 
 ## Composants
 
-
-### Cristaux de Rutile 
-
-#### Description
-Les rutiles et un minerale cristalin de titane. Elles pourrait atteindre 1 m a 1.5 m (max 3m) de couleur jaune our rouge. 
-Il se forme par la chaleur
-Il est tres stable à la temperature.
-
-#### Composition
-TiO2
-
-#### Condition
-Presence de titane.
-Presence d'oxygene.
-Temerature de formation de 873K minimum.
-
-#### Illustration
-![Cristaux Rutile](/img/biome/rutile_titane.jpg)
-
-
-### Cristaux de Brookite 
+### Cristaux de Rutile
 
 #### Description
-Les rutiles et un minerale cristalin de titane. Elles pourrait atteindre 10 à 20 cm de couleur brun. 
 
+Le rutile est un minéral cristallin de titane. Il peut atteindre 1 m à 1,5 m (max 3 m), de couleur jaune ou rouge. Il se forme par la chaleur et est très stable à la température.
 
 #### Composition
-TiO2
+
+TiO₂
 
 #### Condition
-Presence de titane.
-Presence d'oxygene.
-Formation entre 400°C et 700°C pendant des milliers d'années dans une fente hydrothermal.
 
+- Présence de titane
+- Présence d'oxygène
+- Température de formation de 873 K minimum
 
 #### Illustration
-![Cristaux Brookite](/img/biome/brookite_titane.jpg)
 
+![Cristaux de rutile](/img/biome/rutile_titane.jpg)
+
+### Cristaux de Brookite
+
+#### Description
+
+La brookite est un minéral cristallin de titane. Elle peut atteindre 10 à 20 cm, de couleur brune.
+
+#### Composition
+
+TiO₂
+
+#### Condition
+
+- Présence de titane
+- Présence d'oxygène
+- Formation entre 400 °C et 700 °C pendant des milliers d'années dans une fente hydrothermale
+
+#### Illustration
+
+![Cristaux de brookite](/img/biome/brookite_titane.jpg)
 
 ### Cristaux d'Anatase
 
 #### Description
-C'est de petit groupe de cristaux de 1 cm à 10 cm bleu.
-Si la temperature depasse un seuil il se transforme en Rutile. 
+
+C'est un petit groupe de cristaux bleus de 1 cm à 10 cm. Si la température dépasse un seuil, il se transforme en rutile.
 
 #### Composition
-TiO2
+
+TiO₂
 
 #### Condition
-Titane
-Oxygene
-Temerature basse (si la chaleur depasse 873K longtemps 1183K rapide il se transforme en Rutile)
+
+- Titane
+- Oxygène
+- Température basse (si la chaleur dépasse 873 K longtemps, ou 1183 K rapidement, il se transforme en rutile)
 
 #### Illustration
-![Cristaux Anatase](/img/biome/anatase_titane.jpg)
 
+![Cristaux d'anatase](/img/biome/anatase_titane.jpg)
 
 ### Dendrite de titane
 
 #### Description
-Les structures de dendrites peuvent monter de 2m à 3m sur gravité de 1g
-Sur une lune elle peuvent monter bien plus haut.
-C'est des structures très fragiles. 
+
+Les structures de dendrites peuvent monter de 2 m à 3 m sous une gravité de 1 g. Sur une lune, elles peuvent monter bien plus haut. Ce sont des structures très fragiles.
 
 #### Composition
+
 Ti
 
 #### Condition
-Titane
-Pas d'oxygene
-Pas de vapeur d'eau
-temperature superieur de 1700°C
-Gravité faible 
+
+- Titane
+- Pas d'oxygène
+- Pas de vapeur d'eau
+- Température supérieure à 1700 °C
+- Gravité faible
 
 #### Illustration
+
 ![Dendrite de titane](/img/biome/titane_dendrite.jpg)

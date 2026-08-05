@@ -1,16 +1,20 @@
-# desert de sable de talc
+# Désert de sable de talc
 
 ## Description
-Le paysage de talc est blanchatre très claire. La texture est poudreuse.
 
-## Coposition
-Talc phyllosilicate (Mg3Si4O10(OH)2)
+Le paysage de talc est blanchâtre, très clair, et sa texture est poudreuse.
+
+## Composition
+
+Talc phyllosilicate (Mg₃Si₄O₁₀(OH)₂)
 
 ## Condition
-Presence de Magnésium (Mg).
-Presence de Silicium (Si).
-Presence d'oxygène (O).
-Presence d'eau (H2O).
+
+- Présence de magnésium (Mg)
+- Présence de silicium (Si)
+- Présence d'oxygène (O)
+- Présence d'eau (H₂O)
 
 ## Illustration
-![talc phyllosilicate](/img/biome/sand_desert_talc.png)
+
+![Talc phyllosilicate](/img/biome/sand_desert_talc.png)

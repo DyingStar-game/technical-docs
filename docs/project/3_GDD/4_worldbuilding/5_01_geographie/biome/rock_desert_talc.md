@@ -1,21 +1,23 @@
 # Désert de roche de Talc
 
 ## Description
-Le paysage de talc est blanchatre très claire. Constitué de couche de phyllosilicate. 
-C'est un minerale tendre indice 1 syr l'échelle de Mohs) 
 
-## Coposition
-Talc phyllosilicate (Mg3Si4O10(OH)2)
+Le paysage de talc est blanchâtre, très clair, constitué de couches de phyllosilicate. C'est un minéral tendre (indice 1 sur l'échelle de Mohs).
+
+## Composition
+
+Talc phyllosilicate (Mg₃Si₄O₁₀(OH)₂)
 
 ## Condition
-Presence de Magnésium (Mg).
-Presence de Silicium (Si).
-Presence d'oxygène (O).
-Presence d'eau (H2O).
-Pas d'athmosphère
-Pas de pluie
-Pas de cycle de gel
 
+- Présence de magnésium (Mg)
+- Présence de silicium (Si)
+- Présence d'oxygène (O)
+- Présence d'eau (H₂O)
+- Pas d'atmosphère
+- Pas de pluie
+- Pas de cycle de gel
 
 ## Illustration
-![talc phyllosilicate](/img/biome/rock_desert_talc.png)
+
+![Talc phyllosilicate](/img/biome/rock_desert_talc.png)

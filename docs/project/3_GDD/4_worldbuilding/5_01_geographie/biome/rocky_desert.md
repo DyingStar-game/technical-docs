@@ -1,64 +1,75 @@
-# Desert de pierre
+# Désert de pierre
 
 ## Description
-Étendue aride caractérisée par des dalles rocheuses dénudées et des plateaux de pierre (mesas) sculptés par l'érosion. La topographie est marquée par des formations de "badlands" où les strates géologiques sont exposées.
 
-## Desert de pierre Caméléon Laiteux 
+Étendue aride caractérisée par des dalles rocheuses dénudées et des plateaux de pierre (mesas) sculptés par l'érosion. La topographie est marquée par des formations de « badlands » où les strates géologiques sont exposées.
+
+## Désert de pierre Caméléon Laiteux
 
 ### Description
-Le Corindon Caméléon contient des impureté de vanadium qui absorbe la lumiere jaune. Le Chrome renforce ce changement.
-Ce qui provoque un changement de couleur. Le jour la couleur de la pierre est bleu-vert. La nuit Pourpre.
 
-### Coposition
-Coridon Caméléon (Al2-x-yCrxVy)O3 
+Le corindon caméléon contient des impuretés de vanadium qui absorbent la lumière jaune. Le chrome renforce cet effet, ce qui provoque un changement de couleur : le jour, la pierre est bleu-vert ; la nuit, elle devient pourpre.
+
+### Composition
+
+Corindon caméléon : (Al₂₋ₓ₋ᵧCrₓVᵧ)O₃
 
 ### Illustration
-![rocky desert corindon cameleon laiteux](/img/biome/rocky_desert_corindon_cameleon_laiteux.jpg)
 
+![Rocky desert corindon caméléon laiteux](/img/biome/rocky_desert_corindon_cameleon_laiteux.jpg)
 
-## Desert de pierre de magnesium et de calcium 
+## Désert de pierre de magnésium et de calcium
 
 ### Description
-La formation de plaque de magnesium et de calcium
 
-### Coposition
+Formation de plaques de magnésium et de calcium.
+
+### Composition
+
 Mg + Ca
 
 ### Illustration
-![rocky desert Calcium magnesium](/img/biome/rocky_desert_calcium_magnesium.jpg)
 
+![Rocky desert calcium magnésium](/img/biome/rocky_desert_calcium_magnesium.jpg)
 
-## Desert de pierre de hematite 
-
-### Description
-Ce desert est riche en hematite. (Oxyde de fer III)
-
-### Coposition
-Fe2O3
-
-### Illustration
-![rocky desert hematite](/img/biome/rocky_desert_hematite.jpg)
-
-
-## Desert de pierre de Ilmenite 
+## Désert de pierre d'hématite
 
 ### Description
-Ce desert est riche en Ilménite. 
 
-### Coposition
-FeTiO3
+Ce désert est riche en hématite (oxyde de fer III).
+
+### Composition
+
+Fe₂O₃
 
 ### Illustration
-![rocky desert ilmenite](/img/biome/rocky_desert_ilmenite.jpg)
 
+![Rocky desert hématite](/img/biome/rocky_desert_hematite.jpg)
 
-## Desert de pierre de Phosphure d'aluminium 
+## Désert de pierre d'Ilménite
 
 ### Description
-Ce desert est riche en phosphure d'aluminium. 
 
-### Coposition
-FeTiO3
+Ce désert est riche en ilménite.
+
+### Composition
+
+FeTiO₃
 
 ### Illustration
-![rocky desert phosphure aluminium](/img/biome/rocky_desert_phosphure_aluminium.jpg)
+
+![Rocky desert ilménite](/img/biome/rocky_desert_ilmenite.jpg)
+
+## Désert de pierre de Phosphure d'aluminium
+
+### Description
+
+Ce désert est riche en phosphure d'aluminium.
+
+### Composition
+
+FeTiO₃
+
+### Illustration
+
+![Rocky desert phosphure aluminium](/img/biome/rocky_desert_phosphure_aluminium.jpg)

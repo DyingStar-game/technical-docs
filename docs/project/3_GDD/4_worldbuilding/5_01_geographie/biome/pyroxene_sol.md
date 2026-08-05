@@ -1,15 +1,18 @@
-# Sol de Pyroxene
+# Sol de Pyroxène
 
 ## Description
-Le Pyroxene est un minéraux très comun souvent magmatique. 
 
-## Coposition
-Pyroxène XY(SiO3)2
-(XY) Sont des cations. (ions ayant perdu des électrons)
+Le pyroxène est un minéral très commun, souvent magmatique.
+
+## Composition
+
+Pyroxène : XY(SiO₃)₂, où X et Y sont des cations (ions ayant perdu des électrons).
 
 ## Condition
-Presence de Silicium 
-Presence d'Oxygene
+
+- Présence de silicium
+- Présence d'oxygène
 
 ## Illustration
-![Sol de Pyroxene](/img/biome/pyroxene_sol.png)
+
+![Sol de Pyroxène](/img/biome/pyroxene_sol.png)

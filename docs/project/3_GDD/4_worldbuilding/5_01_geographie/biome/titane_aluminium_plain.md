@@ -1,15 +1,18 @@
-# Plaine de titane d'aluminium
+# Plaine de titane et d'aluminium
 
 ## Description
-Mélange de titane d'aluminium. 
 
-## Coposition
+Mélange de titane et d'aluminium.
+
+## Composition
+
 Titane + Aluminium (Ti, Al)
 
 ## Condition
-Titane 
-Aluminium
 
+- Titane
+- Aluminium
 
 ## Illustration
-![Plaine de titane d'aluminium](/img/biome/titane_aluminium_plain.jpg)
+
+![Plaine de titane et d'aluminium](/img/biome/titane_aluminium_plain.jpg)
