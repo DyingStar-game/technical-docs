@@ -72,6 +72,24 @@ Any property you replicate for the tool (`tools`, `head`, …) must be declared 
 If the tool must disappear in some states (the drill stows while the player carries an ore),
 expose a **`set_stowed(value)`** and call it from the player when that state changes.
 
+## Tools follow the body (belt holster)
+
+A **stowed** tool is holstered on the animated body so it moves with it (walk / crouch / jump)
+instead of floating at a fixed offset from the body origin. The mechanism is shared and DRY:
+
+- The puppet exposes **`player.belt_mount`** — a `BoneAttachment3D` on the hip bone, created once by
+  the `CharacterAnimator` (see [Character animation](./character_animation.md)). It follows the
+  animation for free.
+- **Each tool holsters onto it with its OWN offset.** The mount (the bone) is shared; the offset —
+  where *that* tool sits on the belt — is per-tool. The mining tool's `Stow` group (`stow_offset` /
+  `stow_rotation_deg`) *is* that belt pose. A new tool just reads `player.belt_mount` and supplies
+  its own offset; no duplicated bone-finding code.
+
+:::tip[Owner vs remotes]
+The local owner doesn't see his own stowed tool (first-person clutter); it's the **remote** avatars
+that show the holstered tool following the body. Tune the offset with a second client watching.
+:::
+
 ## Recommendation
 
 Because `MiningTool` is the only tool today, equip/stow, the `EquipmentMount` wiring and the
