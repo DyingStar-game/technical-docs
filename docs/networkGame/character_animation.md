@@ -15,6 +15,8 @@ Every player now has an **animated body**: you see your own arms and legs in fir
 players walk, run, jump, crouch, sit, carry and emote in front of you. The character uses the
 Quaternius **Universal Animation Library** (UAL) rig.
 
+![Three players showing the range: one crouched and one prone — each with a mining tool holstered on the belt — and one standing in a fold-arms idle, next to a carriable box](./static_files/character_showcase_stances.png)
+
 ## The one idea to remember: animation is *derived*, not sent
 
 **No animation data ever travels the network.** We never send "play the walk clip" or a bone pose.
@@ -56,6 +58,28 @@ source clip `Idle_Loop` becomes `Idle` — the names in the `CharacterAnimationS
 names **without** `_Loop`.
 :::
 
+### Where the clip names live (the `@export` fields)
+
+The clip vocabulary is the resource
+**`scenes/_universe/characters/humanoids/ual_animation_set.tres`** (a `CharacterAnimationSet`). Open it
+in the Godot **Inspector** and you get **one `@export` field per state**, grouped by family
+(**Idle · Walk · Run · Sprint · Crouch · Prone · Turn · Jump · Carry · Sit · Emote**). Each field holds
+the **name of the clip** to play for that state:
+
+| Family (group) | Example fields → clip name |
+|---|---|
+| Walk | `walk_fwd → "Walk"`, `walk_bwd → "Walk_Bwd"`, `walk_left/right`, diagonals |
+| Run | `run_fwd → "Jog_Fwd"`, `run_bwd`, `run_left/right`, diagonals |
+| Crouch / Prone | `crouch_idle → "Crouch_Idle"`, `crouch_fwd…`, `prone_idle → "Crawl_Idle"`… |
+| Jump | `jump_start`, `jump_loop`, `jump_land` |
+| Sit | `sit_driving → "Driving"`, `sit_passenger → "Sitting_Nodding"` |
+| Emote | `emote_dance`, `emote_wave`, … (referenced by `EmoteCatalog`) |
+
+An **empty field** means "this model doesn't have that clip" → the animator falls back to a sensible
+one (nearest direction → forward → idle). The set is assigned to the `CharacterAnimator` node's
+**`Anim Set`** slot in `human_puppet.tscn`. So pointing a state at a different clip is just editing a
+**text field in the Inspector** — no code, and a different model gets its **own** set, same controller.
+
 ## What drives what
 
 | You see | Derived from | Notes |
@@ -95,7 +119,9 @@ Both are clamped so the neck never snaps to an impossible angle.
 
 Hold **T** to open a radial menu of emotes (dance, wave, sit on the ground, rock-paper-scissors…).
 Picking one sends the emote **to the server**, which validates it and replicates it as an
-`action = "emote:<key>:<n>"` event, so **every** player sees it play. The emote clips live in the
+`action = "emote:<key>:<n>"` event, so **every** player sees it play.
+
+![The emote wheel open (hold T) — Dance, Celebration, Crying, Drink, Sit, Game, Yes/No, Rage, Lay down, Consume, Surprise, Zombie, T-Pose — with a remote player mid-emote in the background](./static_files/character_emote_wheel.png) The emote clips live in the
 `CharacterAnimationSet`; `EmoteCatalog` only says which set field each wheel entry uses.
 
 ## Adding or retargeting a character model
@@ -109,6 +135,12 @@ The controller works on **clip names**, not on a specific model, so a new charac
 
 Because the whole system reads replicated state, the new model animates the same way in first person
 **and** for remote avatars, with no code and no extra networking.
+
+When you export the model (or new animations) from Blender to glTF, match the Quaternius kit's export
+settings — most importantly **Animation mode = Actions**, **+Y Up**, **Use Rest Position Armature**, and
+**Force keeping channels for bones** (so every bone track survives):
+
+![Blender glTF (.glb) export settings used for the Quaternius kit: Animation mode "Actions", +Y Up, Use Rest Position Armature, Force keeping channels for bones](./static_files/character_export_settings.png)
 
 :::tip[One rig, many bodies]
 The goal is that **creators only rig a model** on the shared skeleton; the code links the animation
