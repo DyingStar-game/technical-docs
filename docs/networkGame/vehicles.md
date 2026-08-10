@@ -497,6 +497,15 @@ Two built-in limiters keep this cheap on weak GPUs (the screens still stay live 
 Also keep `resolution` small.
 :::
 
+### Screens power off with the engine
+
+The rear-view screens **and** the dashboard go **dark when the engine is off**, and light up again on
+ignition — so a parked truck reads as powered-down, not frozen. Each screen reads the vehicle's
+replicated **`is_engine_on()`** on its own (the `Vehicle` knows nothing about its screens): a rear
+camera swaps its feed for a black image **and stops rendering** (no wasted GPU) while off, and the
+dashboard multiplies its panel to black. Since the engine state is replicated, every nearby player
+sees the same on/off. No setup — it's automatic on any screen wired as above.
+
 ## Inspector reference — every `@export`
 
 Every knob below lives on the root **`Vehicle`** node, grouped in the Inspector exactly as shown.
