@@ -19,6 +19,8 @@ bytes on the wire.
 
 ## The pieces
 
+![The human_puppet scene open in the Godot editor: the UAL mannequin body in a T-pose in the 3D viewport](./static_files/puppet_scene.png)
+
 - **The puppet** — `human_puppet.tscn`: a skeleton + the shared animation clips (the Quaternius UAL
   library, merged into `UALDyingStar.glb`), plus one **`CharacterAnimator`** node.
 - **`CharacterAnimator`** (`character_animator.gd`) — the controller. It picks and plays a clip every
@@ -29,6 +31,10 @@ bytes on the wire.
   that puppet's `AnimationPlayer`. One set per skeleton, so a different model gets its own set while
   the same `CharacterAnimator` drives it. An empty slot means "not on this model" → the animator falls
   back to a sensible clip.
+
+The scene tree is just the model and the controller under the puppet root:
+
+![The human_puppet scene tree: the human_puppet root with the UALDyingStar model and the CharacterAnimator node under it](./static_files/puppet_animator.png)
 
 ## Where the animation state comes from
 
@@ -66,7 +72,11 @@ The walk clip's playback speed is warped to the real ground speed so the feet do
 
 ## The animator's settings (Inspector)
 
-All on the `CharacterAnimator` node in `human_puppet.tscn`, grouped by concern:
+All on the `CharacterAnimator` node in `human_puppet.tscn`, grouped by concern. Its **Anim Set** slot
+holds the `CharacterAnimationSet`, whose clip families (Idle, Walk, Run, Climb, Carry, Sit, Emote…)
+expand right in the Inspector:
+
+![The CharacterAnimator in the Inspector: the Anim Set resource expanded into its clip groups (Idle, Walk, Run, Sprint, Crouch, Prone, Turn, Jump, Climb, Carry, Sit, Emote), and below it the animator's own groups — Rig with the Belt Bone, Seated pose, Vault pose offsets, Head look, Head camera, Turn in place](./static_files/character_controller.png)
 
 | Group | What it tunes |
 |---|---|

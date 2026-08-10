@@ -86,6 +86,8 @@ climb**: the height thresholds, the detection reach (`vault_reach`), the face-ch
 (`vault_face_margin`), the vault-over distance and arc, per-clip glide durations, the step-up reach and
 duration, and the cooldown. The per-type animation pose offsets live on the `CharacterAnimator`.
 
+![The Player node's Vault / Climb export knobs in the Godot Inspector, with their default values (min/max height, low max, climb-1 max, face margin, reach, land forward, over distance, arc margin, the three durations, cooldown, step-up reach and duration)](./static_files/player_vault_options.png)
+
 :::tip[Read the obstacle height live]
 Turn on the movement debug (Settings) and the on-screen readout adds a second line —
 `can vault: 1.05m -> climb_1m` (or `0.35m (slope)`, `— (clear)`, …). Walk up to any obstacle to see its
