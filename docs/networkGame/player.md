@@ -122,3 +122,67 @@ The carry/pickup illustrates the pattern:
   which only displays it — the client never decides the prompt itself.
 - Because that prompt is a replicated player property, it must be whitelisted in
   `player_def.json` (see the warning above) or Horizon drops it.
+
+## Replicated player properties
+
+Everything the other clients see about a player is a whitelisted entry in `player_def.json`. The
+current set:
+
+| Property | Kind | What it is |
+|---|---|---|
+| `position`, `rotation`, `velocity` | state | body transform + motion |
+| `parent_id` | state | the frame the body rides (e.g. a planet) |
+| `head`, `head_yaw` | state | look pitch, and the **seated** look yaw (0 while standing) |
+| `stance` | state | standing / crouched / prone |
+| `carrying` | state | holding a carriable |
+| `flashlight` | state | torch on / off |
+| `tools`, `perforating` | state | equipped tool + mining state |
+| `carry_prompt` | state | server-decided `[E]` prompt for the owner |
+| `action` | **event** | one-shot events (jump / land / emote / seat / interact) — see below |
+| `name`, `scenename`, `spawn_appartment_id` | state | identity / scene |
+
+Adding one means editing `player_def.json` **and** rebuilding Horizon (see the warning above). Most of
+these feed the [character animation](./character_animation.md), which is derived from them — no
+animation data is sent.
+
+## The `action` field: one-shot events
+
+Some things are **events**, not states: a jump, a landing, an emote, taking a seat. Horizon keeps the
+**last value** of every property and re-sends it to new subscribers, so if we simply set
+`action = "jump"`, a second identical jump would be **swallowed** by change detection (same value = no
+update) and a late joiner would replay the last one.
+
+The idiom is a **monotonic counter**: the server tags each event with an ever-increasing number, so
+every occurrence is a **new** value that always replicates:
+
+```
+action = "jump:7"            # the 7th jump
+action = "land:7"            # touched down
+action = "emote:wave:3"      # played an emote
+action = "seat:driver:2"     # took the driver seat  (and "unseat:2" on exit)
+action = "emote:interact:5"  # reached for a vehicle door, on foot
+```
+
+Each client remembers the last value it saw **per event type** and reacts only to a new one. This
+needs **no new whitelisted property** — `action` is already in `player_def.json` — which is why
+jump, landing, emotes, seating and the door-interact gesture all cost zero extra networking.
+
+## Movement stances (crouch / prone)
+
+The player has three stances, held in the replicated **`stance`** property: `0` standing, `1` crouched
+(toggle **C**), `2` prone (toggle **W**). It is server-authoritative — the client only asks:
+
+- The owner sends `{"action": "stance", "value": <0|1|2>}`; the server sets `stance`, replicates it,
+  and every client (owner included) reads the echo to drive the crouch / crawl animation.
+- The server **caps the speed** (crouch ≈ 0.8 m/s, prone ≈ 0.5 m/s, no sprint) and **shrinks the
+  collision capsule** so a crouched or prone player fits under low obstacles. Standing up is **gated by
+  a headroom raycast** — you can't stand up under a ceiling.
+- The physics space state is only valid during the physics step, so the stance request is **recorded**
+  in the action handler and **applied on the next physics tick** (where the headroom ray is valid).
+
+## Carry is standing-only
+
+Picking a box up is only allowed while **standing** (`stance == 0`): the server refuses the grab
+otherwise, and no `[E] Carry` prompt is shown while crouched or prone. Changing to crouch / prone — or
+**jumping** — **drops** whatever you carry. This keeps the carry pose and the
+[belt holster](./tools.md#tools-follow-the-body-belt-holster) simple.

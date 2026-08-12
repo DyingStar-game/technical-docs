@@ -134,6 +134,20 @@ automatically. The driver/passenger logic lives in the **networked** path, so te
 game (F5), not the standalone bench.
 :::
 
+Every seat's occupancy is **replicated** to all clients (a `seats` map on the vehicle, alongside
+`doors`), so a taken **passenger** seat shows as occupied too — not only the driver. Without it a
+client couldn't tell a passenger seat was in use and would let two players appear to sit in the same
+spot.
+
+### Seated poses
+
+A seated player plays a matching **animation**: the driver holds the wheel (`Driving`), a passenger
+sits (`Sitting_Nodding`). Remotes see it because the seat state is replicated as a `seat:<role>:<n>`
+event (and `unseat:<n>` on exit) — see [Character animation](./character_animation.md) and
+[the event-field idiom](./player.md#the-action-field-one-shot-events). A tunable puppet offset lines
+the sit pose up with the seat's `SitPoint`; it shifts the visible body only, so the driver's
+first-person camera stays where the seat puts it.
+
 ## 4. Configure the powertrain
 
 On the root `Vehicle`, open the **Drive** export group:
@@ -172,7 +186,7 @@ A vehicle only replicates if the network layer knows it:
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
    `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`, `mass`,
-   `headlights`, `doors`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type
+   `headlights`, `doors`, `seats`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type
    needs its own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
@@ -250,6 +264,10 @@ with no clip falls back to a code hinge-swing on the mesh named `door_id` (about
 
 The handle sits on the interact layer, so the player **looks at it** and presses **E** to toggle the
 door — no proximity zone, no per-vehicle wiring. Prompt: `[E] Open door` / `[E] Close door`.
+
+Operating a handle **on foot** also plays a short **reach-out gesture** on your character, replicated
+to everyone (a non-wheel emote — see [Character animation](./character_animation.md)). A driver or
+passenger toggling a door from **inside** does not.
 
 :::tip[You can only operate the handle you can actually see]
 The interaction is **server-authoritative** and side-aware, so you can't open a door through the
