@@ -118,8 +118,7 @@ La largeur de la piste sera souvent à peine assez grande pour un seul véhicule
 
 
 Pour l'aménagement de la piste, un système de bornes (en rouge) pourrait être ajouté qui indique la direction de la zone de croisement (en violet)
-https://cdn.discordapp.com/attachments/1526334405570728046/1527250222772785263/Piste.png?ex=6a5e975c\&is=6a5d45dc\&hm=dcc0f9d367be8f1f2a429851e9f0821d77d4a1d60a72f9daf6e302d0370df575\&
-piste_sommaire.png
+
 ![Piste sommaire](/img/narrative/sandbox_routes/piste_sommaire.png)
 
 
@@ -151,7 +150,6 @@ Un route sur-utilisée verrait son revêtement s'endommager, peut-être même se
 
 
 La signalisation est plus importante surtout au début et aux croisements de la route pour savoir dans quelle direction on va. Des bornes kilométriques signalerait la distance à la prochaine localité.
-https://cdn.discordapp.com/attachments/1526334405570728046/1527251359173443717/RouteSimple.png?ex=6a5e986a\&is=6a5d46ea\&hm=e51fb760ac807032466fd4bb080eafed84a0926d268032a9cb271e5fc32b23a2\&
 ![Route simple](/img/narrative/sandbox_routes/route_simple.png)
 
 
@@ -212,8 +210,6 @@ Cette technologie est à privilégier dans le cadre d'un revêtement céramique.
 ![Surfaçage par frittage 1](/img/narrative/sandbox_routes/surfacage_frittage_1.png)
 ![Surfaçage par frittage 2](/img/narrative/sandbox_routes/surfacage_frittage_2.png)
 
-https://cdn.discordapp.com/attachments/1526334405570728046/1529948059482460411/7748d476-a276-4f9a-a9bf-618f5a9ed5ca.png?ex=6a6a622a\&is=6a6910aa\&hm=a56f13bf3887d0d3880d81835739004eff28e395a72e72b73048fefc3a3e64f7\&
-https://cdn.discordapp.com/attachments/1526334405570728046/1529948060015268090/bb511748-371e-4c30-8ed6-b5755e3221b4.png?ex=6a6a622a\&is=6a6910aa\&hm=18d38fe8f566f151fb118b5ceeb7f50078561d0e180a5fb6ae06613fa2b81e16\&
 
 
 
