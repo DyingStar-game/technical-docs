@@ -11,8 +11,8 @@
 | Masse | 133.781995 | M🜨 |
 | Rayon  |   69292 | Km |
 | Gravité | 11.10635479 | m/s |
-| Température de jour | 160 | K° | 
-| Température de nuit |  160 | K° | 
+| Température de jour | 160 | K | 
+| Température de nuit |  160 | K | 
 | Distance | 1.10928 | UA |
 | Pression atmosphérique | 96.7239349660605 | bar |
 | épaisseur atmosphérique | 530.605684443984 | km |
@@ -102,8 +102,8 @@ Tarsis V.M1 se trouve dans l'anneau de la planete.
 | Masse | 0.038 | M🜨 |
 | Rayon | 2552.0 | Km |
 | Gravité | 2.325746218 | m/s |
-| Température de jour | 210 | K° |
-| Température de nuit |  150 | K° |
+| Température de jour | 210 | K |
+| Température de nuit |  150 | K |
 | Periapsis  | ? | km |
 | Apoapsis  | 554327.0 | km |
 | Pression atmosphérique | 0.017 | bar |
@@ -174,8 +174,8 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 | Masse | 0.274 | M🜨 |
 | Rayon | 5900 | Km |
 | Gravité | 3.137520747 | m/s |
-| Température de jour | 184.0 | K° |
-| Température de nuit |  183.2 | K° |
+| Température de jour | 184.0 | K |
+| Température de nuit |  183.2 | K |
 | Periapsis  | 843272.0 | km |
 | Apoapsis  | 843272.0 | km |
 | Pression atmosphérique | 1.30 | bar |
@@ -233,8 +233,8 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 | Masse | 0.118 | M🜨 |
 | Rayon | 3632 | Km |
 | Gravité | 3.565581719 | m/s |
-| Température de jour | 190.3 | K° |
-| Température de nuit |  183.4 | K° |
+| Température de jour | 190.3 | K |
+| Température de nuit |  183.4 | K |
 | Periapsis  | 1604945.0 | km |
 | Apoapsis  | 1604945.0 | km |
 | Pression atmosphérique | 1.86 | bar |
@@ -294,8 +294,8 @@ Une Super lune de glace avec des lacs d'ethane et un sol rouge.
 | Masse | 0.383 | M🜨 |
 | Rayon | 7757 | Km |
 | Gravité | 2.537179875 | m/s |
-| Température de jour | 183.4 | K° |
-| Température de nuit |  182.3 | K° |
+| Température de jour | 183.4 | K |
+| Température de nuit |  182.3 | K |
 | Periapsis  | 2247097.0 | km |
 | Apoapsis  | 2247097.0 | km |
 | Pression atmosphérique | 1.858 | bar |
@@ -354,8 +354,8 @@ Une patatoide de carbonne.
 | Masse | 0.001 | M🜨 |
 | Rayon | 809 | Km |
 | Gravité | 0.6090360829 | m/s |
-| Température de jour | 232.3 ! | K° |
-| Température de nuit | 183.4 | K° |
+| Température de jour | 232.3 ! | K |
+| Température de nuit | 183.4 | K |
 | Periapsis  | 3204491.0 | km |
 | Apoapsis  | 3204491.0 | km |
 | Pression atmosphérique | 0 | bar |
@@ -404,8 +404,8 @@ Une patatoide de carbonne.
 | Masse | 1.342 | M🜨 |
 | Rayon | 10023 | Km |
 | Gravité | 5.324724249 | m/s |
-| Température de jour | 189.0 | K° |
-| Température de nuit | 183.4 | K° |
+| Température de jour | 189.0 | K |
+| Température de nuit | 183.4 | K |
 | Periapsis  | 3412311.0 | km |
 | Apoapsis  | 3412311.0 | km |
 | Pression atmosphérique | 1.132 | bar |

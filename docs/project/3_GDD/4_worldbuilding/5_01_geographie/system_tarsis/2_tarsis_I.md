@@ -14,8 +14,8 @@ Un côté nuit composé de basalt recouvert de cheveux et de larmes de pelé. Le
 | Masse | 0.318718 | M🜨 |
 | Rayon | 4679 | Km |
 | Gravité | 5.803525677 | m/s |
-| Température de jour | 1040 | K° |
-| Température de nuit |  502 | K° | 
+| Température de jour | 1040 | K |
+| Température de nuit |  502 | K | 
 | Distance | 0.054036 | UA |
 | Pression atmosphérique | 0.23691194820064 | bar |
 | épaisseur atmosphérique | 151.991607774609 | km |
