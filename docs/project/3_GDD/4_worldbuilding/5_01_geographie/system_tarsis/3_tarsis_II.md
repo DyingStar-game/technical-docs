@@ -11,8 +11,8 @@
 | Masse | 0.071294 | M🜨 |
 | Rayon  |   3123 | Km |
 | Gravité | 2.914267833 | m/s |
-| Température de jour | 605 | K° |
-| Température de nuit |  313 | K° |
+| Température de jour | 605 | K |
+| Température de nuit |  313 | K |
 | Distance  | 0.148665 | UA |
 | Pression atmosphérique | 0.0359039308709677 | bar |
 | épaisseur atmosphérique |  274.314320450192 | km |

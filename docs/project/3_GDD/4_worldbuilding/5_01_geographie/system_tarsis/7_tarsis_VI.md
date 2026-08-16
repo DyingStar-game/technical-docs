@@ -11,8 +11,8 @@
 | Masse | 38.450652 | M🜨 |
 | Rayon  | 26806 | Km |
 | Gravité | 21.32945451 | m/s |
-| Température de jour | 61 | K° |
-| Température de nuit |  61 | K° | 
+| Température de jour | 61 | K |
+| Température de nuit |  61 | K | 
 | Distance  | 6.466886 | UA |
 | Pression atmosphérique | 30.0 | bar |
 | épaisseur atmosphérique |  113.001587700585 | km |
@@ -73,8 +73,8 @@
 | Masse | 0.257 | M🜨 |
 | Rayon | 5775 | Km |
 | Gravité | 3.07163221 | m/s |
-| Température de jour | 81.6 | K° |
-| Température de nuit |  77.9 | K° |
+| Température de jour | 81.6 | K |
+| Température de nuit |  77.9 | K |
 | Periapsis  | 3820451.0 | km |
 | Apoapsis  | 3820451.0 | km |
 | Pression atmosphérique | 0.4 | bar |
@@ -136,8 +136,8 @@
 | Masse | 0.111 | M🜨 |
 | Rayon | 3568 | Km |
 | Gravité | 3.475468481 | m/s |
-| Température de jour | 81.6 | K° |
-| Température de nuit |  77.9 | K° |
+| Température de jour | 81.6 | K |
+| Température de nuit |  77.9 | K |
 | Periapsis  | 9556588.0 | km |
 | Apoapsis  | 9556588.0 | km |
 | Pression atmosphérique | 0.457 | bar |

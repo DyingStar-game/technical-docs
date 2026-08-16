@@ -18,8 +18,8 @@ Elle est le siège social et la propriété de la société Ares.
 | Masse | 0.788 | M🜨 |
 | Rayon | 6356 | Km |
 | Gravité | 7.774966156 | m/s |
-| Température de jour | 290 | K° |
-| Température de nuit |  275 | K° |
+| Température de jour | 290 | K |
+| Température de nuit |  275 | K |
 | Distance | 0.65 | UA |
 | Pression atmosphérique | 1.02 | bar |
 | épaisseur atmosphérique | 110.0 | km |
@@ -117,8 +117,8 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 | Masse | 0.007102 | M🜨 |
 | Rayon | 1500 | Km |
 | Gravité | 1.258166787 | m/s |
-| Température de jour | 287.5 | K° |
-| Température de nuit |  257.5 | K° |
+| Température de jour | 287.5 | K |
+| Température de nuit |  257.5 | K |
 | Periapsis  | 108900 | km |
 | Apoapsis  | 111100 | km |
 | Pression atmosphérique | 0 | bar |
@@ -179,8 +179,8 @@ Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui re
 | Masse | 0.000601 | M🜨 |
 | Rayon | 700 | Km |
 | Gravité | 0.4888982231 | m/s |
-| Température de jour | 278.7 | K° |
-| Température de nuit | 248.7 | K° |
+| Température de jour | 278.7 | K |
+| Température de nuit | 248.7 | K |
 | Periapsis  | 313600 | km |
 | Apoapsis  | 326400 | km |
 | Pression atmosphérique | 0 | bar |
