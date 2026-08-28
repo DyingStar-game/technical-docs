@@ -48,6 +48,15 @@ On _LOD1, _LOD2 and _LOD3, add the modifier *Decimate*. Apply the ratio like thi
 **Never** embed textures inside the .blend, keep them as sidecar files so they can be updated without opening Blender
 :::
 
+:::tip
+A material reused across several models does not live next to its `.blend` at
+all. It is published once into the shared library and assigned by Godot at
+import time, which is what stops the same texture from existing in four copies
+across the repository. Read [Materials](./materials.md) to find out which of the
+two flows your material belongs to. The rest of this section covers
+model-specific materials.
+:::
+
 This is the procedure to manage textures:
 
 **When adding a texture the first time**, in the Shader Editor, add an *Image Texture* node → click *Open* → navigate to your `assets_blender/.../` folder and select the `.png` file there. Blender will store a relative path automatically as long as the `.blend` has already been saved once alongside the textures.
@@ -113,6 +122,21 @@ You can check **Transform > +Y Up** and other options from the built-in glTF exp
 | **UVs** | ✅ Enable |
 | **Vertex Colors** | ✅ if used |
 | **Compression (Draco)** | ❌ Avoid — Godot doesn't support Draco decompression natively |
+
+
+#### 🟣 Material
+
+| Option | Setting |
+|---|---|
+| **Materials** | ✅ Export |
+| **Images** | **None**, but only for a model using shared library materials |
+
+A model whose materials come from the shared library exports with **Images:
+None**. The `.glb` then carries the material *names* and no pixels at all, and
+Godot assigns the real materials at import time. Exporting the images would ship
+a second copy of textures that already live in the library, which is exactly what
+the library exists to avoid. A model with its own model-specific textures keeps
+the default. See [Materials](./materials.md).
 
 
 #### 🟠 Animation (if exporting animated objects)
