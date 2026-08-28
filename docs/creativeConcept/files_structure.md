@@ -196,6 +196,10 @@ Inside we have 3D blender exported models (gltf files), textures...
           - materials/
 ```
 
+The inside of `_shared/materials/` follows its own layout, one folder per
+material holding a manifest, its maps and a preview. It is described on the
+[Materials](./materials.md) page.
+
 ## Naming convention
 
 The pattern is: [category_prefix]_[descriptor]_[variant/size].[ext]
