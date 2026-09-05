@@ -95,3 +95,5 @@ The actual list of sounds per object lives on that object's **Audio SFX** group 
   the material underfoot, and how to add a new surface.
 - **[Vehicle sounds](./vehicle_audio.md)** — doors, engine (start / stop / running loop), lights,
   handbrake, horn.
+- **[Prop & tool sounds](./prop_audio.md)** — carriable crates, and the perforator's drill loop,
+  equip and miss.
