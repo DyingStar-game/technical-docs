@@ -91,5 +91,7 @@ Follow the existing folders and naming; don't invent a new layout.
 The actual list of sounds per object lives on that object's **Audio SFX** group in the Inspector:
 
 - **[Player sounds](./player_audio.md)** — footsteps, jump, torch on/off.
+- **[Surface sounds](./surface_sounds.md)** — how a footstep or a dropped crate picks the samples of
+  the material underfoot, and how to add a new surface.
 - **[Vehicle sounds](./vehicle_audio.md)** — doors, engine (start / stop / running loop), lights,
   handbrake, horn.
