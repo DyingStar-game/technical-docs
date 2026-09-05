@@ -165,8 +165,25 @@ is blank, its front points the wrong way.
 
 ### 4. If the image is rotated ("lying down")
 
-The feed is upright along the UV's vertical. If it comes out rotated, rotate the **UVs**: Edit Mode →
-select the face → UV Editor → **`R 90`** (or `180` / `-90`) until it's straight.
+The feed is upright along the UV's vertical. `U → Reset` fills the square but has no notion of "up" —
+it maps the corners in the face's own vertex order — so a screen coming out sideways after a Reset is
+expected, not a mistake.
+
+Rotate the **UVs**: Edit Mode → select the face → hover the **UV Editor** → `A` to select its UVs →
+**`R 90`** (or `180` / `-90`) until it's straight.
+
+:::warning[Set the UV Editor pivot to Median Point first]
+If the pivot is the **2D cursor** and the cursor is not at the centre of the square, the rotation walks
+the UVs **off** the `0→1` square — which silently undoes the Reset you just did, and the screen goes
+back to showing one magnified corner of the feed. With the pivot on **Median Point** a square rotated by
+90° lands back on itself exactly.
+
+Check after rotating: the quad must still cover the whole square, same four corners, just permuted.
+Rotate in the **UV Editor**, never in the 3D viewport — there you would be turning the screen itself.
+:::
+
+Do it screen by screen: each face was built on its own, so the angle is not necessarily the same for
+all of them.
 
 ## Doors — animations
 
