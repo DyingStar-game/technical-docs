@@ -10,10 +10,19 @@ sidebar_position: 7
 Traversal is decided **on the server**, like every other gameplay action.
 :::
 
-Walk into an obstacle and the character crosses it **automatically** — no key press. Depending on the
-obstacle's height it will **step up** a low kerb, **vault over** a waist-high crate, or **climb onto** a
-chest- or head-high ledge. It is fully **server-authoritative** and replicated, and it reuses the
-already-whitelisted **`action`** field (like the jump), so **no Horizon change is needed**.
+Walk into an obstacle and the character crosses it, with no move to learn: a low kerb is **stepped up**
+on its own, and against a waist-high crate or a chest-high ledge you **press jump** and the character
+**vaults over** or **climbs onto** it instead of hopping into it. It is fully **server-authoritative**
+and replicated, and it reuses the already-whitelisted **`action`** field (like the jump), so **no
+Horizon change is needed**.
+
+:::note[Why the jump key, and not fully automatic]
+Step-up is small and continuous, so doing it silently is right — you walk up a kerb without thinking
+about it. A vault is a committed move that takes over the body for a moment, and triggering it purely on
+proximity fired it when the player only meant to walk past. It therefore **consumes the pending jump
+request**: the jump you asked for becomes the vault, and it is spent, so you do not land on the ledge
+and immediately hop off it.
+:::
 
 ## How the obstacle is detected — the trace (raycast) probe
 
