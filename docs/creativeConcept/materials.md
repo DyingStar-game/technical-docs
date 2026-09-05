@@ -123,16 +123,25 @@ Expand its entry and set **Repository Root** to your clone. The addon reads the
 tag vocabulary and writes materials relative to that path, so nothing works
 until it is set. The panel tells you if the path is wrong.
 
+![Blender Preferences, Add-ons tab: the "Dying Star Material Library" entry expanded, showing its Repository Root preference set to the repository clone and a green check line confirming the library folder it resolved to](./static_files/blender_addon_material_library.png)
+
+The check line under the field is the one to read: it shows the materials folder
+the addon resolved to. If it is missing, the Repository Root is wrong.
+
 ### 4. Declare the asset library
 
 *Edit → Preferences → File Paths → Asset Libraries* → `+` →
 `<your-clone>/assets_blender/_universe/_shared/materials`
+
+![Blender Preferences, File Paths tab before the change: the Asset Libraries list holds only the default "User Library", with the + button on its right](./static_files/blender_asset_libraries_before.png)
 
 Name it **DyingStar Materials** in the Name column. Blender defaults to the
 folder name, which is `materials`, and any second clone or sandbox gives you a
 second entry with the exact same label. Two identically named libraries in the
 same dropdown are indistinguishable, and you end up publishing into one while
 reading the other.
+
+![Blender Preferences, File Paths tab after the change: a second entry named "DyingStar Materials" is selected in the Asset Libraries list, its Path pointing at assets_blender/_universe/_shared/materials in the clone](./static_files/blender_asset_libraries_after.png)
 
 This is what fills the Asset Browser.
 
@@ -153,6 +162,17 @@ This is what fills the Asset Browser.
 2. Set **Import Settings** to **Link**
 3. Drag the material onto your object
 4. Unwrap the model at **1 UV unit = 1 meter**
+
+Any editor area can become an Asset Browser from the **Editor Type** menu in its
+top-left corner:
+
+![The Blender Editor Type menu open, with "Asset Browser" highlighted in the Data column and its shortcut Shift+F1](./static_files/blender_editor_type_asset_browser.png)
+
+Then pick **DyingStar Materials** in the library dropdown. The catalogs down the
+left — concrete, metal, mineral, wood — are the families, and each material shows
+its preview under its `mat_<family>_<name>` id:
+
+![The Blender Asset Browser with the DyingStar Materials library selected: catalogs concrete, metal, mineral and wood in the left column, and material previews on the right, the first labelled mat_concrete_wall_rough](./static_files/blender_asset_browser_materials.png)
 
 New materials arrive with `git pull`. Nothing to install, nothing to rebuild.
 
