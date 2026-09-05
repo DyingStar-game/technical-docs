@@ -158,6 +158,38 @@ When exporting with animations, use **NLA Strips** mode — each strip in the NL
 2. **Check origin points** — objects floating in Godot is often caused by a misplaced origin in Blender.
 3. **Materials**: Use **Principled BSDF** nodes. The exporter supports Metal/Rough PBR (core glTF) and Shadeless (KHR_materials_unlit) materials, and constructs a glTF material based on the nodes it recognizes in the Blender material.
 4. **Textures** must be in PNG or JPEG format — other formats are auto-converted on export.
+5. **One UV map per object.** The export keeps the map flagged **render** — the *camera* icon in
+   *Object Data Properties → UV Maps* — which is not necessarily the one you edited. A part separated
+   with `P` inherits the body's UV maps, so the duplicate is easy to acquire without noticing. Select
+   the extra one and delete it with `–`.
+6. **Check face orientation.** *Overlays → Face Orientation*: **blue** = front, **red** = back.
+
+The last two are worth knowing by their symptoms, because neither reads as a UV or a normal problem
+when you hit it in Godot:
+
+| What you see in Godot | What it actually is |
+|---|---|
+| A surface in one **flat colour**, as if the texture never arrived — while Blender shows it correctly | The export used the **other UV map**. In the game file the UVs are collapsed to a point, so the whole surface samples a single pixel of the texture |
+| A surface you can **see through**, or that looks "textured from the inside" | Its faces are **inverted**. Godot culls back faces, so you are looking at the inside of the mesh |
+
+❌ Faces pointing away from the viewer show **red**:
+
+![Face Orientation overlay: a face showing red, meaning it is back-facing](./static_files/normalok_pasok.png)
+
+✅ The same faces once fixed show **blue**:
+
+![Face Orientation overlay: the face showing blue, meaning it is front-facing](./static_files/normalok.png)
+
+Fix a red surface in Edit Mode with `Shift+N` (Recalculate Outside); on a thin plate, where "outside"
+is ambiguous, use `Alt+N → Flip` instead. Turn the overlay off afterwards — left on, it paints
+everything blue and hides your textures.
+
+:::note[Screens are the exception to a global unwrap]
+A screen face (dashboard, mirror feed) must fill the `0→1` square exactly: select **that face alone**
+and use `U → Reset`, never `Unwrap` or `Cube Projection`. Unwrapping a whole object at once takes the
+screens with it and the feed comes out hugely magnified, showing one corner of the image.
+See [Vehicle models](./vehicle_models.md) for the full screen recipe.
+:::
 
 #### Tip: Save as Export Preset
 
