@@ -108,6 +108,65 @@ gizmo** (top of the viewport header) between **Global** and **Local** to compare
 
 ![Steering wheel with the Local transform orientation — the axes tilt with the column](./static_files/steering_wheel_axis_local.png)
 
+## Checking that your wheels sit where the physics rolls
+
+Your wheel meshes are only the **skin**. The vehicle builds its own invisible wheel — a
+`VehicleWheel3D` — and the model's mesh is reparented under it at runtime. If the two do not sit in
+the same place, the truck rolls somewhere your eyes do not, and no amount of remodelling fixes it.
+
+Tick **`Debug Show Physics Wheels`** on the vehicle (Inspector → *Debug*) and the simulated wheel is
+drawn as a **translucent magenta cylinder**, at the physics radius, on top of your mesh.
+
+### ⚠️ Where you look decides what it means
+
+The physics of a networked vehicle runs on the **server**, which is headless. So the marker does not
+mean the same thing in the three places you might look at it:
+
+| Where | Who places the wheel | What the marker shows |
+|---|---|---|
+| **Bench scene** (`vehicle_bench.tscn`, not networked) | the suspension — real physics | the **simulated wheel**. The only place the alignment can be judged |
+| **In game**, on any client (the driver included) | `wheel_visual_drop`, physics off | the suspension **mount**, sitting one rest length higher |
+| **Editor**, scene not running | nothing — the mesh is not even reparented yet | the mount |
+
+❌ In the **editor**, the marker floats above the wheel. This is correct and proves nothing:
+
+![Truck in the Godot editor: magenta markers sitting above and behind the wheel meshes](./static_files/wheels_debug_editor.png)
+
+❌ **In game**, same thing — every client sees a replica, so the marker is at the mount:
+
+![The same truck in game, seen by a client: the magenta markers sit at deck height while the wheels rest on the ground](./static_files/wheels_debug_ingame.png)
+
+✅ In the **bench**, the physics runs and the marker lands on the wheel. This is the check:
+
+![The truck in the test bench: the magenta markers coincide with the wheel meshes](./static_files/wheels_debug_bench.png)
+
+### Reading a mismatch at the bench
+
+| What you see | What it means |
+|---|---|
+| The marker is **bigger or smaller** than your tyre | `wheel_radius` does not match the model. Measure your tyre and set it — it is the physics wheel, and it decides whether the vehicle climbs an obstacle or grounds on its chassis |
+| The marker sits **above or below** by a constant amount | the mount, or `suspension_rest`. Ride height is `suspension_rest + wheel_radius` under the mount |
+| They match at the bench but **not in game** | expected — see below |
+
+### Why the truck looks taller in game than at the bench
+
+At the bench the suspension carries the weight: the body settles, the wheels ride up into their
+arches, and the vehicle looks its proper height. On a client there is no physics at all, so
+`wheel_visual_drop` places the wheel at **one fixed height** — the unloaded one. Every parked vehicle
+is therefore drawn with its suspension fully extended, sitting high on its wheels like a car on a lift.
+
+A replica cannot know how far the springs are squashed: that number only exists on the server, and
+replicating it per wheel would spend network traffic on decoration.
+
+So tune `wheel_visual_drop` for the **loaded** stance, not the resting one: at the bench, measure how
+far the body settles (call it *s*), then set it to `suspension_rest − s`. It is an eyeball setting, not
+a calculation — judge it on a **parked vehicle seen from another client**, never on your own screen
+while the bench is running.
+
+:::tip[Turn it off to play]
+It is one extra cylinder per wheel, drawn over your model. It is a diagnosis, not a feature.
+:::
+
 ## Separating a part into its own object (`P`)
 
 If a screen (or any part) is currently a face of the body:
