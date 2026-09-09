@@ -24,7 +24,7 @@ request**: the jump you asked for becomes the vault, and it is spent, so you do 
 and immediately hop off it.
 :::
 
-## How the obstacle is detected — the trace (raycast) probe
+## How a VAULT is detected — the trace (raycast) probe
 
 Detection is a small, shared helper — **`VaultProbe`** (`vault_probe.gd`) — used by two callers (DRY):
 the server, which **acts** on it, and the owner's debug HUD, which just **shows** it. It's the classic
@@ -62,11 +62,65 @@ If all pass, the measured height `H` picks the move.
 
 | Obstacle height `H` | Move | Feel |
 |---|---|---|
-| below `vault_min_height` (~0.5 m) | **step-up** | a low kerb — you just walk up it |
+| below `vault_min_height` (~0.5 m) | **step-up** | a low kerb — you just walk up it. **Its own probe**, see below |
 | `vault_min_height` … `vault_low_max` (~0.9 m) | **SafetyVault** | a vault-*over* — up, over, down the far side |
 | `vault_low_max` … `vault_climb1_max` (~1.7 m) | **ClimbUp_1m** | climb *onto* the ledge |
 | `vault_climb1_max` … `vault_max_height` (~2.3 m) | **ClimbUp_2m** | climb *onto* a tall ledge |
 | above `vault_max_height` | *nothing* | too tall — a wall |
+
+## How a STEP is detected — the swept collider
+
+Below the vault threshold the obstacle is not the vault's business, and it is **not detected with
+rays**. `StepProbe` (`step_probe.gd`) sweeps the body's **own collider** three times:
+
+```
+   1. RISE          2. ADVANCE            3. DROP
+   lift the body    push it forward       let it fall back
+        ^                ==>                    v
+        |            +---------+           +---------+
+        |            |         |           |  <-- it lands HERE: that is the step,
+     ___|___         |         |           |      and how far the drop fell short
+                                                  of the lift is its height
+```
+
+Where the swept body lands **is** the step, and `rise − drop` **is** its height. Nothing is
+reconstructed from an offset, so the landing cannot disagree with the collider that has to fit there a
+moment later. Headroom over the step is checked by the same sweep, for free.
+
+### Why not rays, when the vault uses them
+
+A vault is a committed move against a big, deliberate obstacle: a few line traces describe it well. A
+step is a centimetre-scale question against whatever the level happens to be made of, and there a ray
+samples a **point** — whether it hits depends on where that one point lands on a chamfer, a joint
+between two meshes, or a lip thinner than the ray is precise.
+
+Measured in game before the rewrite: a 0.21 m step was climbed while a 0.18 m one was refused, and the
+*same* step at the *same* height was taken one moment and turned down the next. A swept shape
+integrates over the whole contact area and cannot fall down that gap.
+
+### The lift is as small as necessary
+
+The rise is tried **smallest first** (a quarter, a half, then the full `vault_min_height`), stopping at
+the first that lets the body through. That is not an optimisation — it is a correctness fix:
+
+:::warning[Lifting the whole body by the maximum makes it too tall for the doorway]
+Raising a 1.8 m body by 0.5 m makes it a 2.3 m body, and it then has to fit through the very opening it
+was about to walk through. Measured in a doorway: the rise clipped to **0.434 m** by the lintel, the
+advance then blocked at **0.001 m** by the wall *above* the door — a 7 cm step refused because the body
+had been made too tall for the door. A 7 cm step needs a 7 cm lift, which passes under any lintel a
+walking body already passes under.
+:::
+
+### There is no walkability verdict
+
+The probe does **not** reject a step for having a sloped top. On a staircase the same step was refused
+at a flatness of 0.60 and climbed at 0.60 — every reading crowded against the threshold, falling either
+side of it on rounding. One normal describes **one triangle** of a bevelled or tessellated top, not
+whether you can stand on it.
+
+The two things that test was meant to prevent are both covered elsewhere, and covered by volume: a
+**wall** stops the advance dead (the `tall` verdict), and whether a **slope** can be held is
+`floor_max_angle`, applied a frame later by `move_and_slide` on the real body.
 
 ## How the move is performed
 
@@ -100,11 +154,16 @@ duration, and the cooldown. The per-type animation pose offsets live on the `Cha
 :::tip[Read the obstacle height live]
 Turn on the movement debug (Settings) and the on-screen readout adds a second line —
 `can vault: 1.05m -> climb_1m` (or `0.35m (slope)`, `— (clear)`, …). Walk up to any obstacle to see its
-measured height and the decision in real time; it reads the **same** `VaultProbe` the server acts on.
+measured height and the decision in real time; it reads the **same** probe the server acts on.
+
+A third line, `can step: 0.16m -> yes`, does the same for the step sweep. When a step is refused the
+**server** prints why (`[StepUp] refuse: tall  montee=0.434  avance=0.001 …`) — the client's probe is
+blank against terrain, because terrain collision is server-only.
 :::
 
 :::note[Thin obstacles]
-The step-up probes the top **just past the face** it hit, so a shallow step works. The vault detection
-still samples the top a fixed distance ahead, so a very **thin** elevated ledge is best approached by its
+The step sweep moves the **whole collider** forward, so a shallow step or a chamfered lip works: there
+is no single sample to land in the wrong place. The vault detection still samples the top a fixed
+distance ahead, so a very **thin** elevated ledge is best approached by its wide face.
 wide face.
 :::

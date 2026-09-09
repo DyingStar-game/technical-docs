@@ -97,14 +97,71 @@ one (nearest direction → forward → idle). The set is assigned to the `Charac
 
 ## First person: your own body, without the seasickness
 
-For the local player the puppet **is** the visible body (arms, legs, tool). Two tricks keep it
-comfortable:
+For the local player the puppet **is** the visible body (arms, legs, tool). Four things keep it
+comfortable, and each of them exists because its absence was visible:
 
-- **Your own head is hidden** — the head bone is scaled to almost nothing so the animated head never
-  fills the camera. Remote players keep their head, of course.
-- **The camera follows the head's bob** (position only, smoothed) so the animated body never clips
-  through a fixed camera, while the mouse still owns where you look. The seat ride owns the camera
-  while you're seated.
+### Your own head *and neck* are hidden
+
+Both bones are scaled to almost nothing for the owner. Remote players keep theirs, of course.
+
+:::warning[Hiding the head alone is not enough]
+The neck is a **separate bone**. With only the head collapsed, looking straight ahead was fine and
+looking up, left or right swept the view through your own throat. No camera height fixes that — the
+geometry is *around* the eye, not below it.
+
+Collapsing the neck drags the head bone down with it, and that is harmless here: the camera is
+anchored to `CameraPivot` in the scene and takes only a **delta** from the head bone, measured against
+a rest captured with the same collapse applied, so a constant shift cancels on both sides. The arms
+hang off the spine, not the neck.
+:::
+
+### The eye is the centre of rotation
+
+`Camera3D` sits **at** `CameraPivot`, not offset from it, and the eye is nudged a little forward of the
+head bone (`head_cam_forward`) where a real one is. The camera used to hang 6.3 cm above and 8.5 cm
+behind the pivot, so looking around swung it on a 10 cm arm and the **viewpoint translated** — plainly
+visible at the wheel, where the dashboard gives you a fixed reference to see it against.
+
+### The camera follows the head, split by axis
+
+The head bone does two unrelated things, and they must be treated differently:
+
+| | What it is | How it is handled |
+|---|---|---|
+| **Bounce** | up/down and side to side, a few times a second | Damped by `head_cam_amount` — this is what makes a first-person view sickening |
+| **Lean** | forward, as the torso pitches over from a walk to a jog to a sprint | **Followed in full**, always |
+
+Damping the lean walks the body out from under the camera and you end up looking at your own neck. So
+`head_cam_amount` can be taken all the way to 0 for a perfectly steady view **without** buying the neck
+back — which was not possible when one setting damped both.
+
+:::note[Why by axis and not by a low-pass filter]
+A filter was tried. It cannot work: slow enough to ignore the stride is also slow enough to lag a whole
+gait change, and the neck showed for the half second it took to catch up. The two motions share a time
+scale; they do not share an axis.
+:::
+
+### Three heights, three settings
+
+They used to be one number, so tuning any of them broke the others:
+
+| | Setting | What it moves |
+|---|---|---|
+| Standing eye | `CameraPivot.position.y` (in `player.tscn`) | the camera, on foot |
+| Seated body | `seat_body_drop` (Player) | the **model** on its seat |
+| Seated eye | `seat_eye_height` (Player) | the camera, at the wheel |
+
+`_ride_seat` used to derive the seated body position from the standing eye height, so lowering the
+pivot 3.7 cm to fix the on-foot view raised the seated body by exactly that and the driver floated. And
+`seat_eye_height` was applied to the body origin too — camera and body moved rigidly together, so no
+value ever changed what you saw.
+
+:::tip[`seat_body_drop` is a full offset, not a height]
+All three components matter. Its `-0.17` on Z is the pivot's forward set-back inside the skull; reducing
+it to a height alone slid every seated body 17 cm.
+:::
+
+The seat ride owns the camera while you are seated.
 
 ## Head-look
 
