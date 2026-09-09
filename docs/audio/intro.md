@@ -94,6 +94,6 @@ The actual list of sounds per object lives on that object's **Audio SFX** group 
 - **[Surface sounds](./surface_sounds.md)** — how a footstep or a dropped crate picks the samples of
   the material underfoot, and how to add a new surface.
 - **[Vehicle sounds](./vehicle_audio.md)** — doors, engine (start / stop / running loop), lights,
-  handbrake, horn.
+  handbrake, horn, and the tyres — a scuff when the wheel is turned, a roll that rises with speed.
 - **[Prop & tool sounds](./prop_audio.md)** — carriable crates, and the perforator's drill loop,
   equip and miss.

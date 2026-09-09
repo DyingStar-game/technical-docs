@@ -29,6 +29,8 @@ player hears.
 | **Handbrake on** / **Handbrake off** | one-shot | handbrake set / released | `VERY_SHORT` |
 | **Horn** | **held loop** | held while the horn button is pressed | `FAR_REACHING` |
 | **Horn (special)** | one-shot | the special horn | `FAR_REACHING` |
+| **Tyre scrub** | **held loop** | held while the wheel is *turned*, below the crossover speed | `VERY_SHORT` |
+| **Tyre roll** | **held loop** | held while the vehicle *moves*, turning or not | `VERY_SHORT` |
 
 Each has the usual **Db / Falloff / Distance / Attenuation** knobs. Horns default to **`FAR_REACHING`**
 so they carry across the map; the engine uses **`REALISTIC`**; the small clicks use **`VERY_SHORT`**.
@@ -52,6 +54,28 @@ For **Engine running** and **Horn**, don't worry about the *Loop* import flag in
 looping on at runtime. Just make sure the clip loops seamlessly (no gap or click at the seams). See the
 [intro's looping note](./intro.md#file-rules).
 :::
+
+## The tyres — two sounds, two unrelated questions
+
+They are easy to confuse and they are gated on different things:
+
+| | Gated on | Behaviour |
+|---|---|---|
+| **Scrub** | the steering **rate** | Holding full lock is silent; *turning* is what scuffs. It stands down once the roll reaches full level. |
+| **Roll** | the **speed** alone | Its level rises from a standstill to full at `Sfx Wheel Roll Kmh`, then holds. Turning has nothing to do with it. |
+
+Both are **held loops**, never a stream of one-shots: a sample longer than the gap between two shots
+piles onto the tail of the one before, and a single turn ends up sounding like a crowd.
+
+The scrub draws from a [`SurfaceSounds`](./surface_sounds.md) set, so it changes with what the tyre is
+standing on. The roll is a single clip — see that page for why only one of the two asks the surface.
+
+| Setting | What it does |
+|---|---|
+| `Sfx Wheel Scrub Min Rate` | How fast the steering must turn (rad/s) before a tyre is heard. Too low and it hisses at every trim of the line. |
+| `Sfx Wheel Roll Kmh` | The speed at which the roll reaches **full volume**. It is a ramp, not a switch: below it the sound rises with the speed. |
+| `Sfx Wheel Roll Attack Secs` | A slew limiter on that ramp, not a fade-in. It only bites when the speed *jumps* — a vehicle spawning mid-drive, or landing. |
+| `Sfx Wheel Scrub Fade Secs` | How fast both die once their condition stops. Deliberately short: a tyre sound that outlives the movement is heard as a sound that forgot to stop. |
 
 ## What's replicated
 

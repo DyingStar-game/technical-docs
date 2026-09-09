@@ -7,7 +7,8 @@ sidebar_position: 4
 
 A footstep on metal grating and a footstep on sand are not the same sound. So instead of one list of
 footstep clips, the game asks **what am I standing on?** and picks the samples for that surface. The
-same question serves a crate set down on the ground, and will serve wheels and impacts later.
+same question serves a crate set down on the ground and a tyre scuffing as it is turned, and will
+serve impacts later.
 
 For you, adding a surface is **files plus one slot in the Inspector** — there is no code to write and
 nothing to ask a programmer for.
@@ -79,8 +80,9 @@ sound played confidently is worse than a neutral one, and it hides the hole inst
 
 ## Authoring the sounds
 
-A `SurfaceSounds` resource holds the clips. Two exist today — `scenes/common/footsteps.tres` and
-`scenes/common/prop_landing.tres` — and each object points at one (`Sfx Footsteps` on the Player).
+A `SurfaceSounds` resource holds the clips. Three exist today — `scenes/common/footsteps.tres`,
+`scenes/common/prop_landing.tres` and `scenes/common/wheel_scrub.tres` — and each object points at
+one (`Sfx Footsteps` on the Player, `Sfx Wheel Scrub` on a vehicle).
 
 | Field | What to put in it |
 |---|---|
@@ -95,6 +97,28 @@ The game also never plays the same sample twice in a row when a family has two o
 With no default, an unmapped surface plays the **missing** marker and you hear exactly where the holes
 are. Fill the default in at the end, once you have covered the families that matter. Silence would hide
 the gap; a plausible substitute would hide it even better.
+:::
+
+## The wheels: the same probe, and one sound that does not use it
+
+A vehicle makes two tyre noises, and only one of them is a surface question:
+
+| Sound | Resource | Why |
+|---|---|---|
+| **Tyre scrub** — the tyre shoved sideways as the wheel is turned | `wheel_scrub.tres`, a `SurfaceSounds` | Scuffing gravel and scuffing metal grating are different sounds. The same question as a footstep, asked from a vehicle. |
+| **Tyre roll** — the tyres simply going round | one looped clip, no resource | Gated on **speed alone**, and a single loop covers it. Give it its own `SurfaceSounds` the day you record a rolling sample per family. |
+
+The probe is fired **from the vehicle**, not from a wheel. `SurfaceProbe` excludes the node it starts
+from, and it can only exclude a physics body — a `VehicleWheel3D` is not one, so a ray fired from a
+wheel would not exclude the truck and would report the truck's own chassis as the ground.
+
+:::warning[The wheel set ships with "Default Samples" filled, on purpose]
+The tip above tells you to leave the default empty while you work, so the holes stay audible. The
+wheel set breaks that rule **deliberately**: Sandbox's terrain reports the family `mineral`, and with
+no default the wheels would be silent on the only planet you can currently drive on. Gravel is a
+passable stand-in for any dry granular ground — only the timbre is wrong, not the event.
+
+Fill in a real `mineral` entry when you have one, and the default stops being reached.
 :::
 
 ## Where the files go
