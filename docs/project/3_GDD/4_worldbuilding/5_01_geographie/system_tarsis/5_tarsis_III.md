@@ -1,8 +1,8 @@
-# Tarsis IV
+# Tarsis III
 
 ## Description
 
-La planète Sandbox était considérée comme une planète inhabitable.  
+La planète Sandbox était considérée comme une planète inhabitable. 
 Seuls certains hauts plateaux sont visibles du ciel.
 Le reste est recouvert d'une tempête permanente de poussières de corindons qu'on trouve dans la basse altitude. 
 La planète minière est composée principalement de roche de corindon.
@@ -20,7 +20,7 @@ Elle est le siège social et la propriété de la société Ares.
 | Gravité | 7.774966156 | m/s |
 | Température de jour | 290 | K |
 | Température de nuit |  275 | K |
-| Distance | 0.65 | UA |
+| Distance | 0.55 | UA |
 | Pression atmosphérique | 1.02 | bar |
 | épaisseur atmosphérique | 110.0 | km |
 | Période de révolution | 219.77 | jours |
@@ -48,7 +48,7 @@ Elle est le siège social et la propriété de la société Ares.
 | champ | valeur | unité |
 |----------|----------|----------|
 | Oxygene | 45 | % |
-| Aluminium | 27% | % |
+| Aluminium | 27 | % |
 | Fer | 10 | % |
 | Calcium | 4.0 | % |
 | Magnesium | 3.0 | % |
@@ -71,30 +71,7 @@ Elle est le siège social et la propriété de la société Ares.
 
 | nom | Composition |
 |----------|----------|
-| caprock |  |
-| fluted_columns |  |
-| lava_dome |  |
-| corundum_sand_desert |  |
-| corundum_plateau |  |
-| valley_of_fire |  |
-| Anhydrite_desert |  |
-| Columnar_basalt_vertical |  |
-| Mining_Excavation |  |
-| Cave |  |
-| Mining_Cave |  |
-| Crystalline_Fields |  |
-| Pressure_Canyon |  |
-| Magmatic_Crust |  |
-| Ash_Desert |  |
-| fumarole |  |
-| Lava_Lake |  |
-| Lava_Field |  |
-| Volcanic_Basalt |  |
-| Active_Volcano |  |
-| Canyon |  |
-| Cliff |  |
-| Rocky_Desert |  |
-| Sandy_Desert |  |
+|  | |
 
 
 ## Lunes
@@ -133,17 +110,15 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Fer | 64.06 | % |
-| Nickel | 16.01 | % |
-| Aluminium | 12.81 | % |
-| Titane | 3.20 | % |
-| Zinc | 3.20 | % |
-| RareEarths | 0.32 | % |
-| Thorium | 0,016 | % |
-| Argent | 0,010 | % |
-| Or | 0.000032 | % |
-| Platine | 0.000032 | % |
-| Cuivre | 0.000064 | % |
+| Oxygene | 38 | % |
+| Fer | 17.5 | % |
+| Silicium | 17.5 | % |
+| Titane | 8.5 | % |
+| Magnesium | 7 | % |
+| Calcium | 5.5 | % |
+| Aluminium | 4.5 | % |
+| Nickel | 1 | % |
+
 
 #### Biomes
 
@@ -212,6 +187,5 @@ Elle ne possède pas de glace d'eau en surface, mais elle possède un sol qui re
 | Sandy_Desert | gypse |
 | Chlorinated_Field | Magnesium |
 | Travertin | Magnesium, Calcaire |
-
 
 

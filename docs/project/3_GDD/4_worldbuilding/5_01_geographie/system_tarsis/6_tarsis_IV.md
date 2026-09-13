@@ -1,4 +1,4 @@
-# Tarsis III
+# Tarsis IV
 
 ## Description
 
@@ -14,7 +14,7 @@
 | Gravité | 9.042449396 | m/s |
 | Température de jour | 295 | K |
 | Température de nuit |  275 | K |
-| Distance | 0.55 | UA |
+| Distance | 0.65 | UA |
 | Pression atmosphérique | 0.91 | bar |
 | épaisseur atmosphérique | 112.0 | km |
 | Période de révolution | 171.05 | jours |
@@ -137,14 +137,17 @@
 
 | champ | valeur | unité |
 |----------|----------|----------|
-| Oxygene | 38 | % |
-| Fer | 17.5 | % |
-| Silicium | 17.5 | % |
-| Titane | 8.5 | % |
-| Magnesium | 7 | % |
-| Calcium | 5.5 | % |
-| Aluminium | 4.5 | % |
-| Nickel | 1 | % |
+| Fer | 64.06 | % |
+| Nickel | 16.01 | % |
+| Aluminium | 12.81 | % |
+| Titane | 3.20 | % |
+| Zinc | 3.20 | % |
+| RareEarths | 0.32 | % |
+| Thorium | 0,016 | % |
+| Argent | 0,010 | % |
+| Or | 0.000032 | % |
+| Platine | 0.000032 | % |
+| Cuivre | 0.000064 | % |
 
 
 #### Biomes
@@ -154,3 +157,5 @@
 | Raw_Mountain | Basalt |
 | Lunar_Ground | Basalt |
 | Lunar_pool | Basalt |
+
+
