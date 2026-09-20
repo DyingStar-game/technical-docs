@@ -97,6 +97,13 @@ seat zone they're sitting in. Set these in the Inspector; see
 example.
 :::
 
+### Component bays
+
+Drop a `VehicleComponentSlot` (a `Marker3D`) per hatch, aim it where the part should sit, and name
+the hatch that guards it in `door_id`. The vehicle finds its own bays by type — no per-vehicle
+wiring, and a new chassis just adds nodes. Full details on
+[Vehicle components](./vehicle_components.md).
+
 ## 3. Add the seats
 
 For each place, add a **`VehicleSeat`** node (an `Area3D` with `vehicle_seat.gd`) as a child of
@@ -130,8 +137,7 @@ with **Y**; the prompt is hidden while seated, and on exit you are dropped besid
 
 :::tip[Seats are server-authoritative]
 A seat refuses a second occupant, and if a seated player disconnects the server frees their seat
-automatically. The driver/passenger logic lives in the **networked** path, so test seats in the
-game (F5), not the standalone bench.
+automatically. The driver/passenger logic lives in the **networked** path — the only path there is.
 :::
 
 Every seat's occupancy is **replicated** to all clients (a `seats` map on the vehicle, alongside
@@ -148,19 +154,26 @@ event (and `unseat:<n>` on exit) — see [Character animation](./character_anima
 the sit pose up with the seat's `SitPoint`; it shifts the visible body only, so the driver's
 first-person camera stays where the seat puts it.
 
-## 4. Configure the powertrain
+## 4. Configure the chassis (the powertrain comes from the engines)
 
-On the root `Vehicle`, open the **Drive** export group:
+:::info[Performance is not typed in any more]
+A vehicle has **no** `engine_power`, `max_speed_kmh` or `propulsion_type`. How hard it pulls, how
+fast it goes and how steep a slope it climbs are **derived from the engines bolted into its bays** —
+see [Vehicle components](./vehicle_components.md). Fit no engine and the vehicle cannot move and
+cannot even be started.
+:::
 
-- **Propulsion Type**: `ELECTRIC` (single-speed, instant torque) or `THERMAL` (automatic
-  gearbox). The inspector shows only the relevant sub-group (**Electric** or **Thermal gearbox**).
-- Tune `engine_power`, `max_speed_kmh`, `reverse_max_kmh`, steering, brakes, and the wheel /
-  suspension settings.
-- **Mass** is the standard `RigidBody3D` mass; **Cargo** (`max_payload`, overload) drives the
-  load limiter.
+What still belongs to the chassis, in the **Chassis physics** export group: its transmission
+(`pump_efficiency`, `hydraulic_efficiency`, `torque_factor`), its shape (`drag_coefficient`,
+`frontal_area_m2`), its rolling resistance (`rolling_coefficient`, `rolling_factor`), the local
+`air_density`, how many engines it will run (`max_engines`), what it leaves the works with
+(`factory_engines`), and its **bare** weight (`empty_mass` — modules and payload excluded).
 
-You never edit `vehicle_powertrain.gd` — the `Vehicle` copies these settings into it each frame
-(so you can tune them live while driving the bench).
+Steering, brakes, wheels and suspension are unchanged, and so is **Cargo** (`max_payload`, overload)
+for the load limiter.
+
+You never edit `vehicle_powertrain.gd` — the `Vehicle` feeds it from `VehicleDriveSpec`, which is
+rebuilt whenever a part is fitted or removed.
 
 :::tip[Every knob]
 See **[Inspector reference — every `@export`](#inspector-reference--every-export)** at the bottom of
@@ -186,7 +199,8 @@ A vehicle only replicates if the network layer knows it:
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
    `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
    `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`, `mass`,
-   `headlights`, `doors`, `seats`). If you reuse the `vehicle` type, there is nothing to add. A brand-new type
+   `headlights`, `doors`, `seats`, `components`). If you reuse the `vehicle` type, there is nothing
+   to add. A brand-new type
    needs its own `<type>_def.json` — see
    [Replication definition files](./props.md#replication-definition-files).
 
@@ -198,11 +212,16 @@ the def and **rebuild Horizon**.
 
 ## 6. Test
 
-- **Bench (F6)** — `scenes/vehicles/vehicle_bench.tscn` drives the vehicle locally (no network):
-  good for tuning the body, suspension and powertrain feel. The bench boards as driver only.
-- **In game (F5)** — the full flow: spawn the vehicle, walk into a seat box, **E** to board as
-  driver or passenger, drive, **Y** to leave. This is the only place seats and passengers are
-  faithful.
+**In game (F5)** — spawn the vehicle, walk into a seat box, **E** to board as driver or passenger,
+drive, **Y** to leave.
+
+:::note[The standalone bench is gone]
+There used to be a `vehicle_bench.tscn` that drove a vehicle locally, with its own keyboard input,
+its own chase camera and its own debug keys. Nobody used it, and it was a **second control path
+that could disagree with the real one** — the kind of divergence you only notice when a bug appears
+in game and not on the bench. Everything a driver can do now travels player to server, and F5 is
+the only way to try a vehicle.
+:::
 
 ## Using a real 3D model (GLB)
 
@@ -337,7 +356,7 @@ The generated colliders are invisible by default. To check them:
 
 1. In the editor top menu: **Debug → Visible Collision Shapes** (FR: *Déboguer → Formes de collision
    visibles*) — a checkbox, leave it ticked.
-2. **Run** the scene (**F6** bench or **F5**). It's a *runtime* overlay, so it must be enabled
+2. **Run** the game (**F5**). It's a *runtime* overlay, so it must be enabled
    **before** running and only shows while the game runs.
 3. The colliders draw as **cyan wireframes** over the truck. You should see your `col_*` shapes hug the
    body (and **no** oversized fallback box) — proof the model collision is in use. If you instead see
@@ -347,8 +366,7 @@ The generated colliders are invisible by default. To check them:
 ### First-person view = the driver SitPoint
 The in-cab camera sits on the **driver seat's `SitPoint`** (the same eye point used in game), so it
 follows the real model — no blockout dependency. Place that `SitPoint` at head height in the cab,
-facing forward (`-Z`). The bench (F6) now enters in this first-person view like in game; **F4**
-toggles to the chase camera.
+facing forward (`-Z`).
 
 ## Cargo — loading the bed
 
@@ -527,8 +545,8 @@ sees the same on/off. No setup — it's automatic on any screen wired as above.
 ## Inspector reference — every `@export`
 
 Every knob below lives on the root **`Vehicle`** node, grouped in the Inspector exactly as shown.
-Listed values are the **defaults** — `truck.tscn` overrides some of them. Most apply **live** (tune
-them on the bench, F6, while driving). Changing a **dimension** (Body / Cab / Bed / Wheels) rebuilds
+Listed values are the **defaults** — `truck.tscn` overrides some of them. Most apply **live**.
+Changing a **dimension** (Body / Cab / Bed / Wheels) rebuilds
 the procedural blockout; with a real GLB model the blockout **visual** is skipped, but the collisions,
 cameras and cargo bay still use these numbers.
 
@@ -536,17 +554,13 @@ cameras and cargo bay still use these numbers.
 
 | Property | Default | Role |
 |---|---|---|
-| `propulsion_type` | `ELECTRIC` | Powertrain. `ELECTRIC` = single-speed, instant torque (EV). `THERMAL` = automatic gearbox. Switches which sub-group (**Electric** / **Thermal gearbox**) the Inspector shows. |
-| `engine_power` | `1200` | Base torque per driven wheel. Total pull = this × driven wheels (× gear ratio in THERMAL). Must beat `m·g·sin(slope)` to climb. |
-| `max_speed_kmh` | `45` | Top speed (km/h). |
-| `reverse_max_kmh` | `15` | Reverse top speed (km/h). |
 | `torque_response` | `2.5` | How fast torque ramps to the throttle (1/s). Lower = gentler launch (keeps a heavy vehicle from leaping off the line). |
 | `brake_force` | `30` | Brake force per wheel. |
 | `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep well **below** `brake_force`. |
 | `handbrake_hold` | `30` | Parking-brake damping (m/s per s) **above** the release speed. A real collision impulse exceeds this, so a hit parked truck still gets pushed (then re-settles). |
 | `handbrake_release_speed` | `2` | Horizontal speed (m/s) **below** which the engaged hand brake fully cancels motion — a parked truck must not move from a player bump or a gentle slope. |
 | `drive_mode` | `ALL` | Driven wheels: `FRONT` (FWD), `REAR` (RWD) or `ALL` (4×4). |
-| **Mass** | *(node)* | Not an `@export` — it's the standard `RigidBody3D` **Mass** on the node (~1 t empty; cargo physically loads on top). |
+| **Mass** | *(node)* | Not an `@export`, and **not authored**: the vehicle writes it as `empty_mass + fitted components + cargo`. |
 | `center_of_mass_offset` | `(0,0,0)` | COM offset (m) from the wheelbase centre. We pin it ourselves (else the `col_` pieces drag it forward → nose-dive). Lower Y for roll stability, shift Z for a weight bias. |
 
 ### Steering
@@ -605,29 +619,39 @@ Optional — present a GLB (group `vehicle_model`, or named wheel meshes) and th
 | `door_open_angle_deg` | `75` | **Fallback only** (door with no Blender animation clip): instant open angle (degrees)… |
 | `door_hinge_axis` | `(0,1,0)` | …about this local hinge axis. The real swing is normally authored in Blender. |
 
-### Electric *(propulsion_type = ELECTRIC)*
+### Chassis physics
+
+The chassis's own contribution to the drive model. The motor side of it lives on the **component**
+(`power_w`, `torque_nm`, `efficiency`, propulsion, gearbox) — see
+[Vehicle components](./vehicle_components.md).
 
 | Property | Default | Role |
 |---|---|---|
-| `base_speed_kmh` | `25` | Full torque from standstill up to this speed (constant-torque), then torque tapers to zero at `max_speed_kmh` (constant-power) — the real EV curve. |
-| `motor_max_rpm` | `4500` *(0–12000)* | Gauge RPM at top speed (single-speed, no gears). `RPM = motor_max_rpm × speed / max_speed_kmh`. |
+| `empty_mass` | `1425` | Mass of the **bare** chassis (kg), modules and payload excluded. Declared, never captured from `mass` at `_ready` — see the warning on the components page. |
+| `max_engines` | `3` | How many engines this chassis will run. Bays are generic; the **chassis** caps the count. `-1` = no limit. |
+| `factory_engines` | *(empty)* | What the chassis leaves the works with. The server turns each entry into a **real, removable part** in a free bay, with a deterministic uuid so a restart upserts instead of duplicating. |
+| `pump_efficiency` | `0.8` | Hydraulic pump efficiency — part of the chassis transmission, not of the motor. |
+| `hydraulic_efficiency` | `0.8` | Hydraulic circuit efficiency. `pump × hydraulic` = 0.64 on the MVP truck. |
+| `torque_factor` | `1.0` | Chassis torque multiplier applied to the sum of the motor torques. **No efficiency term** on this path — that is the design sheet's own rule. |
+| `rolling_coefficient` | `0.01` | `Cr`, rolling resistance. The sheet quotes 0.001 on good tarmac to 0.3 on soft sand; per-surface `Cr` is a natural follow-up. |
+| `rolling_factor` | `1.0` | Chassis multiplier on `Cr`. |
+| `drag_coefficient` | `1.0` | `Cx`. Only matters once a chassis is **drag-limited** rather than engine-limited, which the MVP truck is not (its aero ceiling is 55.9 m/s against a 28.8 m/s motor ceiling). |
+| `frontal_area_m2` | `3.0` | `S`, frontal area. Same caveat. |
+| `air_density` | `1.26` | Air density (kg/m³) where the vehicle drives — Sandbox at sea level. Could later be read from the planet's atmosphere. |
+| `reverse_max_ratio` | `0.15` | Reverse top speed as a **fraction** of the forward top speed. A fraction, not a km/h, so it cannot contradict whatever engines are fitted. |
+| `speed_taper_kmh` | `10` | Width of the band below top speed over which the drive tapers off. The sheet is an **equilibrium** model, not a torque curve: used as one it has no constant-power region, so the force would fall from 100 % to 0 in 0.1 km/h. Nothing else holds the speed down (no drag is simulated), so downhill at full throttle there would be no limit at all. |
 
-### Thermal gearbox *(propulsion_type = THERMAL)*
-
-| Property | Default | Role |
-|---|---|---|
-| `gear_ratios` | `[2.5, 1.7, 1.25, 1.0, 0.8]` | Per-gear torque multiplier, 1st→last (1st = strongest/slowest). Shifts automatically on engine RPM. |
-| `shift_up_rpm` | `3400` | Engine RPM to shift up. |
-| `shift_down_rpm` | `1400` | Engine RPM to shift down. |
-| `reverse_ratio` | `2.5` | Reverse gear torque multiplier. |
-| `idle_rpm` | `800` | Idle RPM (needle floor). |
-| `redline_rpm` | `4000` | Redline RPM (needle ceiling). |
+:::note[Aerodynamic drag is not simulated]
+Top speed is applied as `min(motor, aero)`, and on the MVP truck the aero ceiling never bites. The
+day a chassis is drag-limited, the real force belongs in `_integrate_forces` — and it deserves its
+own commit, because it also changes how a vehicle slows down when coasting.
+:::
 
 ### Cargo
 
 | Property | Default | Role |
 |---|---|---|
-| `max_payload` | `1300` | Max payload (kg) before **overloaded** (load limiter). Empty ~1 t + this = full weight. |
+| `max_payload` | `1300` | Max payload (kg) before **overloaded** (load limiter). ⚠️ A fitted component is **not** payload: its mass counts towards the vehicle, or a truck could be immobilised for being overloaded by its own engines. |
 | `overload_immobilize` | `1.2` | Above `max_payload × this` the vehicle is immobilized (1.2 = +20 %). |
 | `cargo_bay_size` | `(2.0, 1.5, 3.1)` | Size of the cargo-bay box. A massive body that comes to rest inside is absorbed (its mass added once). **Also the on-foot bed-walker zone** — a player standing inside adds their weight, so fit it to the real bed (too low/large counts someone standing beside the truck). |
 | `cargo_bay_offset` | `(0.0, 1.0, 0.75)` | Centre of the cargo-bay box, relative to the vehicle origin. |

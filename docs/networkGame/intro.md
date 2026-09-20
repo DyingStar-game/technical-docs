@@ -7,7 +7,7 @@ sidebar_position: 1
 
 This page explains the **big picture** of multiplayer in DyingStar, in plain language, before
 you read the more technical pages ([Player](./player.md), [Props](./props.md),
-[Vehicles](./vehicles.md)). You don't need to be a network engineer to follow it — read it once
+[Vehicles](./vehicles.md), [Vehicle components](./vehicle_components.md)). You don't need to be a network engineer to follow it — read it once
 and the rest of the section will make sense.
 
 ## The one rule that explains everything
@@ -126,3 +126,5 @@ application of them.
 - [Props network management](./props.md) — how any object (box, rock, building…) replicates,
   the definition files, and deletion.
 - [Adding a vehicle](./vehicles.md) — a worked example that combines all of the above.
+- [Vehicle components](./vehicle_components.md) — engines you carry and bolt in, and how what is
+  fitted decides what the vehicle can do.
