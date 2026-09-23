@@ -197,12 +197,17 @@ A vehicle only replicates if the network layer knows it:
    UID rename does not touch string paths.)
 
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
-   `horizonserver/ds_genericprops/props/vehicle_def.json` (whitelisting `position`, `rotation`,
-   `scenename`, `parent_id`, `pilot_uuid`, `steering`, `speed`, `cargo_mass`, `handbrake`, `mass`,
-   `headlights`, `doors`, `seats`, `components`). If you reuse the `vehicle` type, there is nothing
-   to add. A brand-new type
-   needs its own `<type>_def.json` — see
-   [Replication definition files](./props.md#replication-definition-files).
+   `horizonserver/ds_genericprops/props/vehicle_def.json`, split across three channels by **how
+   often each property actually changes**:
+
+   | Zone | Rate | Properties |
+   |---|---|---|
+   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components` |
+   | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension` |
+   | 6 | 1 Hz | `scenename`, `parent_id` |
+
+   If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its own
+   `<type>_def.json` — see [Replication definition files](./props.md#replication-definition-files).
 
 :::warning[Rebuild Horizon after touching a def]
 A property (or a whole type) that is not whitelisted is dropped silently → the vehicle appears on
