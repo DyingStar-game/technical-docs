@@ -89,6 +89,35 @@ in Settings → Controls and cannot be rebound.
 
 It then appears in **Settings → Controls** and is rebindable + persisted, with zero menu code.
 
+## Families and labels
+
+The controls page groups its actions into tabs — **General, On foot, In a vehicle, In flight,
+Debug** — from `MenuConfig.ACTION_GROUPS`, which maps family → action → translation key. That is
+one table, not a list of families beside a table of labels: two of those drift, and you end up with
+an action in a family with no label, or the reverse.
+
+A new action you do not file lands in an **Other** tab rather than disappearing from the page, and
+shows the opened-out form of its name. Filing it is one line.
+
+Give it a label whenever the action name does not say what the key does. `jump` also starts a vault
+and a climb — it was reported as "the vault key is not configurable" when it had been configurable
+all along, under a name that never mentioned vaulting. `action` and `interact` are worse: two
+different keys whose names say the same thing.
+
+The search box searches **all** families, not the open tab — you type in it precisely because you do
+not know where the key lives. See [Localization](./localization.md) for the label keys themselves.
+
+## Prompts show the key that is bound
+
+Never write a key into a prompt. `"[E] Drop"` lies to anyone who rebound `interact`.
+
+```gdscript
+# InputLabel names the key as printed on the player's own layout ("²" on AZERTY)
+player.interact_label.text = _prompt(&"action", tr("%%HUD_DROP"))
+```
+
+The same helper names keys in the controls list, so there is one answer per key for the whole game.
+
 :::danger[A modifier does not separate two actions on its own]
 `is_action_pressed()` **ignores modifiers**: an action bound to `L` matches a plain `L` *and* `Alt+L`.
 So binding `Alt+L` next to an existing `L` gives you two actions that both fire on the same press —
