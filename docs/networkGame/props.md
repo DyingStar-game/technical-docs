@@ -33,34 +33,49 @@ It can be a planet, a box, a building, a car...
 
 ## Writing a generic prop
 
-The recommended way is to make your prop **extend `GenericProp`**
-(`scenes/globals/generic_prop.gd`). It already provides everything a networked, carriable
-prop needs:
+**A prop is networked because it carries a `PropSync` child node**, not because of what its script
+inherits from. Add a `Node` named **`PropSync`** to the scene, give it the
+`scenes/globals/prop_sync.gd` script, and set two things in the Inspector:
+
+| Property | What it does |
+|---|---|
+| `type_name` | The GORC type, e.g. `box`. **Must match** a `<type>_def.json` on Horizon, or the prop is dropped in silence — see [Replication definition files](#replication-definition-files). |
+| `enable_carry` | Puts the prop in the `"carriable"` group and wires the carry contract. |
+
+That child provides everything a networked prop needs:
 
 - the replication signals (`hs_server_prop_update` / `hs_server_prop_delete`),
 - the `uuid` / `type_name` / position state,
-- server -> client replication driven by `PropNet.server_tick(self)`, which sends an update
-  **only when** the prop's local position/rotation/parent actually changes (not every frame); a
-  held or loaded prop does **not** re-announce itself — Horizon rebuilds its world position from
-  its parent (see [Carriables](#carriables-carry--drop)),
-- the `"carriable"` group and the carry contract (`interact()` / `set_carried()` — see
+- server -> client replication driven by `PropNet.server_tick`, which sends an update **only when**
+  the prop's local position/rotation/parent actually changes (not every frame); a held or loaded
+  prop does **not** re-announce itself — Horizon rebuilds its world position from its parent (see
   [Carriables](#carriables-carry--drop)),
+- the carry contract (`interact()` / `set_carried()`),
 - reparenting and delete-on-exit.
 
-So a carriable prop is just:
+:::tip[The simplest prop has no script at all]
+`scenes/_universe/props/containers/box_50cm.tscn` is a body, a collision shape, a mesh and a
+`PropSync` child with `type_name = "box"`. Build the scene, declare its `<type>_def.json`, done.
+:::
 
-```
-class_name Box50cm
-extends GenericProp
+### Why a child node instead of a base class
 
-func _ready() -> void:
-	type_name = "box"
-	super()
-```
+Because props are not all the same kind of body. A crate is a `RigidBody3D`, a shelf is a
+`StaticBody3D`, a warehouse is a `Node3D`, the star is a `MeshInstance3D` — **no single base class
+can cover them**, and before this each one hand-copied the same networking code. A child node is
+composition: any body type gets the identical implementation by containing it.
 
-Build the scene (a body + collision shape + mesh), attach the script, and declare a
-`<type>_def.json` (see [Replication definition files](#replication-definition-files)). Done —
-no boilerplate to copy.
+### `GenericProp`: a convenience, not the contract
+
+`GenericProp` (`scenes/globals/generic_prop.gd`) still exists and is still worth extending — but it
+is now a **thin facade over the PropSync child**, for `RigidBody3D` roots only. It forwards what
+other systems reach by raycast **on the body** (`uuid`, carry, interact, parent) to the child, and
+it owns the printed serial (see [Crate IDs](./crate_ids.md)).
+
+- Extending it is **optional**, and it does **not** replace the `PropSync` child: a `GenericProp`
+  scene without that child does nothing at all.
+- A non-`RigidBody3D` prop **cannot** extend it and inlines the same short facade instead. There is
+  no logic to duplicate there — only delegation.
 
 :::note[Set the prop's mass]
 Set the `RigidBody3D` **Mass** on your prop's scene (Inspector). It is the prop's weight
@@ -80,9 +95,9 @@ also has a purely **static** part (a fixed collision that never moves), put it o
 
 ### Complex props
 
-A prop with special behaviour may stay a standalone script (extending whatever body it needs)
-and implement the contract itself, but it should still call `PropNet.server_tick(self)` from
-its `_physics_process` so replication and carry-follow stay consistent. Example: the mining
+A prop with special behaviour keeps its own script (extending whatever body it needs) and still
+carries a `PropSync` child, which drives `PropNet.server_tick` for it — so replication and
+carry-follow stay consistent whatever the script does. Example: the mining
 rock (`rock_mining.gd`) is custom because it fractures, and only a **fully-fractured ore
 piece** is carriable (it overrides `interact()` for that) — a whole rock is not carriable.
 

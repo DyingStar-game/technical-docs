@@ -13,9 +13,10 @@ life and are never destroyed, so each one carries a **unique ID** printed on its
 
 ## The ID is the prop's UUID (it already exists)
 
-Every networked prop (anything extending `GenericProp`) already has a **UUID** — generated on the
-server, **persisted in the ScyllaDB `items` table**, replicated to clients, and stable forever. That
-UUID **is** the crate's unique identity: reload the world and the same crate keeps the same id.
+Every networked prop — anything carrying a **`PropSync` child node**, see
+[Writing a generic prop](./props.md#writing-a-generic-prop) — already has a **UUID**: generated on
+the server, **persisted in the ScyllaDB `items` table**, replicated to clients, and stable forever.
+That UUID **is** the crate's unique identity: reload the world and the same crate keeps the same id.
 
 So the ID system does not invent a parallel identifier — it just makes that UUID **visible**, with a
 readable "company / type" prefix.
@@ -32,6 +33,14 @@ The on-crate text is `COMPANY-TYPE-UUID`, for example `ARES-HAUL-8c44b2f9-…`:
 The whole string is computed **locally from the UUID** (`GenericProp.serial()`), so there is **no extra
 database column, no new network message and no service change** — the crate already carries its UUID.
 
+:::note[The serial lives on `GenericProp`, the UUID does not]
+The UUID comes from the `PropSync` child, so **every** networked prop has one whatever its body
+type. The printed serial — `id_company`, `id_type`, `id_short_display`, `serial()` and the label
+filling below — lives on `GenericProp`, which only `RigidBody3D` props extend. A shelf or a
+warehouse therefore has a perfectly good UUID and **no printed serial**: to give one a label, that
+short helper has to be inlined the same way its networking facade already is.
+:::
+
 ## Displaying it: the `prop_id_label` group ("id-frames")
 
 To show the id, drop a **`Label3D` node into the group `prop_id_label`** somewhere in the scene — an
@@ -47,14 +56,17 @@ Detection is `is_in_group("prop_id_label")`, **not** the node's name. Name your 
 
 ## Adding IDs to a new crate
 
-1. The crate's **root script extends `GenericProp`** — already true for `scenes/props/cargo/*` crates
-   (they have a UUID). Static decor boxes (`scenes/props/StorageBoxes/*`, which `extends Node3D`) have no
-   UUID and are out of scope.
+1. The prop's **root script extends `GenericProp`** — which requires a `RigidBody3D` root, and is
+   where the serial lives. (A `PropSync` child gives it a UUID; `GenericProp` is what prints it.)
 2. Add one or more **`Label3D`** on the faces, each in the group **`prop_id_label`**, positioned and sized
    on the surface (non-billboard, oriented outward — one per face).
 3. Set **`id_company`** / **`id_type`** on the root (or keep the defaults), optionally `id_short_display`.
 
-No code per scene. Reference example: `scenes/props/cargo/hauling_box.tscn` (5 id-frames: front / back /
-left / right / top).
+No code per scene. Two reference examples:
+
+- `scenes/_universe/props/containers/hauling_box.tscn` — 5 id-frames (front / back / left / right / top).
+- `scenes/_universe/props/vehicles/engine_t1.tscn` — a T1 motor, `id_type = "ENG"` with
+  `id_short_display = true` on 2 faces. Not a crate: anything that is a carriable `RigidBody3D` prop
+  can be serialised, and a part you fit into a vehicle benefits as much as a box.
 
 ![The hauling box in the Godot viewport with an id-frame on each face, showing the ARES-HAUL-XXXXXXXX placeholder before runtime fills in the real id](./static_files/crate_ids_frames.png)
