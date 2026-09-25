@@ -249,5 +249,5 @@ and set `PAD_PROBE_PLANET` / `PAD_PROBE_SIZE` as needed. Results go to `user://p
 | `test/parity/pad_probe.tscn` | Offline bench on the real planet data. |
 
 Related: [How the game reads elevation](./6_elevation_runtime.md) for chunks, tiles and the
-residency gate; [Mountains](./7_mountains/1_overview.md) for the other runtime change
+residency gate; Mountains for the other runtime change
 to the relief.
