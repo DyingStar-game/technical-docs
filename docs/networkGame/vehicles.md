@@ -202,8 +202,8 @@ A vehicle only replicates if the network layer knows it:
 
    | Zone | Rate | Properties |
    |---|---|---|
-   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components` |
-   | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension` |
+   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
+   | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension`, `odometer_km` |
    | 6 | 1 Hz | `scenename`, `parent_id` |
 
    If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its own
@@ -473,6 +473,71 @@ front SpotLights as the example.
 `L` is **contextual**: it drives the **head lights** while seated as driver, and the player's
 **flashlight** on foot — the two never fire at once.
 
+## Steering
+
+The steer keys are a **rate, not a position**: a tap turns the wheels a little, holding turns them
+further, and **releasing leaves them where they are** — the driver builds a turn up in taps, the way
+one feeds a real steering wheel through the hands. Pressing the opposite direction winds them back
+(a bit faster, `steer_return_speed`).
+
+While **rolling**, the wheels drift back to straight on their own (a real wheel's caster):
+`steer_self_center_speed`, scaled by speed up to `steer_self_center_ref_kmh`. **Parked**, they keep
+their angle. The speed-sensitive lock (`steer_speed_falloff_kmh` / `steer_min_ratio`) still applies,
+and pulls a held angle back in as the vehicle speeds up.
+
+The maths lives in `vehicle_steering.gd` (`VehicleSteering`, pure and unit-tested); the vehicle copies
+its Steering exports (see the Inspector reference below) into it every tick, so they can be tuned
+live. Nothing new on the wire: the client still sends the steer axis, the server integrates it, and
+`steering` is replicated.
+
+## Speed limiter
+
+The driver turns it on/off with **T** and moves the limit by **5 km/h** with **Alt + mouse wheel**
+(between 5 km/h and `limiter_max_kmh`). The chosen limit is kept while the limiter is off, so **T**
+brings the same one back. Server-authoritative: the client only asks (`vehicle_limiter`,
+`vehicle_limiter_step`), the server checks that the sender is the pilot.
+
+- **Under the limit**, it does nothing; over the last `limiter_taper_kmh` the engine eases off, so the
+  vehicle settles on the limit instead of banging against it.
+- **At the limit**, the engine stops pushing.
+- **More than 1 km/h over it**, the throttle counts as **closed**, so the usual engine braking (the one
+  of a released pedal) brings the vehicle back down. This matters: the game models **no drag at all**
+  — no air, and no rolling resistance while the pedal is down — so an engine that merely stopped
+  pushing left a vehicle that was already over the limit rolling at that speed for ever.
+- It **never adds a brake**: downhill the vehicle may still run over the limit; slowing down is the
+  driver's job.
+
+On the dashboard the limit is **dimmed** when the limiter is off, **green** when it is on, **red**
+while it is holding the vehicle back. Replicated as `limiter_on` / `limiter_kmh` (and so persisted).
+
+## Odometer
+
+Every vehicle counts the distance it has driven **over its whole life** — across sessions and server
+restarts. The server adds up the moves of the vehicle's **local** position (relative to the planet it
+drives on, which moves and spins), and skips a step when the parent changes (new frame) or when it is
+too long to have been driven (a reset, a teleport). It is replicated as `odometer_km` in 0.1 km
+steps, only on change — and being replicated is what makes the persistence service store it. At boot
+the server takes it back through the same restore path as the doors. Shown on the dashboard.
+
+:::note[Known limitation]
+If Horizon re-seeds a vehicle with a **new uuid**, that vehicle starts again from 0 km.
+:::
+
+### Adding replicated vehicle state — `VehicleNetPart`
+
+The limiter and the odometer are **parts** (`vehicle_net_part.gd`): each one knows what it last sent,
+writes only its **changed** keys (`write_changes`), and takes received keys back (`read`), remembering
+them as sent so a value restored from the database is not sent straight back. `Vehicle` asks every
+part in `_replicate_transform`, and hands every part the received data in `client_channel_data_update`
+and `server_adopt_state` — so a new piece of vehicle state is **a new part**, not new lines in those
+three functions. Parts are exposed as properties (`vehicle.limiter`, `vehicle.odometer`), not getters:
+`vehicle.gd` sits two below gdlint's 40-public-method ceiling.
+
+:::warning[Whitelist every new key]
+A key a part writes must also be listed in `vehicle_def.json` — Horizon drops anything else in
+silence: no error, the value simply never reaches the other clients nor the database.
+:::
+
 ## Dashboard — optional in-cab screen
 
 Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D-screen pattern —
@@ -492,8 +557,8 @@ The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
 (`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
 the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
 is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light` (or adjust them in
-the script).
+`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light`, `Limiter`,
+`Odometer` (or adjust them in the script).
 
 ## Rear-view camera & mirrors
 
@@ -573,10 +638,21 @@ cameras and cargo bay still use these numbers.
 | Property | Default | Role |
 |---|---|---|
 | `max_steer_deg` | `30` | Maximum front-wheel steering angle (degrees). |
-| `steer_speed` | `1.6` | How fast the wheels turn toward the held direction (rad/s). Lower = more progressive. |
-| `steer_return_speed` | `3.0` | How fast the wheels re-centre on release (rad/s). A bit snappier than `steer_speed`. |
+| `steer_speed` | `1.6` | How fast a **held** key turns the wheels further (rad/s). Lower = more progressive (the truck uses `0.8`). |
+| `steer_return_speed` | `3.0` | How fast a held key winds the wheels back when it points **against** the current angle (rad/s). |
+| `steer_self_center_speed` | `0.3` | Hands-off drift back to centre while rolling (rad/s), reached at `steer_self_center_ref_kmh`. `0` = the wheels never move on their own. |
+| `steer_self_center_ref_kmh` | `50` | Speed at which the hands-off drift reaches `steer_self_center_speed`; it scales linearly below. Parked = no drift. |
 | `steer_speed_falloff_kmh` | `80` | Above this speed the steering lock shrinks (toward `steer_min_ratio`) — agile when slow, stable when fast. `0` disables. |
 | `steer_min_ratio` | `0.35` | Fraction of the max steer angle still available at/above `steer_speed_falloff_kmh`. |
+
+**Speed limiter** group:
+
+| Property | Default | Role |
+|---|---|---|
+| `limiter_step_kmh` | `5` | One step of the selector (Alt + wheel), km/h. |
+| `limiter_max_kmh` | `130` | Highest selectable limit, km/h. |
+| `limiter_default_kmh` | `30` | Limit the selector starts on, km/h. |
+| `limiter_taper_kmh` | `3` | The engine eases off over this many km/h below the limit. |
 
 **Steering wheel (visual)** sub-group — cosmetic only, no effect on driving:
 
