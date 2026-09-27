@@ -24,9 +24,26 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 | **R** | `vehicle_reset` | — | Flip the vehicle upright |
 | **2** | `zapette` | Toggle the admin cleanup tool ("Zapette") | (same) |
 | **I** | `vehicle_ignition` | — | Start / stop the engine |
-| **T** | `emote_wheel` | Hold to open the **emote wheel**, release on a slice to play it | (same) |
+| **T** | `emote_wheel` / `vehicle_speed_limiter` | Hold to open the **emote wheel**, release on a slice to play it | **Speed limiter** on/off |
+| **Alt + wheel** | `vehicle_limiter_up` / `_down` | — | Speed limit **±5 km/h** (shown on the dashboard) |
+| **F7** | `screenshot` | **Photo**: the world alone, no interface nor debug visuals | (same) |
+| **F8** | `screenshot_debug` | **Bug-report shot**: the screen as it is, plus the debug panels | (same) |
 | **F2** | `star_map` | Open / close the **star map** | (same) |
 | **+** / **−** | `star_map_zoom_in` / `_out` | Zoom the star map (numpad or the top row) | (same) |
+
+The **arrows** steer **progressively** while driving: a tap turns the wheels a little, and they keep
+their angle when released (they straighten up on their own only while rolling).
+
+:::note[Screenshots]
+F7 and F8 save a PNG and **copy it to the clipboard**. Files go to `<game folder>/screenshots` (F8 in
+`screenshots/debug`, the F6 recordings in `screenshots/records`) — the game folder being the
+executable's in a build, the project's in the editor. When that folder is not writable they fall
+back to `Documents/DyingStar/screenshots`. **Settings › Video › Screenshot gallery** opens it.
+
+For developers: the photo hides everything drawn on the window's canvas by itself, but it cannot tell
+a **debug visual drawn in the 3D world** from scenery — such a node must join the group
+`Globals.GROUP_DEBUG_OVERLAY` (as the celestial markers and the cargo envelope do).
+:::
 
 Movement (`move_forward/back/left/right`), `sprint`, `crouch`, `prone`, `interact`, mining
 (`toggle_tool`, `aim`, `perforate`), chat (`toggle_chat`, `write_in_chat`) and `pause` are
@@ -59,7 +76,7 @@ Handy while working on the game. Like every key, these are InputMap actions — 
 | **+** / **−** | `debug_time_forward` / `_back` | Shift the **simulated time** by an hour; hold to sweep the sky. Safe because the sky is a pure function of time and everything standing on a body is parented to it, so the ground never moves under anyone. The HUD shows the offset. Shares its keys with the star-map zoom, which only reads them while the map is open. |
 | **Alt + L** | `debug_toggle_moon_lights` | Cut the **moon lights** and print each factor (phase, elevation, extinction, energy) — the way to tell "the night is too dark" from "the moon is below the horizon". |
 | **Alt + I** | `debug_isolate_light` | Cycle the **light isolation** modes: no aerial perspective, no sky reflection, no sky ambient. Each step removes exactly one contributor, so whatever still lights the scene names its own source. |
-| **F6** | `game_record` | Start / stop the gameplay recording. |
+| **F6** | `game_record` | Start / stop the gameplay recording (saved in `screenshots/records`). |
 
 See [Lighting, day/night & the sky](/docs/planetTech/lighting_sky_daynight) for what those readouts mean.
 
