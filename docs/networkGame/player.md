@@ -134,10 +134,11 @@ current set:
 | `parent_id` | state | the frame the body rides (e.g. a planet) |
 | `head`, `head_yaw` | state | look pitch, and the **seated** look yaw (0 while standing) |
 | `stance` | state | standing / crouched / prone |
+| `floating` | state | weightless (no gravity area for a moment): floating animation, no footsteps, a bare point on the star map. Sent on change. |
 | `carrying` | state | holding a carriable |
 | `flashlight` | state | torch on / off |
 | `tools`, `perforating` | state | equipped tool + mining state |
-| `carry_prompt` | state | server-decided `[E]` prompt for the owner |
+| `carry_prompt` | state | server-decided `[F]` prompt (the `action` key) for the owner |
 | `action` | **event** | one-shot events (jump / land / emote / seat / interact) — see below |
 | `name`, `scenename`, `spawn_appartment_id` | state | identity / scene |
 
