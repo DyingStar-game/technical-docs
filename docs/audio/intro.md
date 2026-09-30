@@ -41,6 +41,12 @@ them. So other players hear your footsteps, your torch click, a truck's horn… 
 audio over the network. Nothing to do on your side; just know a sound you add is heard by everyone nearby.
 :::
 
+:::note[Music is the exception]
+Music is not positional and has no slot on an object: one system plays it for the whole game, from a
+table that pairs each situation (menu, wilderness, a point of interest, EVA, a station, a building)
+with a playlist. See **[Music](./music.md)**.
+:::
+
 ## File rules
 
 ### Format: **`.mp3` or `.ogg`** (not `.wav`)
@@ -86,6 +92,21 @@ Audio assets go under `assets/_universe/audio/`:
 
 Follow the existing folders and naming; don't invent a new layout.
 
+### Credit file
+
+Every audio file has a `.txt` file of the same name beside it (`step_metal_1.mp3` →
+`step_metal_1.txt`), holding one line in this exact format:
+
+```
+Discord - <name> - <numeric Discord id>
+```
+
+The id is the long number from Discord (right-click the profile > Copy User ID), not the username.
+Contributions are CC0; nothing is added after the id.
+
+A sound taken from freesound keeps its own line instead:
+`<title> by <author> -- <url> -- License: Creative Commons 0`.
+
 ## Which sounds does each object have?
 
 The actual list of sounds per object lives on that object's **Audio SFX** group in the Inspector:
@@ -95,5 +116,6 @@ The actual list of sounds per object lives on that object's **Audio SFX** group 
   the material underfoot, and how to add a new surface.
 - **[Vehicle sounds](./vehicle_audio.md)** — doors, engine (start / stop / running loop), lights,
   handbrake, horn, and the tyres — a scuff when the wheel is turned, a roll that rises with speed.
+- **[Music](./music.md)** — which playlist plays where, and how to give a place its own.
 - **[Prop & tool sounds](./prop_audio.md)** — carriable crates, and the perforator's drill loop,
   equip and miss.
