@@ -31,3 +31,12 @@ Vaulting (le joueur peut franchir de petits obstacles via une action joueur)
 
 Plusieurs biomes par planète
 
+
+## Containers
+
+Les **containers** (props de stockage) se placent dans une scène comme n'importe quel prop. Pour qu'un
+container **verrouille** les objets qu'on pose dedans (le contenu se fige et ne peut plus être bousculé),
+il lui faut le script `StorageContainer` sur sa racine et une **`Area3D` intérieure** couvrant le volume
+de rangement. Détails de mise en place : [Network Game → Containers (Setting one up)](../../networkGame/containers.md#setting-one-up).
+
+Côté game design (rôle, variantes, boucle transport) : [Game Design → Containers](../../gameDesign/containers.md).
