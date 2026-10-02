@@ -14,9 +14,10 @@ life and are never destroyed, so each one carries a **unique ID** printed on its
 ## The ID is the prop's UUID (it already exists)
 
 Every networked prop — anything carrying a **`PropSync` child node**, see
-[Writing a generic prop](./props.md#writing-a-generic-prop) — already has a **UUID**: generated on
-the server, **persisted in the ScyllaDB `items` table**, replicated to clients, and stable forever.
-That UUID **is** the crate's unique identity: reload the world and the same crate keeps the same id.
+[Writing a generic prop](./props.md#writing-a-generic-prop) — and every **`Vehicle`** already has a
+**UUID**: generated on the server, **persisted in the ScyllaDB `items` table**, replicated to clients,
+and stable forever. That UUID **is** the crate's unique identity: reload the world and the same crate
+keeps the same id.
 
 So the ID system does not invent a parallel identifier — it just makes that UUID **visible**, with a
 readable "company / type" prefix.
@@ -30,8 +31,10 @@ The on-crate text is `COMPANY-TYPE-UUID`, for example `ARES-HAUL-8c44b2f9-…`:
 - The **UUID** is the real unique key. On a small face it is long, so **`id_short_display = true`** shows
   only its first block, uppercased (`ARES-HAUL-8C44B2F9`); the full UUID stays the identity.
 
-The whole string is computed **locally from the UUID** (`GenericProp.serial()`), so there is **no extra
-database column, no new network message and no service change** — the crate already carries its UUID.
+The whole string is computed **locally from the UUID**, so there is **no extra database column, no new
+network message and no service change** — the crate already carries its UUID. The rule lives in one
+small class, **`PropSerial`** (`scenes/globals/prop_serial.gd`): `format()` builds the serial, `fill()`
+writes it on the frames. `GenericProp.serial()` and `Vehicle.serial()` both call it.
 
 :::note[The serial lives on `GenericProp`, the UUID does not]
 The UUID comes from the `PropSync` child, so **every** networked prop has one whatever its body
@@ -69,4 +72,22 @@ No code per scene. Two reference examples:
   `id_short_display = true` on 2 faces. Not a crate: anything that is a carriable `RigidBody3D` prop
   can be serialised, and a part you fit into a vehicle benefits as much as a box.
 
+![An engine part on the ground, its serial ARES-ENG-B4D1151C printed on the top and on the side, each above the engine pictogram](./static_files/crate_ids_engine.png)
+
 ![The hauling box in the Godot viewport with an id-frame on each face, showing the ARES-HAUL-XXXXXXXX placeholder before runtime fills in the real id](./static_files/crate_ids_frames.png)
+
+## Vehicles: the registration plate
+
+A vehicle carries the same serial, as a **registration plate** — the truck's reads
+`ARES-TRUCK-C9FCA1B1`. It is the same mechanism, not a second one: a `Vehicle` is a `VehicleBody3D`, so it
+cannot extend `GenericProp`, but both hand their uuid to `PropSerial`.
+
+![The back of the truck in game, a light plate on the tailgate reading ARES-TRUCK-C9FCA1B1](./static_files/crate_ids_truck_plate.png)
+
+- The **plate** is a `Label3D` in the group **`prop_id_label`**, in front of a light `QuadMesh` (the
+  `PlateRear` node of `truck.tscn`, on the tailgate). Add another one in the group for a front plate.
+- **`id_company`** / **`id_type`** / **`id_short_display`** sit on the vehicle's root, in the Inspector
+  group **Registration plate** (defaults `ARES` / `TRUCK` / short): a full uuid is far wider than a plate.
+- The plate is written when the uuid arrives — on a client that is **before** the vehicle enters the
+  tree, so `Vehicle` fills it from its `uuid` setter **and** from `_ready`. A vehicle with no uuid (a
+  bench scene) keeps the placeholder text `ARES-TRUCK-XXXXXXXX`.
