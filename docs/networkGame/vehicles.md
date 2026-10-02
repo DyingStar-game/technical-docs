@@ -82,7 +82,7 @@ Its scene tree — the GLB `Model` plus the rig nodes you add around it:
 - **`Light`** — the `vehicle_light` lamps (head / brake / cabin).
 - **`RearCamera_*`** — reversing camera + mirrors.
 - **`Cargo_loading_zone`** — where dropping loads the bed.
-- **`Handle_FL` / `Handle_FR`** (`VehicleDoorHandle`) — the door handles (§Doors).
+- **`HandleFL` / `HandleFR`** (`VehicleDoorHandle`) — the door handles (§Doors).
 
 Note the handles are placed at the **root** (siblings of `Model`), each on its door's visible handle.
 At runtime the code re-parents each one **under its door mesh** so it swings with the door.
@@ -209,6 +209,29 @@ A vehicle only replicates if the network layer knows it:
    If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its own
    `<type>_def.json` — see [Replication definition files](./props.md#replication-definition-files).
 
+### The replicated state, as the database holds it
+
+Every key goes out **from the first tick**, with its value even when it is the default — an admin
+reading the database sees `"headlights": false`, `"pilot_uuid": ""`, every door shut and every seat and
+bay empty, not a missing key. `Vehicle.full_state()` builds it; the server sends only what changed
+after that, and the whole state once more ~2 s after spawn (Horizon drops in silence an update for an
+object it is still creating). The keys **inside** `seats`, `components` and `doors` are snake_case:
+
+```json
+"seats":      {"seat_driver": "", "seat_passenger": ""},
+"components": {"slot_fl": "<engine uuid>", "slot_fr": "", "slot_rl": "", "slot_rr": ""},
+"doors":      {"front_l_door": false, "front_r_door": false, "hatch_fl": false, …}
+```
+
+- Seat and bay keys are their **node names** (PascalCase, Godot's convention: `SeatDriver`, `SlotFL`)
+  turned into snake_case by **`VehicleNetKey`**, used wherever a key is written or read back. An older
+  save (`"SeatDriver"`, `"Slot_FL"`) reads back under the new key.
+- `doors` holds **only the vehicle's own doors** (the `door_id`s of its handles): an unknown id sent by
+  a client is refused, and an old key read from the database (a mesh name from before a rename) is
+  dropped.
+- A part's bay is its own `slot_id` (snake_case too), published when it is fitted and taken out.
+- Node names on the vehicle scenes are checked by `test_vehicle_node_names.gd` (PascalCase only).
+
 :::warning[Rebuild Horizon after touching a def]
 A property (or a whole type) that is not whitelisted is dropped silently → the vehicle appears on
 the server but is **invisible** to clients (`Object definition not found for type: …`). Add it to
@@ -279,7 +302,8 @@ with no clip falls back to a code hinge-swing on the mesh named `door_id` (about
    the **interior** side (the handle you'd reach when seated). Place each box **just proud of the body
    surface** (see the sightline note below).
 3. Set its exports:
-   - **`Door Id`** — the door's mesh / clip prefix (e.g. `Front_l_door`).
+   - **`Door Id`** — the door's mesh / clip prefix, in snake_case (e.g. `front_l_door`; the mesh is
+     found whatever its case).
    - **`Outdoor Shape`** — the exterior box (used when interacting **on foot**). Drag the child in.
    - **`Indoor Shape`** — the interior box (used when interacting **seated**). Drag the child in.
    - **`Open Angle Deg`** — fallback swing angle (used when the door has no Blender clip).
@@ -315,7 +339,7 @@ body would stay at the shut position and the look-at ray would miss it once the 
 :::
 
 **Door-gated seats — open the door before you can get in *or* out.** Set the **`Door Id`** export on
-the **`VehicleSeat`** to the door that guards it (e.g. the driver seat → `Front_l_door`). Then:
+the **`VehicleSeat`** to the door that guards it (e.g. the driver seat → `front_l_door`). Then:
 - **Open/close** the door (look at the handle + **E**) from that seat's **boarding zone** (on foot)
   **or while seated** — so a driver/passenger can close it from inside.
 - **E boards only once that door is open.** A closed door shows *"Open the door first (aim at the

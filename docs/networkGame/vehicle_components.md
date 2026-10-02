@@ -103,7 +103,7 @@ because a refusal the player cannot read is indistinguishable from a bug.
 :::danger[Never parent a physics body under a hatch mesh]
 The truck's hatch meshes carry a **non-uniform scale** `(0.175, 0.225, 0.325)`. Jolt handles a
 non-uniformly scaled shape badly, and a `RigidBody3D` reparented under one inherits it. Bays are
-direct children of the vehicle, exactly like `SeatDriver` and `Handle_FL`.
+direct children of the vehicle, exactly like `SeatDriver` and `HandleFL`.
 :::
 
 ## Fitting and removing
