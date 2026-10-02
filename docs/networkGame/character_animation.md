@@ -122,23 +122,29 @@ head bone (`head_cam_forward`) where a real one is. The camera used to hang 6.3 
 behind the pivot, so looking around swung it on a 10 cm arm and the **viewpoint translated** — plainly
 visible at the wheel, where the dashboard gives you a fixed reference to see it against.
 
-### The camera follows the head, split by axis
+### No head bob: the camera holds the posture's eye
 
-The head bone does two unrelated things, and they must be treated differently:
+There is **no head bob** in the game, and no setting to bring it back. The first-person camera still
+takes its position from the head bone (`HeadCam`, `scenes/_universe/characters/humanoids/head_cam.gd`),
+because that one movement carries what the view must keep — but it is split by what it is:
 
 | | What it is | How it is handled |
 |---|---|---|
-| **Bounce** | up/down and side to side, a few times a second | Damped by `head_cam_amount` — this is what makes a first-person view sickening |
-| **Lean** | forward, as the torso pitches over from a walk to a jog to a sprint | **Followed in full**, always |
+| **Bounce & sway** | up/down and side to side, a few times a second | **Never followed** |
+| **Posture** | standing, crouched, prone | The camera holds that stance's **eye point**, taken once from the head the first time the stance is held still |
+| **One-shot moves** | a stance transition, a vault | **Followed in full**: the view goes down as you crouch, up over the ledge |
+| **Lean** | forward, as the torso pitches over into a jog or a sprint | **Followed in full while moving** — or you look at your own neck |
 
-Damping the lean walks the body out from under the camera and you end up looking at your own neck. So
-`head_cam_amount` can be taken all the way to 0 for a perfectly steady view **without** buying the neck
-back — which was not possible when one setting damped both.
+Standing still, turning on the spot, playing an emote or reading a 3D screen, **nothing moves the view**:
+the eye point is fixed, so idle breathing and the turn clip move the body under a still camera. There is
+nothing to tune per clip either — a new animation set brings its own eye points. The two settings left
+under **Head camera (first person)** are `head_cam_smooth` (how fast the camera reaches its target,
+which is also how fast the view drops when you crouch) and `head_cam_forward` (above).
 
-:::note[Why by axis and not by a low-pass filter]
-A filter was tried. It cannot work: slow enough to ignore the stride is also slow enough to lag a whole
-gait change, and the neck showed for the half second it took to catch up. The two motions share a time
-scale; they do not share an axis.
+:::note[Why not a low-pass filter on the head]
+A filter was tried. Slow enough to ignore the stride, it is also slow enough to lag a whole gait change,
+and the neck showed for the half second it took to catch up. What tells the bounce from the posture is
+not its speed, it is what the character is doing: walking, still, or in a one-shot move.
 :::
 
 ### Three heights, three settings

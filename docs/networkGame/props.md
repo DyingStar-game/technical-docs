@@ -146,7 +146,8 @@ client only aims, the server decides.
   something it shows `[E] Drop`.
 - **Pick up** (server) — the prop is parented to the player and marked carried (`set_carried(true)`),
   but it stays a **live `RigidBody3D`**: the server steers it toward a hold spot in front of the
-  player by **velocity** (gravity off, rotation locked). So a carried prop now **physically collides
+  player by **velocity** (gravity off; it is angular‑damped rather than locked, so a knock against a wall or
+  another prop **nudges its orientation** instead of it being rigid). A carried prop **physically collides
   with the world** — blocked by the ground, walls and vehicles, and it pushes lighter props (needed
   to load a container) — instead of clipping through. Its `parent_id` becomes the player so Horizon
   keeps its GORC global fresh, and its physics-driven transform replicates as it moves. The pickup
@@ -155,20 +156,23 @@ client only aims, the server decides.
   check this (it has no collisions), so it is the server's call.
 - **Drop** (server) — the prop's normal physics is restored, it is reparented back to the world, and
   `set_carried(false)`. Dropped **while standing in a vehicle bed**, it is loaded onto that vehicle
-  instead (see [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)).
+  instead (see [Vehicles → Cargo bed](./vehicles.md#cargo--loading-the-bed)). Dropped and left to rest inside a **container**, it locks in place there (see [Containers](./containers.md)).
 
 `interact(interactor) -> bool` is the gate (default: not already carried; the mining rock also
 requires a fully-fractured piece). `set_carried(bool)` only flips the flag. A carried prop **keeps
 its collision** and stays solid to the world and to other players; only the **carrier** is excepted
 (`add_collision_exception_with()`, removed on drop) so it is not blocked by what it holds.
 
-:::note[Physics-held carry]
-Because a carried prop is driven by velocity toward the hold spot, a few behaviours fall out of the
-physics for free: the **camera pitch** raises/lowers it vertically (look up/down to place it on a
-higher shelf), a downward raycast keeps the hold spot **above the ground** (looking down to grab
-can't drive it underground), and it **auto-drops** if dragged out of grab reach (e.g. left stuck
-behind a wall while you back away). Collision is suppressed only during the brief travel into the
-hand, so nothing knocks it on the way in.
+:::note[Physics-held carry — feel]
+The velocity follow is **eased** (proportional), so on pickup the object does **not** snap to the hand —
+it stays where it was grabbed and **glides** in. A **horizontal dead zone** lets it trail as you move;
+the **vertical** follow has a dead zone that **shrinks as you look down**, so a level pickup doesn't drop
+the object but looking **down** takes it all the way to the **floor** to place it (and up when you look up).
+The hold spot is clamped between the **floor and any ceiling** (rays from the eye), so looking up inside a
+container can't fling it onto the roof. It **auto‑drops** if dragged past the carry reach (derived from the
+hold offset — NOT the interaction ray, which is a separate, tunable grab distance: see
+`interact_ray_length` on the Player). Collision is **never suppressed**: the object is solid the instant
+you grab it (it eases in, it doesn't snap *through* things).
 :::
 
 :::note[parent_id is replicated, and only re-applied on change]
