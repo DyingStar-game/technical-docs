@@ -167,7 +167,7 @@ What still belongs to the chassis, in the **Chassis physics** export group: its 
 (`pump_efficiency`, `hydraulic_efficiency`, `torque_factor`), its shape (`drag_coefficient`,
 `frontal_area_m2`), its rolling resistance (`rolling_coefficient`, `rolling_factor`), the local
 `air_density`, how many engines it will run (`max_engines`), what it leaves the works with
-(`factory_engines`), and its **bare** weight (`empty_mass` — modules and payload excluded).
+(`factory_components`), and its **bare** weight (`empty_mass` — modules and payload excluded).
 
 Steering, brakes, wheels and suspension are unchanged, and so is **Cargo** (`max_payload`, overload)
 for the load limiter.
@@ -658,7 +658,7 @@ The chassis's own contribution to the drive model. The motor side of it lives on
 |---|---|---|
 | `empty_mass` | `1425` | Mass of the **bare** chassis (kg), modules and payload excluded. Declared, never captured from `mass` at `_ready` — see the warning on the components page. |
 | `max_engines` | `3` | How many engines this chassis will run. Bays are generic; the **chassis** caps the count. `-1` = no limit. |
-| `factory_engines` | *(empty)* | What the chassis leaves the works with. The server turns each entry into a **real, removable part** in a free bay, with a deterministic uuid so a restart upserts instead of duplicating. |
+| `factory_components` | *(empty)* | What the chassis leaves the works with (engines, batteries…). The server turns each entry into a **real, removable part** in a free bay, with a deterministic uuid so a restart upserts instead of duplicating. |
 | `pump_efficiency` | `0.8` | Hydraulic pump efficiency — part of the chassis transmission, not of the motor. |
 | `hydraulic_efficiency` | `0.8` | Hydraulic circuit efficiency. `pump × hydraulic` = 0.64 on the MVP truck. |
 | `torque_factor` | `1.0` | Chassis torque multiplier applied to the sum of the motor torques. **No efficiency term** on this path — that is the design sheet's own rule. |

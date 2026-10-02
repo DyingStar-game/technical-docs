@@ -194,11 +194,40 @@ from the server's drive path, so without the table a replica keeps the helper's 
 **rev counter lies**. For now one tier exists, so "uuid count × `engine_t1.tres`" is enough; **the
 day a T2 ships, the tier has to be replicated.**
 
-## Factory engines
+## Batteries and energy
+
+The **T1 battery** (`battery_t1.tscn`, `VehicleBattery`, spec `VehicleBatterySpec` in
+`specs/battery_t1.tres`) is the motor's twin: same 0.4 × 0.3 × 0.6 m box, 25 kg, fits any of the four
+hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1000 A**, **500 V**.
+
+- **One at a time** (GDD 6.1). `VehicleEnergy` (`vehicle.energy`) draws on the first battery that
+  still holds a charge, in bay order, and moves on to the next when it runs dry. Bay order is the same
+  everywhere, so the battery in use is not replicated.
+- **The torque, not the speed.** Each server tick, `_apply_drive` turns the force applied into the
+  share of the motors' torque requested, and the battery pays
+  `discharge_j_per_nm_s × torque × Δt` — **127 J per N·m per second**, an `@export` on the spec, to be
+  validated in game (≈ 39 min at full throttle with one T1 motor). A slope, a load or a bad road ask
+  for more torque per km. No torque (no throttle, hand brake, engine off): no draw. No current limit
+  in the MVP: more motors empty it faster.
+- **No charge, no start.** `toggle_engine` refuses without energy; running dry stops the engine and
+  puts the lights out. Lights, dashboard and rear cameras draw nothing, but need some charge.
+- **The battery in use stays in while the engine runs**: `VehicleComponentBays.removal_refused()`,
+  the one gate for every kind of part.
+- **Charge on the part**: `charge_j`, replicated and persisted (whitelisted in
+  `vehicle_component_def.json`, zone 0), published in 0.1 kWh steps. A gauge (bar + `35.1 / 50.0 kWh`)
+  is painted under the pictogram (`ComponentFace` lays out both); the cab dashboard shows one bar per
+  battery with its percentage, the one in use at full strength.
+- **Recharge**: `VehicleBattery.charge(delta)` follows the sheet's curve — full rate (500 kW) between
+  20 and 80 %, half rate below 20 % and above 80 %, empty to full in **504 s**. The garage's charging
+  bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
+  batteries in the zone and call `charge(delta)` on the server.
+
+## Factory components
 
 `startup_items.json` seeds vehicles with empty bays — so **none of them would move**.
-`factory_engines: Array[VehicleEngineSpec]` on the `Vehicle` is what the chassis leaves the works
-with, and the server turns it into **real, removable parts** with
+`factory_components: Array[VehicleComponentSpec]` on the `Vehicle` is what the chassis leaves the
+works with (the MVP truck: two T1 motors and a T1 battery), and the server turns it into **real,
+removable parts** with
 
 ```
 uuid = PropSpawn.stable_uuid("<vehicle uuid>:<bay name>")
@@ -219,8 +248,8 @@ underlying behaviour is Horizon's re-seed, which affects every prop type.
 
 `VehicleComponentSpec` is the base class and the extension point:
 
-1. Write `VehicleBatterySpec extends VehicleComponentSpec` with whatever a battery needs. **No
-   engine code moves.**
+1. Write a `VehicleComponentSpec` subclass with whatever the part needs (as `VehicleBatterySpec`
+   did). **No engine code moves.**
 2. Add a `.tres` for the tier and a `.tscn` for the object (copy `engine_t1.tscn`: a `RigidBody3D`
    on the prop layer, a `PropSync` with `type_name = "vehicle_component"` and `enable_carry = true`,
    a mesh, a collision shape, and an `Area3D` on the interactable layer so the interact ray sees
@@ -229,8 +258,9 @@ underlying behaviour is Horizon's re-seed, which affects every prop type.
    `server/server.gd`.
 4. Give the chassis its limit: one more branch in `VehicleComponentBays.limit_for()`.
 
-The GORC type stays `vehicle_component`, so **there is no new Horizon definition and no lockstep
-PR** — that is the point of a shared type.
+The GORC type stays `vehicle_component`, so **there is no new Horizon definition** — that is the
+point of a shared type. Only state of the part's own (a battery's `charge_j`) has to be whitelisted
+in `vehicle_component_def.json`, in the game and in horizonserver.
 
 :::danger[No `CSGBox3D` for the mesh]
 A CSG node only draws when it is the **root** of its CSG tree. Under a `RigidBody3D` it is simply
