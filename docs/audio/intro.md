@@ -95,17 +95,17 @@ Follow the existing folders and naming; don't invent a new layout.
 ### Credit file
 
 Every audio file has a `.txt` file of the same name beside it (`step_metal_1.mp3` →
-`step_metal_1.txt`), holding one line in this exact format:
+`step_metal_1.txt`), one line per author:
 
 ```
 Discord - <name> - <numeric Discord id>
+<Site> - <author> - <URL> - <licence>
 ```
 
-The id is the long number from Discord (right-click the profile > Copy User ID), not the username.
-Contributions are CC0; nothing is added after the id.
-
-A sound taken from freesound keeps its own line instead:
-`<title> by <author> -- <url> -- License: Creative Commons 0`.
+The first is a community member (CC0, nothing after the id); the second a sound taken from a site,
+such as `Freesound - RescopicSound - https://freesound.org/s/750433/ - CC BY-NC 4.0`. These files
+feed the **Credits** page of the main menu: see [Credits](../creativeConcept/credits.md) for the
+details and the check that runs on every pull request.
 
 ## Which sounds does each object have?
 
