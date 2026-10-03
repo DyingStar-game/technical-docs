@@ -109,6 +109,7 @@ To check or rebuild locally (Python 3, nothing to install):
 python3 tools/generate_credits.py --validate   # check the credit files only
 python3 tools/generate_credits.py              # rewrite assets/credits.json
 python3 tools/generate_credits.py --check      # fail if it is out of date
+python3 tools/generate_credits.py --validate --new-since origin/develop   # as on a pull request
 ```
 
 The check fails, naming the file and line, when:
@@ -116,4 +117,8 @@ The check fails, naming the file and line, when:
 - a line is in neither form, or a Discord id is not a number;
 - a `.txt` credits no file (its asset was renamed or removed);
 - one Discord id appears under two pseudos;
-- a sound has no credit file.
+- a sound has no credit file;
+- on a pull request, a model or texture it **adds** is credited by nothing: no `.txt` of its name,
+  no `<prefix>.txt` for a `<prefix>_*` set (the textures exported with a model named alike), no
+  `material.json` in its folder, no `License.txt` of a library folder. Those already in the project
+  are not asked for one yet.
