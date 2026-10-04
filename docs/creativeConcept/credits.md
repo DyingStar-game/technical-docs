@@ -26,7 +26,7 @@ assets/_universe/audio/music/a_starry_night.txt   <- the credit
 For a texture set, name the `.txt` after the shared prefix: `metal_iron_041A_4K.txt` credits
 `metal_iron_041A_4K_Color.jpg`, `metal_iron_041A_4K_Normal.jpg`, and so on.
 
-Inside, **one line per author**, in one of two forms.
+Inside, **one line per author**, in one of the forms below.
 
 ### You made it (community member)
 
@@ -58,6 +58,21 @@ Pixabay - tanweraman - https://pixabay.com/sound-effects/wave-cape-cloth-in-wind
 Always write the licence, even though the page does not show it: it is the record of what we may
 do with the file.
 
+### The author's name was lost
+
+```
+Unknown
+```
+
+Only for a work that **was given to the project** but whose author's name was lost (some tracks were
+recovered that way after an accident). The line stands **alone** in its file. The Credits page shows
+*Owner wanted — contact us on Discord* in place of the name, and the track keeps its play button so
+its author can recognise it. When they come forward, the line becomes theirs; if they want the work
+out, it leaves the project.
+
+An asset whose **source** is unknown (found somewhere, origin unclear) is not credited `Unknown`: it
+is removed.
+
 ### Several authors
 
 One line each:
@@ -85,6 +100,13 @@ One section per kind of asset, one line per work and author:
 
 A line reads **author — work**, nothing else: the work is the file name without its extension, words
 apart (`a_starry_night.ogg` → *A starry night*). Icons and fonts are not listed.
+
+- While the page is open, one credited track drawn at random plays.
+- Every track has a **play button** before its name: it plays that track instead, and pressed again
+  it stops and the drawn track comes back. *Accept* on a focused line (Enter, Space, the pad's A)
+  does the same.
+- A work credited `Unknown` reads *Owner wanted — contact us on Discord*, after the named works of
+  its section.
 
 ## How it works
 
@@ -115,7 +137,8 @@ python3 tools/generate_credits.py --validate --new-since origin/develop   # as o
 
 The check fails, naming the file and line, when:
 
-- a line is in neither form, or a Discord id is not a number;
+- a line is in none of the forms, or a Discord id is not a number;
+- an `Unknown` line shares its file with an author's line;
 - a `.txt` credits no file (its asset was renamed or removed);
 - one Discord id appears under two pseudos;
 - a sound has no credit file;
