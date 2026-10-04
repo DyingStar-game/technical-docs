@@ -29,7 +29,24 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 | **F7** | `screenshot` | **Photo**: the world alone, no interface nor debug visuals | (same) |
 | **F8** | `screenshot_debug` | **Bug-report shot**: the screen as it is, plus the debug panels | (same) |
 | **F2** | `star_map` | Open / close the **star map** | (same) |
-| **+** / **−** | `star_map_zoom_in` / `_out` | Zoom the star map (numpad or the top row) | (same) |
+| **+** / **−** | `star_map_zoom_in` / `_out` | Zoom the star map, held (numpad or the top row; triggers on the pad) | (same) |
+
+### Star map
+
+Every gesture of the star map is an action too, listed under **Settings → Controls → General → Star
+map**, so any of them can move to another button, a key or the pad:
+
+| Default (mouse / pad) | Action | What it does |
+|---|---|---|
+| **Left click** / **A** | `star_map_select` | Select what is under the pointer (the centre of the screen on the pad); **twice** = go there |
+| **Right click** / **X** | `star_map_reset` | Reset the view: the whole system |
+| **Middle click (hold)** | `star_map_orbit` | Turn the view as the mouse moves (about the station, over one) |
+| **Right stick** | `star_map_orbit_left/right/up/down` | Turn the view |
+| **Wheel up / down** | `star_map_zoom_step_in` / `_out` | Zoom one notch |
+
+The help line at the **foot of the map** is built from these bindings, for the device in your hands: a
+rebound gesture shows its new key, an unbound one is left out. Mouse buttons are named in the game's
+language (*Clic gauche*, *Molette haut*…), on the Controls page too.
 
 The **arrows** steer **progressively** while driving: a tap turns the wheels a little, and they keep
 their angle when released (they straighten up on their own only while rolling).
@@ -71,6 +88,7 @@ Handy while working on the game. Like every key, these are InputMap actions — 
 | Default | Action | What it does |
 |---|---|---|
 | **Alt + ²** | `toggle_debug` | Show/hide the **debug panels** — server/client stats, and (for the body you're on) your **altitude**, its **local time**, and your **longitude/latitude**. |
+| *(Settings → Debug)* | Star map debug | A **Star map** section in the debug panel while the map is open: bodies, followed body, zoom, simulated time, relief tiles. The panel goes over the map, and the map's info panel steps aside. |
 | *(see Settings)* | `toggle_eva` | **EVA free-flight** — detach and fly the body freely to inspect planets, moons and the day/night terminator from afar. |
 | **Middle mouse (hold)** | `carry_free_rotate` | While carrying a prop, hold and move the mouse to **freely rotate** the held object (mouse wheel = step the yaw by 15°). |
 | **+** / **−** | `debug_time_forward` / `_back` | Shift the **simulated time** by an hour; hold to sweep the sky. Safe because the sky is a pure function of time and everything standing on a body is parented to it, so the ground never moves under anyone. The HUD shows the offset. Shares its keys with the star-map zoom, which only reads them while the map is open. |
