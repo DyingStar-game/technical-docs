@@ -41,7 +41,8 @@ Discord - Pierro - 852633379459039302
 - The id is the long number, not your user name: in Discord, right-click your profile > **Copy User
   ID** (turn on *Developer Mode* in Discord's advanced settings if the entry is missing).
 - Always use the same pseudo for the same id: the check refuses one person under two names.
-- Contributions are CC0 by project rule, so nothing is written after the id.
+- Contributions are under the project's asset licence (CC BY-NC-SA 4.0, `assets/LICENSE` in the
+  game repository), so nothing is written after the id.
 
 ### It comes from a site (third party)
 
