@@ -367,12 +367,33 @@ and comes from a scene**, one per village:
   node, as its definition (`items_def/<type>_def.json`) lists them.
 
 To add a building to every village, instance its scene as a direct child of the layout, under a
-name of its own, and position it there. The garage and the teleporter are placed this way.
+name of its own, and position it there. The garage, the teleporter, the floodlights and the
+lampposts are placed this way.
+
+:::danger[Its type must have a definition]
+The `type_name` of the `PropSync` node must name a definition, `items_def/<type>_def.json` (and its
+twin in Horizon). Left at its default, `generic_prop`, it names none: Horizon drops the object
+(`Object definition not found for type: generic_prop` in its log), and **nothing fails on the game
+side**: the object exists on the server and on no client. For a fixed object with no state of its
+own (a lamppost, a floodlight), `simple_building` is enough. `test_prop_sync_definitions` fails on any
+scene whose `PropSync` names a type without a definition.
+:::
 
 :::warning
 A village that has already spawned (`is_spawned`, saved in the database) does not read the layout
 again: it only gets the new building after a purge of the world.
 :::
+
+### What needs a purge, and what only a restart
+
+The database keeps **where** each object is and **which scene** it loads, nothing else. So:
+
+| You change | To see it |
+|---|---|
+| **What** a village holds: add, remove or move an object in the layout, change a `type_name` | purge the world, so that the villages spawn again |
+| **How** an object looks or sounds: a light, a material, a sign, a sound, a photocell | relaunch the client: every client builds the object from its scene |
+
+A client keeps a scene in memory once it has read it: reconnecting is not enough, relaunch it.
 
 ### Anywhere else: Horizon's seed
 
