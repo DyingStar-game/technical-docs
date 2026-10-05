@@ -325,6 +325,16 @@ receives the scene **without** its placement and spawns the object at the world 
 `(0,0,0)`. Keep `scenename`, `position` and `parent_id` within the **same** `distance`.
 :::
 
+:::danger[Never name a property `type` or `uuid`]
+The game server sends every update as `{"uuid": ..., "type": <the prop's type>, ...properties}`. A
+property **named** like one of those two envelope keys is overwritten by every update: a
+`poi_village`'s `type` ("mining" / "factory") became `"poi_village"` at the village's first update,
+Horizon stopped seeing it as a mining village, and every new player woke two more villages (horizon
+#110, 2026-10-05). Pick another name (`poi_type`, `kind`...). And before Horizon or the server
+**decides** anything from a replicated property, read that property back after the object's first
+update, not only from the seed.
+:::
+
 :::danger[Always declare zone 6 — the deletion channel]
 Object deletion is sent on **channel 6**. Every prop type's def **must** include a `zone 6`
 entry (it carries `scenename`). Without it, deleting the object fails with
