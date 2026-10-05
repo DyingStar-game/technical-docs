@@ -20,7 +20,7 @@ A photocell with nothing to switch shows a yellow warning in the scene tree.
 | What it drives | Off | On |
 |---|---|---|
 | A `Light3D` | hidden. A hidden light gives its place in the shadow atlas back (`LampShadowBudget` skips it) | shown |
-| A `NeonSign` | dark tinted glass, its light out | the tube strikes a few times, then holds |
+| A `NeonSign` | keeps its colour, without glow or light | the tube strikes a few times, then holds |
 | Anything with a `set_lit(on, animate)` method | as that method decides | |
 
 Wired today: the floodlight, the lamppost (in the villages and on the menu stage), and the four
