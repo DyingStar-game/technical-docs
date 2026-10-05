@@ -357,7 +357,8 @@ inert. A networked object is an **entry in the world's data**. There are two way
 ### In every village: the village layout
 
 `scenes/_universe/structures/urban/villages/ares_village_mining.tscn` is the layout of a mining
-village. When a village is loaded (a player within ~5 km, or Horizon asking for its homes), the
+village, and `scenes/_universe/structures/urban/cities/ares_city_factory.tscn` the layout of a factory
+city. When a village is loaded (a player within ~5 km, or Horizon asking for its homes), the
 server reads the layout (`poi_villages.gd`) and spawns **every direct child that has a `PropSync`
 and comes from a scene**, one per village:
 
@@ -367,8 +368,14 @@ and comes from a scene**, one per village:
   node, as its definition (`items_def/<type>_def.json`) lists them.
 
 To add a building to every village, instance its scene as a direct child of the layout, under a
-name of its own, and position it there. The garage, the teleporter, the floodlights and the
-lampposts are placed this way.
+name of its own, and position it there. The garage, the teleporter, the floodlights, the lampposts
+and the containers are placed this way. The name is part of the uuid: two children of one layout
+never share a name.
+
+Which layout a POI gets is its `spawn_scene`, in its `poi_village` entry of Horizon's seed. The
+mining villages are of type `mining`; the factory cities, of type `factory`, have no homes, and
+Horizon only looks for apartments for new players in the villages of type `mining`. Otherwise a
+city whose homes never arrive would count, for ever, as a whole village's worth of places to come.
 
 :::danger[Its type must have a definition]
 The `type_name` of the `PropSync` node must name a definition, `items_def/<type>_def.json` (and its
@@ -406,6 +413,33 @@ way. The seed ships in the `horizon-data` image: rebuild it to test a change loc
 :::warning
 Horizon skips the **whole** seed when its first uuid is already in the database: an existing world
 needs a purge to get a new entry.
+:::
+
+### Containers, and stacking them
+
+The shipping containers (`scenes/_universe/props/containers/container_*_1200x240x240.tscn`) are
+fixed networked buildings: a `StaticBody3D` (a `RigidBody3D` would be thawed by the server's culler
+when a player comes near, and a 9 t container would fall over), of type `simple_building`, with their
+own `TerrainPad`. Every model is 12 x 2.5 x 2.4 m.
+
+A container's flattener sits it on the levelled ground, so a container placed on top of another one
+would be pulled down onto the ground, into the one below. To stack, use the **tier** variants:
+
+| Scene | Stands on |
+|---|---|
+| `container_<kind>_1200x240x240.tscn` | the ground |
+| `container_<kind>_1200x240x240_tier2.tscn` | one container |
+| `container_<kind>_1200x240x240_tier3.tscn` | two containers |
+
+A `_tierN` scene inherits the container and only moves its `Ground` box N-1 container heights down
+(2.5 m each). Its flattener levels the same ground as the container below and sets it down that much
+higher: exactly on top. In the layout, give every tier of a stack the same position and heading, at
+2.5 m per tier. `test_containers` checks that every `_tierN` in a layout stands on a tier N-1. The skip
+(`container_benne`) is open: it has no tiers.
+
+:::tip[Why a scene, not a setting]
+A value you set on a node of the layout never travels: each machine builds the object from its scene
+file and from the properties its definition lists. The tier has to be in the scene.
 :::
 
 ### Level the ground under it
