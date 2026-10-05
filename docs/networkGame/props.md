@@ -347,6 +347,55 @@ helper does both:
 NetworkOrchestrator.spawn_prop_authoritative(data)  # data must hold "uuid" and "type"
 ```
 
+## Placing a networked prop in the world
+
+A scene you drop into another scene by hand (a cabin in a planet scene, a kiosk in a station) is
+**not** a networked object, even if it carries a `PropSync`. Every machine loads it from its own copy
+of the scene file: it has no uuid, Horizon and the database never hear of it, and its `PropSync` stays
+inert. A networked object is an **entry in the world's data**. There are two ways to make one.
+
+### In every village: the village layout
+
+`scenes/_universe/structures/urban/villages/ares_village_mining.tscn` is the layout of a mining
+village. When a village is loaded (a player within ~5 km, or Horizon asking for its homes), the
+server reads the layout (`poi_villages.gd`) and spawns **every direct child that has a `PropSync`
+and comes from a scene**, one per village:
+
+- its uuid is stable, `"<village uuid>|<node name>"`: a restart upserts it, never duplicates it;
+- it is protected as world infrastructure (the admin cleanup tool cannot delete it);
+- its type is the `type_name` of its `PropSync`, and its other network properties are read from the
+  node, as its definition (`items_def/<type>_def.json`) lists them.
+
+To add a building to every village, instance its scene as a direct child of the layout, under a
+name of its own, and position it there. The garage and the teleporter are placed this way.
+
+:::warning
+A village that has already spawned (`is_spawned`, saved in the database) does not read the layout
+again: it only gets the new building after a purge of the world.
+:::
+
+### Anywhere else: Horizon's seed
+
+A networked object in a particular place (aboard the station, in a city) is an entry of Horizon's
+seed, `horizonserver/ds_genericprops/startup_items.json`: its `object_type`, a fixed
+`object_uuid`, and in `object_data` its `scenename`, its `parent_id` (the uuid of the networked frame
+it stands in) and its `position` / `rotation` in that frame. The station's teleporter is placed this
+way. The seed ships in the `horizon-data` image: rebuild it to test a change locally.
+
+:::warning
+Horizon skips the **whole** seed when its first uuid is already in the database: an existing world
+needs a purge to get a new entry.
+:::
+
+### Level the ground under it
+
+A building that stands on a planet gets a `TerrainPad` child with a `CSGBox3D` under it: the box is
+the platform, its top face the height of the levelled ground, `apron_m` the flat margin around it.
+Sink the box until its top face is just under the building's floor. The pad's measures travel in
+`terrain_settled`, which the `simple_building` definition already replicates: a building with no
+state of its own can use that type and needs no new definition. A pad more than ~50 km from the
+surface (a station in orbit) levels nothing.
+
 ## Moving or reparenting a prop on the Horizon side (GORC)
 
 Most prop work is done from the game server (Godot). But if you ever **change an object's position
