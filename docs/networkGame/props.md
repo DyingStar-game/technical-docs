@@ -415,31 +415,32 @@ Horizon skips the **whole** seed when its first uuid is already in the database:
 needs a purge to get a new entry.
 :::
 
-### Containers, and stacking them
+### Containers stand in a storage area
 
 The shipping containers (`scenes/_universe/props/containers/container_*_1200x240x240.tscn`) are
-fixed networked buildings: a `StaticBody3D` (a `RigidBody3D` would be thawed by the server's culler
-when a player comes near, and a 9 t container would fall over), of type `simple_building`, with their
-own `TerrainPad`. Every model is 12 x 2.5 x 2.4 m.
+fixed networked props: a `StaticBody3D` (a `RigidBody3D` would be thawed by the server's culler when
+a player comes near, and a 9 t container would fall over), of type `simple_building`. Every model is
+12 x 2.5 x 2.4 m. They have **no** `TerrainPad`: they do not level the ground, a **storage area**
+does, and they stand in it.
 
-A container's flattener sits it on the levelled ground, so a container placed on top of another one
-would be pulled down onto the ground, into the one below. To stack, use the **tier** variants:
+The storage area (`scenes/_universe/structures/industrial/storage/pad_storage_area.tscn`, type
+`storage_area`) is a stretch of levelled ground. To place containers in a layout:
 
-| Scene | Stands on |
-|---|---|
-| `container_<kind>_1200x240x240.tscn` | the ground |
-| `container_<kind>_1200x240x240_tier2.tscn` | one container |
-| `container_<kind>_1200x240x240_tier3.tscn` | two containers |
+1. Instance `pad_storage_area.tscn` in the layout, and set its **Size** in the Inspector (width along
+   its X, length along its Z, in metres). The yellow box shows the ground it levels.
+2. Drop the containers **under it** in the Scene tree, standing on its top face (y = 0 in the area).
+   Stack them by raising them 2.5 m per container.
 
-A `_tierN` scene inherits the container and only moves its `Ground` box N-1 container heights down
-(2.5 m each). Its flattener levels the same ground as the container below and sets it down that much
-higher: exactly on top. In the layout, give every tier of a stack the same position and heading, at
-2.5 m per tier. `test_containers` checks that every `_tierN` in a layout stands on a tier N-1. The skip
-(`container_benne`) is open: it has no tiers.
+`poi_villages.gd` spawns the area, then everything the layout placed under it as its **children**,
+their pose local to it. The server seats the area on the ground it levels and the containers move
+with it. A container placed beside an area instead would keep the layout's height while the ground
+under it settles elsewhere: 16 cm away at the median, more than 50 cm one time in five, measured on
+5726 buildings. `test_containers` checks that every container of a layout stands in an area.
 
-:::tip[Why a scene, not a setting]
+:::tip[Why the size is a network property]
 A value you set on a node of the layout never travels: each machine builds the object from its scene
-file and from the properties its definition lists. The tier has to be in the scene.
+file and from the properties its definition lists. The area's `size` is in `storage_area_def.json`
+(game and Horizon), so the server and every client level the same ground.
 :::
 
 ### Level the ground under it

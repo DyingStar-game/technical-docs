@@ -33,23 +33,49 @@ photocell switches lights and signs, not materials.
 
 ## When
 
+A photocell measures the **light**, not the time or the star's height, like a real one: under the
+corundum veil the star can stand 30° up in a dark sky, and the lamps there must be on.
+
 | Setting | Default | Meaning |
 |---|---|---|
-| `on_below_deg` | +2° | At dusk, the lights come on when the star sinks under this height above the horizon |
-| `off_above_deg` | +4° | At dawn, they go off when it rises above this one |
+| `on_below_light` | 0.011 | At dusk, the lights come on when the daylight falls under this |
+| `off_above_light` | 0.031 | At dawn, they go off when it rises above this |
 | `max_delay_s` | 120 s | The longest a lamp waits after the threshold (below) |
 
-The height is the star's at the photocell's own place, the planet taken as a sphere: a mountain hiding
-the star does not count. The lamps come on **before** the star has set, because under Tarsis 3's haze
-the light is already failing (tuned in game). Under a clear Earth sky, real photocells switch on
-nearer -3°, at some 30 lux. The gap between the two thresholds keeps a lamp sitting at the threshold
-from blinking.
+The daylight (`Planet.daylight_at`) is the share of the star's full overhead light that reaches flat
+ground at the photocell's place: the slant the star's light falls at, times the air it crossed (the
+same calculation that dims the sunlight on screen). 1 is the star at the zenith with no air, 0 is
+night. Weather, when there is some, will multiply in there, and the lamps will follow storms without
+any change to the photocell.
+
+The defaults keep what was tuned by eye over the plateau: they are the light of the star at +2° and +4°
+over a village at 5130 m, the median altitude of Tarsis 3's villages. Lower down, the air takes more
+of the light, and the same thresholds come with the star higher:
+
+| Altitude | On under | Off above |
+|---|---|---|
+| 5650 m | 2.0° | 4.0° |
+| 3684 m (in the top of the veil) | 6.2° | 9.0° |
+| 2000 m | 20° | 26.5° |
+| -406 m (under the veil) | 31.5° | 41.6° |
+
+Under the veil, the star overhead still lets 13 % through: the lamps are off at noon there.
+
+:::note[Simplifications]
+- Only the **direct** light of the star counts. The light the haze scatters down from the rest of the
+  sky is computed by the sky shader alone; the thresholds are tuned on this very value.
+- The planet is taken as a sphere: a mountain hiding the star does not count.
+:::
+
+The gap between the two thresholds keeps a lamp sitting at the threshold from blinking. For
+reference, a real photocell switches on near 30 lux, some 0.0003 of a clear noon: Tarsis 3's haze
+reads dark long before that.
 
 ## One after the other, the same for everyone
 
 Each lamp waits its own delay, between 0 and `max_delay_s`, so a village lights up one lamp at a
 time over a couple of minutes. The delay is drawn from the uuid of the prop the lamp belongs to: every client draws the same one.
-Every client also reads the star on the same 2-second ticks of the shared game clock. So every player
+Every client also reads the daylight on the same 2-second ticks of the shared game clock. So every player
 sees the same lamp come on at the same moment, **with no message on the network**: it is worked out
 on each client, the way the orbits are, and the server takes no part.
 
@@ -70,5 +96,6 @@ dusk there, and the lights stay as the scene has them.
   degrees up) and let time run: it takes a couple of minutes.
 - **On the menu stage**: Settings › Graphics, move the hour slider to night.
 
-`test/unit/test_photocell.gd` covers the thresholds, the delay, the jumps, the neon signs, and that
-each wired scene has its photocell under the right light. A newly wired scene goes in its `WIRED` list.
+`test/unit/test_photocell.gd` covers the thresholds, the delay, the jumps, the neon signs, the
+daylight over the plateau and under the veil (with Tarsis 3's air), and that each wired scene has its
+photocell under the right light. A newly wired scene goes in its `WIRED` list.
