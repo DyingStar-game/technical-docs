@@ -91,6 +91,17 @@ fixes the old "black planets in the sky" problem, where a normal light simply co
 Distant bodies also keep their **real terrain** (their coarse LOD-3 chunks) at every distance —
 there is no low-detail placeholder sphere anymore.
 
+**Every ground** lights itself that way, not only the sand: the far lighting is one shader include,
+`terrain_far_light.gdshaderinc`, in every ground shader (sand, corundum outcrops, lunar ground). A
+surface whose material cannot include it — a `StandardMaterial3D` such as the grass or the regolith —
+is drawn, while its chunk is far, by a flat stand-in (`FarGround`): the average colour of its texture,
+lit the same way. A new ground therefore shows from afar whatever it is made of, and
+`test_far_ground` fails if one would be black.
+
+Far chunks are cut into quads of **50 km at most**. A flat quad sags under the round planet by
+side² / 8R in its middle: with the old 4 quads per side that was 1 to 3 km, enough to sink the ground
+in and out of Sandbox's 3.5 km corundum veil and draw a grid over the whole planet seen from orbit.
+
 ### Their air, seen from afar
 
 Every other body with air shows it too (`AtmosphereLod`, one per body, client only). Which way it is
