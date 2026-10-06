@@ -108,7 +108,7 @@ Handy while working on the game. Like every key, these are InputMap actions — 
 |---|---|---|
 | **Alt + ²** | `toggle_debug` | Show/hide the **debug panels** — server/client stats, and (for the body you're on) your **altitude**, its **local time**, and your **longitude/latitude**. |
 | *(Settings → Debug)* | Star map debug | A **Star map** section in the debug panel while the map is open: bodies, followed body, zoom, simulated time, relief tiles. The panel goes over the map, and the map's info panel steps aside. |
-| **$** | `toggle_eva` | **God mode** (dev free-flight, not the real EVA) — detach and fly the body where you look, with no gravity and no collision, to inspect planets, moons and the day/night terminator from afar. Its speed shows at the top of the screen. |
+| **$** | `toggle_eva` | **God mode** (dev free-flight, not the real EVA) — detach and fly the body where you look, with no gravity and no collision, to inspect planets, moons and the day/night terminator from afar. Its speed shows at the top of the screen, and your own body is hidden while you fly (the others still see it). |
 | **Mouse wheel** | `walk_speed_up` / `_down` | In god mode: **double / halve the flight speed**, from 1 m/s to 100 000 km/s (2 km/s to start). On foot it sets the walk speed as usual. The server clamps the speed again. |
 | **Middle mouse** | `god_mode_land` | In god mode: **land** on the ground right under you, on the body whose gravity holds you (or the one you belong to), and leave god mode. |
 | **Middle mouse (hold)** | `carry_free_rotate` | While carrying a prop, hold and move the mouse to **freely rotate** the held object (mouse wheel = step the yaw by 15°). |
