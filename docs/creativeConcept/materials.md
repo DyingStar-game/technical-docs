@@ -32,7 +32,7 @@ None of them is an editor plugin you have to enable per project.
 | Blender | `tools/blender_scripts/addons/dyingstar_material_library/` | Reads a material's node tree and publishes it: renames the maps, writes `material.json`, renders `preview.jpg`, rebuilds the asset library. |
 | Command line | `tools/validate.py` | Enforces the manifest schema, the tag vocabulary and the pixel-level rules. Runs in CI and inside the add-on. |
 | Command line | `tools/build_asset_library.py` | Regenerates `materials_library.blend` from the manifests, so the Asset Browser always matches what is committed. |
-| Godot | `addons/dyingstar/build_shared_materials.gd` | Turns each `material.json` into the `.tres` Godot renders, and pins that material's texture import settings. |
+| Godot | **DyingStar ▸ Rebuild shared materials** (`addons/dyingstar/shared_material_builder.gd`) | Turns each `material.json` into the `.tres` Godot renders, pins that material's texture import settings, and reimports the models that still show it unlinked. A pull request fails if it was not run. |
 | Godot | `addons/dyingstar/shared_material_resolver.gd` | Given a material name, finds and loads its `.tres`. |
 | Godot | `addons/dyingstar/post_import_shared_materials.gd` | Runs on every `.glb` import and applies what the resolver found. |
 
@@ -51,8 +51,10 @@ Publishing `mat_rock_granite_grey`, then using it on a model:
    `material.json` and `preview.jpg`, then rebuilds the asset library.
 2. **Command line**: `python tools/validate.py` tells you whether it would
    pass review, before anyone else has to look at it.
-3. **Godot**: run `build_shared_materials.gd` (Ctrl+Shift+X). The folder gains
-   `mat_rock_granite_grey.tres`.
+3. **Godot**: **DyingStar ▸ Rebuild shared materials**. The folder gains
+   `mat_rock_granite_grey.tres`, and a model imported before it existed is
+   reimported so it picks the material up. Commit what it changed: a pull
+   request whose library is out of date fails its checks.
 4. **Blender**: a modeller drags the material from the Asset Browser onto a
    mesh, unwraps at 1 UV unit = 1 meter, and exports the `.glb` with
    **Materials: Export** and **Images: None**.
@@ -440,16 +442,29 @@ Never edit the material: it is shared, and the change would apply everywhere.
 
 ### Godot side
 
-Two scripts live in `res://addons/dyingstar/`. Neither is an editor plugin:
-there is nothing to enable in the project settings.
+It lives in `res://addons/dyingstar/`. Nothing to set up: the project's import
+defaults put the import script on every new model, and the rebuild is an entry
+of the editor's **DyingStar** menu.
 
 #### Building the resources
 
-`build_shared_materials.gd` turns every `material.json` into the `.tres` that
-sits beside it, inside the material's own folder. It is an `EditorScript`: open
-it in the script editor and run it (*File > Run*, or Ctrl+Shift+X) after adding
-or correcting a material. The resource is derived, so it is always rewritten,
-like `materials_library.blend`, never edit it by hand.
+**DyingStar ▸ Rebuild shared materials** turns every `material.json` into the
+`.tres` that sits beside it, inside the material's own folder: run it after
+adding or correcting a material. The resource is derived, like
+`materials_library.blend`: never edit it by hand. The work lives in
+`shared_material_builder.gd`; `build_shared_materials.gd` still runs the same
+thing from the script editor (*File > Run*, or Ctrl+Shift+X).
+
+The same command then reimports the models that still show one of the
+library's materials unlinked. The import script only links what exists at
+import time, so a model imported before its material was published keeps the
+glTF's own material until it is reimported.
+
+**Checked on every pull request.** CI (`godot-tests.yml`, step *Shared material
+library up to date*) compares every `.tres` and every pinned import setting
+with what the manifests give, property by property, and fails the pull request
+when one is out of date (`test/unit/test_shared_material_library.gd`). The
+message names the material and says to run the rebuild.
 
 It is deliberately kept out of the import pipeline. A glTF exported with
 `Images: None` carries no textures, so an import has nothing to build a
