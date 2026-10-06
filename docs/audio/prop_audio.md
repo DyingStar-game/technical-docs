@@ -46,6 +46,36 @@ in:
 The loop only needs a clean, steady sample — looping is forced at runtime, so don't set the *Loop* flag
 in the import dock (same rule as the [vehicle engine](./vehicle_audio.md)).
 
+## Machines that hum: `AmbientLoop3D`
+
+A sound that loops for as long as its object stands, such as the generator at the base of the
+floodlight. Under the object: **Add Child Node** → `AmbientLoop3D`. Place it where the sound comes
+from (the generator's box, not the lamp's head) and give it a `stream`.
+
+| Setting | Default | What it does |
+|---|---|---|
+| `stream` | | The sample to loop. Looping is forced at runtime, no *Loop* flag to set |
+| `volume_db` | -6 dB | Loudness at the falloff distance |
+| `falloff` | 2 m | Distance at which it has its nominal loudness; it fades beyond |
+| `distance` | 25 m | Hard cut-off: not heard at all beyond it |
+| `attenuation` | Realistic | How it fades with distance, as for every other sound |
+
+It starts on its own on every client as soon as the object is there: the object being there is all
+the state it needs, so nothing is replicated. Each copy starts at a random point of the sample, so a
+village full of the same machine does not hum in phase. It is silent on the server and in the editor.
+
+:::warning[A loop in Ogg, not MP3]
+An MP3 begins with a little silence that its encoder adds (23 ms in the generator's): looped, it
+becomes a tick on every turn. Convert the loop to Ogg Vorbis, which ffmpeg does without that
+silence:
+
+```
+ffmpeg -i generator_loop.mp3 -c:a libvorbis -q:a 6 generator-loop.ogg
+```
+:::
+
+As every sound, a loop has its credit in a `.txt` of the same name beside it.
+
 ## Who hears what
 
 This is the one thing worth knowing before you set levels, because it decides whether a sound is
@@ -53,7 +83,7 @@ This is the one thing worth knowing before you set levels, because it decides wh
 
 | Reach | Sounds | Why |
 |---|---|---|
-| **Everyone nearby** | the drill loop, equip, unequip, pick up, landing | the state behind them (perforating, which tool is out, the prop's position) is **replicated**, so every client can play them on its own |
+| **Everyone nearby** | the drill loop, equip, unequip, pick up, landing, a machine's hum | the state behind them (perforating, which tool is out, the prop's position) is **replicated**, so every client can play them on its own |
 | **You only** | perforate **fail** | it is feedback about *your* aim, not an event in the world — a bystander has no reason to hear you miss |
 
 Nothing about this costs network traffic: no audio is ever sent. Each client plays the sound from state

@@ -325,6 +325,16 @@ receives the scene **without** its placement and spawns the object at the world 
 `(0,0,0)`. Keep `scenename`, `position` and `parent_id` within the **same** `distance`.
 :::
 
+:::danger[Never name a property `type` or `uuid`]
+The game server sends every update as `{"uuid": ..., "type": <the prop's type>, ...properties}`. A
+property **named** like one of those two envelope keys is overwritten by every update: a
+`poi_village`'s `type` ("mining" / "factory") became `"poi_village"` at the village's first update,
+Horizon stopped seeing it as a mining village, and every new player woke two more villages (horizon
+#110, 2026-10-05). Pick another name (`poi_type`, `kind`...). And before Horizon or the server
+**decides** anything from a replicated property, read that property back after the object's first
+update, not only from the seed.
+:::
+
 :::danger[Always declare zone 6 — the deletion channel]
 Object deletion is sent on **channel 6**. Every prop type's def **must** include a `zone 6`
 entry (it carries `scenename`). Without it, deleting the object fails with
@@ -346,6 +356,111 @@ helper does both:
 ```
 NetworkOrchestrator.spawn_prop_authoritative(data)  # data must hold "uuid" and "type"
 ```
+
+## Placing a networked prop in the world
+
+A scene you drop into another scene by hand (a cabin in a planet scene, a kiosk in a station) is
+**not** a networked object, even if it carries a `PropSync`. Every machine loads it from its own copy
+of the scene file: it has no uuid, Horizon and the database never hear of it, and its `PropSync` stays
+inert. A networked object is an **entry in the world's data**. There are two ways to make one.
+
+### In every village: the village layout
+
+`scenes/_universe/structures/urban/villages/ares_village_mining.tscn` is the layout of a mining
+village, and `scenes/_universe/structures/urban/cities/ares_city_factory.tscn` the layout of a factory
+city. When a village is loaded (a player within ~5 km, or Horizon asking for its homes), the
+server reads the layout (`poi_villages.gd`) and spawns **every direct child that has a `PropSync`
+and comes from a scene**, one per village:
+
+- its uuid is stable, `"<village uuid>|<node name>"`: a restart upserts it, never duplicates it;
+- it is protected as world infrastructure (the admin cleanup tool cannot delete it);
+- its type is the `type_name` of its `PropSync`, and its other network properties are read from the
+  node, as its definition (`items_def/<type>_def.json`) lists them.
+
+To add a building to every village, instance its scene as a direct child of the layout, under a
+name of its own, and position it there. The garage, the teleporter, the floodlights, the lampposts
+and the containers are placed this way. The name is part of the uuid: two children of one layout
+never share a name.
+
+Which layout a POI gets is its `spawn_scene`, in its `poi_village` entry of Horizon's seed. The
+mining villages are of type `mining`; the factory cities, of type `factory`, have no homes, and
+Horizon only looks for apartments for new players in the villages of type `mining`. Otherwise a
+city whose homes never arrive would count, for ever, as a whole village's worth of places to come.
+
+:::danger[Its type must have a definition]
+The `type_name` of the `PropSync` node must name a definition, `items_def/<type>_def.json` (and its
+twin in Horizon). Left at its default, `generic_prop`, it names none: Horizon drops the object
+(`Object definition not found for type: generic_prop` in its log), and **nothing fails on the game
+side**: the object exists on the server and on no client. For a fixed object with no state of its
+own (a lamppost, a floodlight), `simple_building` is enough. `test_prop_sync_definitions` fails on any
+scene whose `PropSync` names a type without a definition.
+:::
+
+:::warning
+A village that has already spawned (`is_spawned`, saved in the database) does not read the layout
+again: it only gets the new building after a purge of the world.
+:::
+
+### What needs a purge, and what only a restart
+
+The database keeps **where** each object is and **which scene** it loads, nothing else. So:
+
+| You change | To see it |
+|---|---|
+| **What** a village holds: add, remove or move an object in the layout, change a `type_name` | purge the world, so that the villages spawn again |
+| **How** an object looks or sounds: a light, a material, a sign, a sound, a photocell | relaunch the client: every client builds the object from its scene |
+
+A client keeps a scene in memory once it has read it: reconnecting is not enough, relaunch it.
+
+### Anywhere else: Horizon's seed
+
+A networked object in a particular place (aboard the station, in a city) is an entry of Horizon's
+seed, `horizonserver/ds_genericprops/startup_items.json`: its `object_type`, a fixed
+`object_uuid`, and in `object_data` its `scenename`, its `parent_id` (the uuid of the networked frame
+it stands in) and its `position` / `rotation` in that frame. The station's teleporter is placed this
+way. The seed ships in the `horizon-data` image: rebuild it to test a change locally.
+
+:::warning
+Horizon skips the **whole** seed when its first uuid is already in the database: an existing world
+needs a purge to get a new entry.
+:::
+
+### Containers stand in a storage area
+
+The shipping containers (`scenes/_universe/props/containers/container_*_1200x240x240.tscn`) are
+fixed networked props: a `StaticBody3D` (a `RigidBody3D` would be thawed by the server's culler when
+a player comes near, and a 9 t container would fall over), of type `simple_building`. Every model is
+12 x 2.5 x 2.4 m. They have **no** `TerrainPad`: they do not level the ground, a **storage area**
+does, and they stand in it.
+
+The storage area (`scenes/_universe/structures/industrial/storage/pad_storage_area.tscn`, type
+`storage_area`) is a stretch of levelled ground. To place containers in a layout:
+
+1. Instance `pad_storage_area.tscn` in the layout, and set its **Size** in the Inspector (width along
+   its X, length along its Z, in metres). The yellow box shows the ground it levels.
+2. Drop the containers **under it** in the Scene tree, standing on its top face (y = 0 in the area).
+   Stack them by raising them 2.5 m per container.
+
+`poi_villages.gd` spawns the area, then everything the layout placed under it as its **children**,
+their pose local to it. The server seats the area on the ground it levels and the containers move
+with it. A container placed beside an area instead would keep the layout's height while the ground
+under it settles elsewhere: 16 cm away at the median, more than 50 cm one time in five, measured on
+5726 buildings. `test_containers` checks that every container of a layout stands in an area.
+
+:::tip[Why the size is a network property]
+A value you set on a node of the layout never travels: each machine builds the object from its scene
+file and from the properties its definition lists. The area's `size` is in `storage_area_def.json`
+(game and Horizon), so the server and every client level the same ground.
+:::
+
+### Level the ground under it
+
+A building that stands on a planet gets a `TerrainPad` child with a `CSGBox3D` under it: the box is
+the platform, its top face the height of the levelled ground, `apron_m` the flat margin around it.
+Sink the box until its top face is just under the building's floor. The pad's measures travel in
+`terrain_settled`, which the `simple_building` definition already replicates: a building with no
+state of its own can use that type and needs no new definition. A pad more than ~50 km from the
+surface (a station in orbit) levels nothing.
 
 ## Moving or reparenting a prop on the Horizon side (GORC)
 
