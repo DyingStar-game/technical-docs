@@ -169,6 +169,19 @@ it to a height alone slid every seated body 17 cm.
 
 The seat ride owns the camera while you are seated.
 
+### The torch on your head, and your own shoulders
+
+The torch is put on the **head bone** at start-up, on every avatar, so that its beam follows the
+animated body. Its place is **`torch_head_offset`** on the Player node (metres, in body axes, forward is
+-Z). The `Torch` node's own transform in `player.tscn` does nothing: the mount overwrites it.
+
+Sitting there, the torch is behind your shoulders, and they would cut the bottom of its beam. Your own
+body is therefore drawn on a render layer of its own (`Globals.RENDER_MASK_OWN_BODY`, layer 19), and
+your torch leaves that layer out of its shadows (`shadow_caster_mask`). The body is on that layer
+**alone**: a mesh casts for a light as soon as one of its layers is in the light's shadow mask. The sun
+and the moons, which only light layer 1, light layer 19 too; every other light, another player's torch
+included, still casts your shadow.
+
 ## Head-look
 
 The head bone tilts to follow where the player aims, so others can read your gaze:
