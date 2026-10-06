@@ -34,14 +34,33 @@ PlayHints.provide(self, &"mining_tool", [
   as a passenger 10, carrying or the drill 20; `HintSource` defaults to 30.
 - **A row may group actions** that are one thing to the player — the four move keys:
   `PlayHints.row([&"move_forward", &"move_left", &"move_back", &"move_right"], "%%HELP_MOVE")`.
+- **A row has a level** (third argument, default 0): a context shows its **level-1** lines only once
+  every level-0 line of that context is learnt, and so on up. The basics first, then what comes next:
+  at the wheel, the speed limiter and its setting, the special horn and flipping the vehicle come
+  after driving, the ignition, the brake, the lights, the horn and getting out.
+
+  ```gdscript
+  PlayHints.row(&"vehicle_speed_limiter", "", 1),
+  PlayHints.row([&"vehicle_limiter_up", &"vehicle_limiter_down"], "%%HELP_LIMITER_SET", 1),
+  ```
 
 The panel does the rest:
 
 - it shows the **keys bound now** on the device in hand (keyboard or gamepad), through
-  `InputLabel` / `ControlsHelpRows.name_of` — a rebound key shows rebound;
-- an action with **no binding** on that device is not listed;
+  `InputLabel` / `ControlsHelpRows.name_of` — a rebound key shows rebound. A row that groups
+  alternatives (the wheel's zoom steps and the pad's triggers) names only that device's keys while it
+  has any, and the words they share are said once: *Alt + Molette haut/bas*;
+- an action with **no binding** on that device is not listed, and holds no next level back;
 - it hides under menus, the star map, the controls help and the chat, and with the rest of the HUD
   for the pause menu and the F7 photo.
+
+### The star map's own panel
+
+The star map is a layer of its own, over the player's panel, so it carries **its own** hints panel
+(left, under its two buttons), kept to the `star_map` context (`PlayHintsPanel.contexts`): select
+(twice: go there), zoom, turn the view, reset, close. It replaced the fixed help line at the foot of
+the chart. Another full-screen view can do the same: a `PlayHintsPanel` in its layer, its `contexts`
+set, and a `PlayHints.provide(...)` whose `when` is the view being open.
 
 ### Without code: `HintSource`
 
@@ -64,6 +83,7 @@ action (`MenuConfig.ACTION_GROUPS`) — most hints need no new text at all.
 | The registry (`provide`, `withdraw`, `row`) | `scenes/globals/play_hints.gd` |
 | What the player has learnt (`user://hints.cfg`) | `scenes/globals/play_hints_memory.gd` |
 | The panel on the left | `ui/play_hints/play_hints_panel.gd` |
+| The star map's panel and lines | `StarMap._offer_play_hints()` in `scenes/ui/star_map/star_map.gd` |
 | The no-code node and its rows | `scenes/globals/hint_source.gd`, `scenes/globals/hint_row.gd` |
 | The player's own contexts | `PlayerClient._offer_play_hints()` in `scenes/player/player_client.gd` |
 | The settings switch and reset | `SettingsManager.is_play_hints_enabled()`, Settings ▸ General |
