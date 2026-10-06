@@ -145,7 +145,8 @@ for making it feel big is the **glow**, not the geometry, which is now correct.
   energy), which is how you tell "the night is too dark" from "that moon is 40° below the horizon".
 - **Isolate a light contributor** with `Alt+I`: no aerial perspective, no sky reflection, no sky
   ambient. Each step removes exactly one, so whatever still lights the scene names its own source.
-- Use the **EVA free-flight** dev tool to fly away from the surface and look at the lit
-  planets/moons and the day/night terminator across a whole body.
+- Use **god mode** (the dev free-flight, `$`) to fly away from the surface and look at the lit
+  planets/moons and the day/night terminator across a whole body: the mouse wheel doubles or halves
+  its speed, the middle mouse button lands you back on the ground under you.
 
 Both keys are InputMap actions, so their current bindings are in **Settings → Controls**.
