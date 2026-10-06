@@ -17,7 +17,7 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 
 | Default | Action | On foot | Driving a vehicle |
 |---|---|---|---|
-| **E** | `action` | Pick up / drop a prop, **enter** a seat | — |
+| **F** | `action` | Pick up / drop a prop, open / close a door, **enter** a seat, use a console | — |
 | **Y** | `exit` | — | Leave the vehicle |
 | **L** | `toggle_flashlight` / `vehicle_lights` | Torch on/off | Head lights on/off |
 | **Space** | `jump` / `brake` | Jump | Brake — **hold** at low speed = hand brake |
@@ -62,7 +62,7 @@ a **debug visual drawn in the 3D world** from scenery — such a node must join 
 `Globals.GROUP_DEBUG_OVERLAY` (as the celestial markers and the cargo envelope do).
 :::
 
-Movement (`move_forward/back/left/right`), `sprint`, `crouch`, `prone`, `interact`, mining
+Movement (`move_forward/back/left/right`), `sprint`, `crouch`, `prone`, mining
 (`toggle_tool`, `aim`, `perforate`), chat (`toggle_chat`, `write_in_chat`) and `pause` are
 actions too — see the full list (and rebind them) in **Settings → Controls**.
 
@@ -74,11 +74,30 @@ map cannot make you honk or drive off — and closing it hands control straight 
 :::
 
 :::note[Carrying, cargo & lights]
-A crate in a vehicle bed is grabbed with **E** (the carry prompt shows `[E] Carry`). While carrying,
+A crate in a vehicle bed is grabbed with **F** (the carry prompt shows `[F] Carry`). While carrying,
 **look up / down** to raise or lower the held object — to set it on the ground or stack it on a shelf —
 and it **drops on its own** if you drag it out of reach (e.g. left stuck behind a wall). On the in-cab
 HUD the active shortcuts are listed live (e.g. `[L] lights`, `[Space] brake`).
 :::
+
+:::note[One key, one use: F]
+`action` moved from **E** to **F** (E is now the EVA roll), and the separate `interact` action that also sat on F
+is **gone**: one press used to do two things — carrying a crate while using a console put the crate down as
+well. A console under the crosshair now takes the `action` press first, and only it.
+:::
+
+## In space (EVA)
+
+Weightless — around a station, or beyond a planet's air — the same movement keys push you with your suit's
+thrusters, and there is **no drag**: you keep your speed until you push against it. They are grouped in the
+**EVA** tab of **Settings → Controls**. How the drift works: [Orbital stations](../networkGame/stations.md).
+
+| Default | Action | What it does |
+|---|---|---|
+| **W A S D** (**Z Q S D** on AZERTY) | `move_*` | Thrust forward / left / back / right |
+| **Space** / **Ctrl** | `strafe_up` / `strafe_down` | Thrust up / down, along your own up |
+| **Q** / **E** (**A** / **E** on AZERTY) | `roll_left` / `roll_right` | Roll, with momentum; a released roll slows down on its own |
+| **X** | `eva_stabilize` | Brake: the thrusters fire against your motion until you are still relative to your frame (the station, beside one) |
 
 ## Developer & debug tools
 
@@ -91,7 +110,7 @@ Handy while working on the game. Like every key, these are InputMap actions — 
 | *(Settings → Debug)* | Star map debug | A **Star map** section in the debug panel while the map is open: bodies, followed body, zoom, simulated time, relief tiles. The panel goes over the map, and the map's info panel steps aside. |
 | *(see Settings)* | `toggle_eva` | **EVA free-flight** — detach and fly the body freely to inspect planets, moons and the day/night terminator from afar. |
 | **Middle mouse (hold)** | `carry_free_rotate` | While carrying a prop, hold and move the mouse to **freely rotate** the held object (mouse wheel = step the yaw by 15°). |
-| **+** / **−** | `debug_time_forward` / `_back` | Shift the **simulated time** by an hour; hold to sweep the sky. Safe because the sky is a pure function of time and everything standing on a body is parented to it, so the ground never moves under anyone. The HUD shows the offset. Shares its keys with the star-map zoom, which only reads them while the map is open. |
+| **+** / **−** | `debug_time_forward` / `_back` | Shift the **simulated time** by an hour, on **this client only**; hold to sweep the sky (a tool for judging an atmosphere at another hour). While it is shifted a **red banner** says so: everything worked out from the time on both sides — an orbital station's place — no longer matches the server, and leaving a station lands you where the server has it. Shares its keys with the star-map zoom, which only reads them while the map is open. |
 | **Alt + L** | `debug_toggle_moon_lights` | Cut the **moon lights** and print each factor (phase, elevation, extinction, energy) — the way to tell "the night is too dark" from "the moon is below the horizon". |
 | **Alt + I** | `debug_isolate_light` | Cycle the **light isolation** modes: no aerial perspective, no sky reflection, no sky ambient. Each step removes exactly one contributor, so whatever still lights the scene names its own source. |
 | **F6** | `game_record` | Start / stop the gameplay recording (saved in `screenshots/records`). |
