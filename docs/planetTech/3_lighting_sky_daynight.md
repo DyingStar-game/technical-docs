@@ -91,6 +91,29 @@ fixes the old "black planets in the sky" problem, where a normal light simply co
 Distant bodies also keep their **real terrain** (their coarse LOD-3 chunks) at every distance —
 there is no low-detail placeholder sphere anymore.
 
+### Their air, seen from afar
+
+Every other body with air shows it too (`AtmosphereLod`, one per body, client only). Which way it is
+drawn depends on how big the body looks:
+
+| Level | When | What draws it |
+|---|---|---|
+| **OWN** | the body you stand on | the sky and the aerial perspective (above) |
+| **DISC** | any other body with air | its far chunks: the light its whole **column** of air and ground sends back to space |
+| **SHELL** | its air is 1 px or more thick on screen | a shell around the body that draws its glowing **limb** |
+
+The disc uses the method planetary albedos are computed with, a **two-stream column** (Eddington).
+Light that enters the air comes back out after as many scatterings as it takes. The sky counts **one**
+scattering, which is right looking up through the air but wrong looking down at a thick one: it turned
+Sandbox's corundum veil and the gas giants black. A veil that scatters without absorbing makes a
+planet **brighter** from space. Sandbox's published albedo is 0.32 over a 0.15 ground, and the column
+gives 0.40–0.46. The limb keeps the sky's single scattering, which is right for its thin grazing paths.
+Both read the body's own `AtmosphereProfile`: nothing is tuned by eye.
+
+On a 1080 p screen at 75°, the air of every body seen from another is under a pixel thick today, so the
+**disc** is what you see (a paler, whiter or brighter world). The limb shows through a narrower view or
+on a closer pass.
+
 ## Planet rotation and orbits
 
 Every body **spins on its axis** at its real sidereal period plus its axial tilt, and every planet and
