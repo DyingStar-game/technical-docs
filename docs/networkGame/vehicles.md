@@ -357,6 +357,28 @@ the **`VehicleSeat`** to the door that guards it (e.g. the driver seat → `fron
   shut door.
 - A seat with an empty `Door Id` boards / leaves directly (no gating).
 
+**The wind shuts an open door.** Driving with a door open, the relative wind presses on it; past a
+certain speed the door check gives way and the door slams (server-authoritative, replicated like any
+door). The server computes it every physics step of a moving vehicle (`DoorWind`): the dynamic
+pressure ½·ρ·v² — with **ρ the air of the planet at the vehicle's altitude**
+(`AtmosphereProfile.air_density`) — on the leaf as the flow sees it (area × sin of its opening
+angle, a flat plate's drag 1.2), at half its width from the hinge, against the door check's torque.
+Set it per door on the **`VehicleDoorHandle`**, group *Wind*:
+
+| Setting | Truck cab door | Meaning |
+|---|---|---|
+| `wind_area_m2` | 1.0 | Area of the leaf. **0 = the wind never shuts it** (the bay hatches). |
+| `wind_shut_travel` | `(0, 0, -1)` | Direction of travel whose airflow pushes it shut: a door hinged at its front edge is shut by driving forward. |
+| `wind_width_m` | 0.9 | Hinge to free edge; the push acts at half of it. |
+| `wind_hold_nm` | 25 | What the door check holds before it gives way. Twice the hold, 1.41 times the speed. |
+
+On Tarsis 3 the truck's cab doors go at about **33 km/h at the reference sphere** (air 1.27 kg/m³)
+and **42 km/h in the villages** at 5130 m (0.77 kg/m³). Simplifications: still air (no wind of its
+own), a constant plate coefficient, no gust, no lee of the cab. The air's density needs the
+atmosphere profiles to carry their pressure (`surface_pressure_pa`): regenerate them with
+`addons/dyingstar/build_atmosphere_profiles.gd` (script editor, **File ▸ Run**) after the system data
+changes; until then the vehicle's `air_density` export (1.26) is used.
+
 Both gates are **server-authoritative**: the client checks them for the prompt, but the server
 re-checks on `enter_vehicle` / `exit_vehicle` and refuses through a shut door — and, to board, out of
 reach or out of sight of the seat.
