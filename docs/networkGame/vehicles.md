@@ -380,9 +380,9 @@ On Tarsis 3 the truck's cab doors (measured: 1.15 m², 0.84 m wide, open at 60°
 (0.77 kg/m³). It stays on the server because a door is gameplay, not decoration: a shut door bars
 boarding and leaving, and only the server decides doors. Simplifications: still air (no wind of its
 own), a constant plate coefficient, no gust, no lee of the cab. The air's density needs the
-atmosphere profiles to carry their pressure (`surface_pressure_pa`): regenerate them with
-`addons/dyingstar/build_atmosphere_profiles.gd` (script editor, **File ▸ Run**) after the system data
-changes; until then the vehicle's `air_density` export (1.26) is used.
+atmosphere profiles to carry their pressure (`surface_pressure_pa`): regenerate them with the editor
+menu **DyingStar ▸ Rebuild atmosphere profiles** after the system data changes; until then the
+vehicle's `air_density` export (1.26) is used.
 
 Both gates are **server-authoritative**: the client checks them for the prompt, but the server
 re-checks on `enter_vehicle` / `exit_vehicle` and refuses through a shut door — and, to board, out of

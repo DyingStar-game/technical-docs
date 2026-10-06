@@ -56,7 +56,10 @@ coefficients, the haze slab, the absorption layer, and the star's irradiance and
 Those files are **generated, not authored**. The composition published by the celestial service is the
 source of truth for what the air is made of, and `addons/dyingstar/build_atmosphere_profiles.gd` turns a
 gas mix into scattering constants once, at edit time — so the client never integrates anything at
-runtime. Run it (**File ▸ Run**) after the system data changes; never hand-edit the `.tres`.
+runtime. Run it after the system data changes — editor menu **DyingStar ▸ Rebuild atmosphere
+profiles** (or **File ▸ Run** on the script); never hand-edit the `.tres`. Besides the scattering, each
+profile carries the surface pressure, from which `AtmosphereProfile.air_density(altitude)` gives the
+air's weight wherever a vehicle is.
 
 :::note[The dust is the exception]
 Mie parameters cannot be derived from a gas mix — they come from an offline computation on the
