@@ -52,15 +52,15 @@ plain words instead of “Layer 1, Layer 2…”. There are six:
 | 2 | `player` | The players' bodies. |
 | 3 | `vehicle` | Vehicles (truck, rover…). |
 | 4 | `prop` | Movable objects: boxes, rocks, carriables — anything physics can push. |
-| 5 | `zone` | **Passive proximity zones**: seats, cargo areas, gravity fields, spawn areas. Invisible volumes that *don't* collide with anything — they just wait to be entered. |
-| 6 | `interactable` | **Look-at targets**: door handles, consoles, carriable pick-up points. The things your view-ray can point at to interact. |
+| 5 | `zone` | **Passive proximity zones**: cargo areas, gravity fields, spawn areas. Invisible volumes that *don't* collide with anything — they just wait to be entered. |
+| 6 | `interactable` | **Look-at targets**: door handles, vehicle seats, consoles, carriable pick-up points. The things your view-ray can point at to interact. |
 
 :::info Why split `zone` and `interactable`?
 They feel similar (both are invisible volumes you "reach"), but they must be **separate layers**.
-When you sit in a vehicle, your interaction ray must be able to hit the **door handle**
-(`interactable`) to get out. If seats and handles shared one layer, the ray would hit the **seat
-zone** you're sitting in first and you could never grab the handle. Keeping them apart lets each
-ray look at exactly the right kind of thing.
+A zone is found by **standing in it** (the player's probe); an interactable by **looking at it**
+(the interaction ray). Mixed on one layer, the ray would stop on every cargo area and spawn volume
+in its way. Vehicle seats are look-at targets since you board the seat you look at; seated, the ray
+passes through the seats of your own vehicle so it still reaches the door handles around you.
 :::
 
 ## Ready-made mask groups
@@ -72,7 +72,7 @@ these, and use the constant name in code:
 | Constant | Includes | Used by |
 |---|---|---|
 | `MASK_SOLID` | `world` + `player` + `vehicle` + `prop` | Everything that **moves and collides physically**: players, vehicles, pushable props. "Bump into anything solid." |
-| `MASK_PROBE` | `zone` | The single **player probe** that detects the passive zones around the player (which seat / gravity field / spawn area they're in). |
+| `MASK_PROBE` | `zone` | The single **player probe** that detects the passive zones around the player (which cargo bed / gravity field / spawn area they're in). |
 | `MASK_OBSTACLE` | `world` + `vehicle` + `prop` | **Line-of-sight and tool rays** — a ray that should be blocked by solid geometry but ignore other players and invisible zones. |
 
 ## The layer / mask matrix
@@ -86,8 +86,8 @@ a new scene:
 | **Vehicle** | `vehicle` | `MASK_SOLID` | Drives on the ground, collides with players, props and other vehicles. |
 | **Movable prop** (box, rock…) | `prop` | `MASK_SOLID` | Physics can push it against anything solid. |
 | **Static geometry** (terrain, building, a scene's fixed collision) | `world` | `0` (nothing) | It never moves — the movers above find it. |
-| **Passive zone** (seat, cargo area, spawn) | `zone` | `0` (nothing) | It doesn't chase anyone; the player's probe finds it. `monitoring` is **off**. |
-| **Interactable** (door handle, console) | `interactable` | `0` (nothing) | It waits to be pointed at; the interaction ray does the looking. |
+| **Passive zone** (cargo area, spawn) | `zone` | `0` (nothing) | It doesn't chase anyone; the player's probe finds it. `monitoring` is **off**. |
+| **Interactable** (door handle, vehicle seat, console) | `interactable` | `0` (nothing) | It waits to be pointed at; the interaction ray does the looking. |
 | **A detector that must catch one specific type** (e.g. a mining trigger that reacts to players) | `0` | just that one layer (e.g. `player`) | It only ever cares about one category — don't make it scan the rest. |
 
 :::note Gravity zones are the exception to "zones have Mask 0"
@@ -121,13 +121,13 @@ things.
 
 **Mask — what the truck _collides with_:** `world` + `player` + `vehicle` + `prop` (that's
 `MASK_SOLID`). Notice `zone` and `interactable` are **off** — the truck body shouldn't physically
-crash into invisible seat volumes or door-handle markers; those are handled by their own areas and
+crash into invisible seat or door-handle markers; those are handled by their own areas and
 rays.
 
 ![The truck's collision Mask: world, player, vehicle and prop are ticked; zone and interactable are off](./static_files/truck_collision_mask.png)
 
-Its own sub-parts follow the matrix above: the **seat areas** are `zone` / Mask 0 with monitoring
-off, and the **door-handle areas** are `interactable` / Mask 0.
+Its own sub-parts follow the matrix above: the **seat** and **door-handle** areas are
+`interactable` / Mask 0 with monitoring off.
 
 ## Why we do it this way
 
@@ -153,8 +153,8 @@ separate mechanism. Layers are the tidy foundation; they are not a magic FPS but
 
 ### 2. Correctness: the right thing reacts
 
-Layers also stop objects from reacting to the wrong things: your interaction ray hits the door
-handle instead of the seat you're in, a mining trigger reacts to players and not to passing rocks,
+Layers also stop objects from reacting to the wrong things: your interaction ray hits a door
+handle or a seat and not a cargo zone, a mining trigger reacts to players and not to passing rocks,
 a gravity field pulls props but a seat volume ignores them. Getting the layer/mask right is often
 the difference between a feature that "sometimes works" and one that always does.
 
