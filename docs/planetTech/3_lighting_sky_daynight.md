@@ -61,6 +61,12 @@ profiles** (or **File ▸ Run** on the script); never hand-edit the `.tres`. Bes
 profile carries the surface pressure, from which `AtmosphereProfile.air_density(altitude)` gives the
 air's weight wherever a vehicle is.
 
+Every body with air has one — the 8 planets and the moons that have an atmosphere
+(`tarsis_<planet>_<moon>.tres`, the name of their scene) — worn by its scene's `PlanetData`
+(`atmosphere_profile`); `test_planet_atmospheres` fails if one is generated and not worn. A moon's
+temperature is the mean of its day and night ones; where the JSON's published scale height contradicts
+the moon's own mass, radius and gases, the derived one is used and the generator says so.
+
 :::note[The dust is the exception]
 Mie parameters cannot be derived from a gas mix — they come from an offline computation on the
 suspended dust and are pinned in the generator, with the study that produced them.
