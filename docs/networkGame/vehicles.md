@@ -26,7 +26,7 @@ All the moving parts already exist as reusable pieces — in most cases a new ve
 |---|---|
 | `scenes/vehicles/vehicle.gd` (`class_name Vehicle`) | The vehicle base: body/wheels, physics, driving, networking, cargo. Put it on the scene root. |
 | `scenes/vehicles/vehicle_powertrain.gd` | Engine math (electric / thermal gearbox). Owned by `Vehicle`, configured through its `@export`s — you don't touch it. |
-| `scenes/vehicles/vehicle_seat.gd` (`class_name VehicleSeat`) | One seat zone (driver or passenger). You drop one per seat. |
+| `scenes/vehicles/vehicle_seat.gd` (`class_name VehicleSeat`) | One seat (driver or passenger), boarded by looking at it. You drop one per seat. |
 | `scenes/vehicles/vehicle_debug_hud.gd` | Optional on-screen dashboard (speed, RPM, load). |
 
 ## 1. Where to put the files
@@ -77,7 +77,7 @@ Its scene tree — the GLB `Model` plus the rig nodes you add around it:
 
 - **`Model`** (group `vehicle_model`) — the GLB: body, `*_wheel`s, `Steering_wheel`, `Front_*_door`s
   and the screen meshes. Everything **below** it is the rig you add in Godot.
-- **`SeatDriver` / `SeatPassenger`** (`VehicleSeat`) — the boarding zones (§3).
+- **`SeatDriver` / `SeatPassenger`** (`VehicleSeat`) — the seats, boarded by looking at them (§3).
 - **`Gui3D → SubViewport →` dashboard UI** — the in-cab screen (§Dashboard).
 - **`Light`** — the `vehicle_light` lamps (head / brake / cabin).
 - **`RearCamera_*`** — reversing camera + mirrors.
@@ -89,10 +89,10 @@ At runtime the code re-parents each one **under its door mesh** so it swings wit
 
 :::note[Set the collision layer & mask on the rig nodes]
 The `VehicleBody3D` root goes on the `vehicle` layer with Mask `MASK_SOLID` (world + player +
-vehicle + prop). The **seat** areas go on the `zone` layer with **Mask 0** (monitoring off — they
-are passive), and the **door handles** on the `interactable` layer with **Mask 0**. This split is
-what lets a seated player's interaction ray reach the door handle to get out, instead of hitting the
-seat zone they're sitting in. Set these in the Inspector; see
+vehicle + prop). The **seats** and the **door handles** go on the `interactable` layer with
+**Mask 0** (monitoring off — they are passive look-at targets; the scripts set it in `_ready`).
+Seated, your interaction ray passes through the seats of your own vehicle, so it reaches the door
+handles around you. Set these in the Inspector; see
 [Collision layers & masks](./collision_layers.md) for the full picture and the truck as a worked
 example.
 :::
@@ -112,7 +112,7 @@ the root, then give it two children:
 ```
 Truck (VehicleBody3D, vehicle.gd)
 ├── SeatDriver      (Area3D, vehicle_seat.gd)   role = Driver
-│   ├── CollisionShape3D (BoxShape3D)   ← the "press E here" box, beside the door
+│   ├── CollisionShape3D (BoxShape3D)   ← the seat itself: the box you LOOK at to board
 │   └── SitPoint (Marker3D)             ← where the occupant sits (driver: the camera eye)
 └── SeatPassenger   (Area3D, vehicle_seat.gd)   role = Passenger
     ├── CollisionShape3D (BoxShape3D)
@@ -121,18 +121,27 @@ Truck (VehicleBody3D, vehicle.gd)
 
 - **`role`** (inspector): `Driver` controls the vehicle (drive input + HUD); `Passenger` just
   rides along. Set this per seat.
-- **The box** (`CollisionShape3D`): size and place it where a player on foot stands to board
-  (e.g. left of the cab for the driver). It is the zone that enables **E**.
+- **The box** (`CollisionShape3D`): fit it to the seat itself, cushion and back, inside the cab
+  (around 0.6 × 0.9 × 0.6 m, centred a little under the `SitPoint`). It is what the player **looks
+  at** to board: through the open door, within reach of the interaction ray (3 m).
 - **`SitPoint`** (`Marker3D`): where the occupant is seated. For the driver it is also the
   **camera eye**, so place it at head height inside the cab, facing forward (the vehicle's local
   `-Z`).
 
-You don't wire anything: the `Vehicle` discovers its seats automatically. The seat box is
-**passive** — it never monitors. Instead the **player's own detector** is the single monitor that
-reports when it walks into a seat zone. This avoids every seat of every vehicle running a
-broad-phase overlap test each physics frame, and it works identically on client and server.
-Standing in a box shows `[E] Drive Seat` / `[E] Passenger Seat` at the crosshair; a taken driver
-seat shows `Driver seat taken` instead. The driver gets free mouse look while driving and exits
+You don't wire anything: the `Vehicle` discovers its seats automatically. A seat is a **look-at
+target**, like a door handle: on the `interactable` layer, never monitoring. You board the seat you
+**look at** — not a patch of ground you stand on — so two seats side by side are never confused.
+Looking at a seat shows `[E] Driver seat` / `[E] Passenger seat`; a taken seat shows `Driver seat
+taken`, a shut door *"Open the door first (aim at the handle)"* (its handle box covers the seat
+behind it, so it takes the aim first).
+
+:::tip[The server checks reach and sight]
+On `enter_vehicle` the server finds the seat the client named and refuses it unless the player's
+eye is within `VehicleSeat.REACH_M` (4 m: the ray's 3 m plus one for latency) of the seat's box and
+has a clear line of sight to it (the vehicle's own hull excepted, as for a door handle). The seat
+boxes used to stand beside the cab and the server never asked: any client could sit in any truck
+from anywhere.
+::: The driver gets free mouse look while driving and exits
 with **Y**; the prompt is hidden while seated, and on exit you are dropped beside the seat you used.
 
 :::tip[Seats are server-authoritative]
@@ -240,8 +249,8 @@ the def and **rebuild Horizon**.
 
 ## 6. Test
 
-**In game (F5)** — spawn the vehicle, walk into a seat box, **E** to board as driver or passenger,
-drive, **Y** to leave.
+**In game (F5)** — spawn the vehicle, open a door, **look at the seat** behind it, **E** to board
+as driver or passenger, drive, **Y** to leave.
 
 :::note[The standalone bench is gone]
 There used to be a `vehicle_bench.tscn` that drove a vehicle locally, with its own keyboard input,
@@ -340,16 +349,44 @@ body would stay at the shut position and the look-at ray would miss it once the 
 
 **Door-gated seats — open the door before you can get in *or* out.** Set the **`Door Id`** export on
 the **`VehicleSeat`** to the door that guards it (e.g. the driver seat → `front_l_door`). Then:
-- **Open/close** the door (look at the handle + **E**) from that seat's **boarding zone** (on foot)
-  **or while seated** — so a driver/passenger can close it from inside.
+- **Open/close** the door (look at the handle + **E**) on foot **or while seated** — so a
+  driver/passenger can close it from inside.
 - **E boards only once that door is open.** A closed door shows *"Open the door first (aim at the
   handle)"* instead of the board prompt.
 - **Y leaves only once that door is open** — symmetric with boarding, so you can't step out through a
   shut door.
 - A seat with an empty `Door Id` boards / leaves directly (no gating).
 
+**The wind shuts an open door.** Driving with a door open, the relative wind presses on it; past a
+certain speed the door check gives way and the door slams (server-authoritative, replicated like any
+door). The server checks it ten times a second on a moving vehicle (`DoorWind`): the dynamic
+pressure ½·ρ·v² — with **ρ the air of the planet at the vehicle's altitude**
+(`AtmosphereProfile.air_density`) — on the leaf as the flow sees it (area × sin of its opening
+angle, a flat plate's drag 1.2), at half its width from the hinge, against the door check's torque.
+**Nothing to set on a new vehicle** whose doors follow the naming: a door whose `door_id` ends with
+**`_door`** (`front_l_door`) catches the wind, and its leaf (area, width) is **measured from its own
+mesh** in the GLB; anything else (`hatch_fl`, a lid) does not. The **`VehicleDoorHandle`**'s group
+*Wind* overrides it:
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `wind_area_m2` | -1 | Area of the leaf: **-1 = measured** (a `_door`) or none (anything else); **0 = never**; a value = that area. |
+| `wind_shut_travel` | `(0, 0, -1)` | Direction of travel whose airflow pushes it shut: a door hinged at its front edge is shut by driving forward. |
+| `wind_width_m` | -1 | Hinge to free edge (the push acts at half of it); -1 = measured with the area. |
+| `wind_hold_nm` | 25 | What the door check holds before it gives way. Twice the hold, 1.41 times the speed. |
+
+On Tarsis 3 the truck's cab doors (measured: 1.15 m², 0.84 m wide, open at 60°) go at about
+**32 km/h at the reference sphere** (air 1.27 kg/m³) and **41 km/h in the villages** at 5130 m
+(0.77 kg/m³). It stays on the server because a door is gameplay, not decoration: a shut door bars
+boarding and leaving, and only the server decides doors. Simplifications: still air (no wind of its
+own), a constant plate coefficient, no gust, no lee of the cab. The air's density needs the
+atmosphere profiles to carry their pressure (`surface_pressure_pa`): regenerate them with the editor
+menu **DyingStar ▸ Rebuild atmosphere profiles** after the system data changes; until then the
+vehicle's `air_density` export (1.26) is used.
+
 Both gates are **server-authoritative**: the client checks them for the prompt, but the server
-re-checks on `enter_vehicle` / `exit_vehicle` and refuses through a shut door.
+re-checks on `enter_vehicle` / `exit_vehicle` and refuses through a shut door — and, to board, out of
+reach or out of sight of the seat.
 
 ### Collision (from the model)
 The collision is **generated by code**, never hand-placed in the `.tscn`. Two sources, in order:
