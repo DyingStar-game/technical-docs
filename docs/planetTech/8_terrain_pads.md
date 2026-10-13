@@ -20,6 +20,16 @@ it works** is for whoever maintains the terrain code or debugs a pad that misbeh
 
 1. Open the building's scene (for example `cargo_depot.tscn`).
 2. Add a **`TerrainPad`** node anywhere under the building's root. It shows with its own snap icon.
+
+   :::note[An object with its own pad, placed inside a building]
+   A machine or any other object that carries a pad (an ARES dispenser, which levels its own ground in
+   a village) can be placed inside a building that has one (the cargo depot, a garage). Its pad then
+   **stands down**: the building's pad levels the ground. A pad looks for another pad from its own
+   scene upward (`TerrainPad.inside_another_pad`, from `Node.owner`), so a building grouped under a
+   plain node with no pad keeps its own. Both pads would otherwise take the building's uuid: two records
+   under one key replaced each other and moved the building up and down every frame, rebuilding its
+   chunks without end.
+   :::
 3. Add a **`CSGBox3D`** as a **direct child** of the pad, and name it `Ground`. A pad with no
    box named `Ground` uses the first `CSGBox3D` child it finds.
 4. Size and move the box with the handles in the 3D view:

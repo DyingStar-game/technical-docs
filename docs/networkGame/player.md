@@ -180,6 +180,12 @@ The player has three stances, held in the replicated **`stance`** property: `0` 
   a headroom raycast** — you can't stand up under a ceiling.
 - The physics space state is only valid during the physics step, so the stance request is **recorded**
   in the action handler and **applied on the next physics tick** (where the headroom ray is valid).
+- `stance`, `floating` and `seat` are sent **only when they change**. A server that takes a player — a
+  new connection, or a body handed over by another server — therefore **publishes the posture it holds
+  once, even at its defaults** (`PlayerServer.spawn_state`, sent by `Server._register_player` after the
+  update signal is wired and a hand-over has re-seated the player). Without it, Horizon and the client
+  kept the last session's crouch, EVA or driver's seat while the new body stood on foot: the stand-up
+  the client asked for was no change to the server, got no answer, and the player stayed stuck.
 
 ## Carry is standing-only
 

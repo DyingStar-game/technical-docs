@@ -90,6 +90,12 @@ The local owner doesn't see his own stowed tool (first-person clutter); it's the
 that show the holstered tool following the body. Tune the offset with a second client watching.
 :::
 
+Nobody starts with the mining tool: it is taken at the ARES Mining dispenser and held in the replicated,
+persisted `mining_tool` property (`Player.owns_mining_tool`). Whether the drill is drawn is **one rule**,
+`MiningTool.shows_tool(owned, out, is_owner)`, read every frame on every instance: **owned**, and either
+out, or stowed on someone else's belt. A pickup, a drop or a late join changes the property and the
+next frame follows it — no signal to wire.
+
 ## Recommendation
 
 Because `MiningTool` is the only tool today, equip/stow, the `EquipmentMount` wiring and the
