@@ -10,7 +10,8 @@ kiosk — render a normal `Control` UI through a `SubViewport` and show it on a 
 `ViewportTexture`. It can also receive clicks. This is Godot's "GUI in 3D" pattern; the reusable
 helper lives at `scenes/interactables/gui_3d.tscn`.
 
-**Used by**: the mining depot screen (`mining_depot.tscn`) and the vehicle dashboard
+**Used by**: the mining depot screen (`mining_depot.tscn`), the teleporter (`teleporter.tscn`), the
+component dispenser (`component_dispenser.tscn`) and the vehicle dashboard
 ([Adding a vehicle](./vehicles.md)).
 
 ## The pieces
@@ -21,7 +22,8 @@ helper lives at `scenes/interactables/gui_3d.tscn`.
 - a **screen `MeshInstance3D`** whose material shows the SubViewport through a `ViewportTexture`,
 - the **`Gui3D`** helper (`scenes/interactables/gui_3d.tscn`) — forwards mouse / touch to the
   viewport so the UI is clickable (only needed for an interactive screen),
-- (interactive only) an **`Area3D`** over the screen mesh, for the click detection.
+- (interactive only) an **`Area3D`** over the screen mesh, for the click detection with a free
+  mouse cursor (the crosshair does not need it, see below).
 
 ## Setup
 
@@ -36,6 +38,46 @@ helper lives at `scenes/interactables/gui_3d.tscn`.
    - **Shading = Unshaded** (or use Emission) so it stays readable.
 5. On the `Gui3D`: `node_viewport` = the SubViewport, `node_quad` = the screen mesh, `node_area`
    = the click `Area3D` (for interactivity).
+
+## Using a screen in game: the crosshair
+
+Walking up to a screen does **not** free the cursor nor freeze the view (it used to, through a
+`ScreenZone` box laid in front of every console: the player was stuck to every screen they walked
+past). The view stays the player's:
+
+- the **crosshair is the pointer**: `PlayerClient._point_screen` finds the nearest `Gui3D` (group
+  `screen_gui`) the ray from the eye meets within 4 m (`Gui3D.hit`, pure geometry on the screen
+  mesh's plane — the client has no wall collision anyway) and hovers it (`Gui3D.pointer_at`);
+- the **`perforate` action** (left click, right trigger) clicks under the crosshair
+  (`Gui3D.click_at`), and the tool in hand does not fire meanwhile;
+- a **text field** that takes the keyboard locks the gameplay keys (so typing `1750` does not equip
+  the drill) but not the view. The next click gives the keyboard back to the game and acts on what
+  is under the crosshair, if anything. Escape, or walking away, gives it back too
+  (`Gui3D.release_keyboard`).
+
+## Talking to the server: the screen contract
+
+A screen's **owner** is the nearest ancestor of its `Gui3D` with `update_screen()`. The client
+**names** the screen in its action, like the truck kiosk; the server finds it again and checks the
+player is within reach (`ScreenTarget`, `scenes/interactables/screen_target.gd`):
+
+| On the owner | Side | |
+|---|---|---|
+| `update_screen(data)` | server | **required** — a validated action |
+| `set_screen_actor(player)` | server | optional — who sent it, right before `update_screen` |
+| `is_typing() -> bool` | client | optional — a field holds the keyboard |
+
+```gdscript
+# CLIENT, on a button of the screen's UI: only the request travels.
+ScreenTarget.send(self, {"state": "dispense", "spec": spec_path})
+```
+
+`send` adds the screen's address (`target_uuid` of the networked node carrying it — the owner or
+its nearest ancestor with a `PropSync` — and the `screen` path inside it) to a `screen_state`
+action. `PlayerServer` resolves it (`ScreenTarget.resolve`) and refuses a screen farther than
+`ScreenTarget.USE_RANGE_M` from the player's eye. Treat `data` as a request, never as an
+instruction: check every field against the server's own state (the dispenser only hands out a part
+of its own catalogue, the teleporter re-resolves the destination).
 
 ## Gotchas
 

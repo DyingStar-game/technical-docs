@@ -222,6 +222,23 @@ hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1
   bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
   batteries in the zone and call `charge(delta)` on the server.
 
+## Getting parts: the component dispenser
+
+`scenes/_universe/structures/component_dispenser/component_dispenser.tscn` — an ARES machine in the
+garage (CSG blockout for now): pick a part on its screen, it drops into the hatch at waist height.
+
+- **Catalogue**: `VehicleComponentCatalog.all()` lists every spec `.tres` in
+  `scenes/_universe/vehicles/specs/` — a new part shows up in the menu with no list to edit. The
+  spec's `display_name` is a translation key (`%%PART_ENGINE_T1`), its `icon` the dashboard pictogram.
+- **Server**: `update_screen` only accepts a spec of the catalogue (it never loads a path the client
+  sent), then, in a physics frame, refuses while anything lies in the hatch and otherwise spawns the
+  part at `TrayMarker` (`MarkerSpawn.spawn`, the same code as the truck kiosk). A battery comes out full.
+- **Clients**: each one looks into the hatch itself (the server's own box test) and lets the flap
+  fall open, with a sound, when a part arrives — right for a late joiner too, with nothing sent.
+- **Why waist height**: the carry prompt is decided by the server's own aim ray, and the client has
+  no wall collision. A part under an overhang near the floor could be picked up (the grab uses the
+  part the client aimed at) but showed no prompt (the server's ray grazed the overhang).
+
 ## Factory components
 
 `startup_items.json` seeds vehicles with empty bays — so **none of them would move**.
