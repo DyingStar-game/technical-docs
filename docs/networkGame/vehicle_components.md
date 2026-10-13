@@ -231,8 +231,12 @@ garage (CSG blockout for now): pick a part on its screen, it drops into the hatc
   `scenes/_universe/vehicles/specs/` — a new part shows up in the menu with no list to edit. The
   spec's `display_name` is a translation key (`%%PART_ENGINE_T1`), its `icon` the dashboard pictogram.
 - **Server**: `update_screen` only accepts a spec of the catalogue (it never loads a path the client
-  sent), then, in a physics frame, refuses while anything lies in the hatch and otherwise spawns the
-  part at `TrayMarker` (`MarkerSpawn.spawn`, the same code as the truck kiosk). A battery comes out full.
+  sent) and refuses while a delivery runs. A delivery lasts `delivery_s` (5 s, against spam); it is
+  announced to the players around (`ScreenTarget.announce`), then, in a physics frame, refused if
+  anything lies in the hatch, else the part is spawned at `TrayMarker` (`MarkerSpawn.spawn`, the same
+  code as the truck kiosk). A battery comes out full.
+- **During the delivery** every client near shows the screen's filling ring with the seconds left,
+  and runs the fan (`sfx_delivery`); the part and the flap's sound come at the end.
 - **Clients**: each one looks into the hatch itself (the server's own box test) and lets the flap
   fall open, with a sound, when a part arrives — right for a late joiner too, with nothing sent.
 - **Why waist height**: the carry prompt is decided by the server's own aim ray, and the client has

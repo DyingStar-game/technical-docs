@@ -66,6 +66,7 @@ player is within reach (`ScreenTarget`, `scenes/interactables/screen_target.gd`)
 | `update_screen(data)` | server | **required** — a validated action |
 | `set_screen_actor(player)` | server | optional — who sent it, right before `update_screen` |
 | `is_typing() -> bool` | client | optional — a field holds the keyboard |
+| `screen_event(event)` | client | optional — what the server announced (below) |
 
 ```gdscript
 # CLIENT, on a button of the screen's UI: only the request travels.
@@ -78,6 +79,15 @@ action. `PlayerServer` resolves it (`ScreenTarget.resolve`) and refuses a screen
 `ScreenTarget.USE_RANGE_M` from the player's eye. Treat `data` as a request, never as an
 instruction: check every field against the server's own state (the dispenser only hands out a part
 of its own catalogue, the teleporter re-resolves the destination).
+
+### Showing everyone what a screen does
+
+`ScreenTarget.announce(screen, player, event)` (server) puts the event on the player property
+`screen_event` of the player who used the screen; player properties reach every client around them,
+and `PlayerClient` hands it to the screen it names (`ScreenTarget.receive` → `screen_event`). It is
+stamped with the server's clock (`at`): a client arriving midway joins at the right second
+(`ScreenTarget.time_left`), one arriving after it is over ignores the re-broadcast. The key is
+whitelisted in `player_def.json` — the game's **and** horizonserver's.
 
 ## Gotchas
 
