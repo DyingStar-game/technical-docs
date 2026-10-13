@@ -132,7 +132,8 @@ from a cabin, and a trip lands you where there is none.
 The screen (`teleporter_ui.gd`, its lists from `scenes/teleport/teleport_catalog.gd`):
 
 - **Bodies** are marked ○ planet, ● moon (indented under its planet), ◌ giant: a body over
-  10 Earth masses (`GIANT_MIN_EARTHS`), Tarsis V and VI.
+  10 Earth masses (`GIANT_MIN_EARTHS`), Tarsis V and VI. The list opens on the first body with surveyed
+  POI (`preferred_body_index`): SandBox – Tarsis III today.
 - **Destinations** are grouped under folded headings, each with its count: the orbital stations first,
   then one heading per POI type (`poi_type` of the QGIS export) in alphabetical order, the computed
   points last. Inside a heading, natural order (F0003 before F0004). A click on a heading opens it;
