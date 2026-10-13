@@ -181,6 +181,21 @@ The player has three stances, held in the replicated **`stance`** property: `0` 
 - The physics space state is only valid during the physics step, so the stance request is **recorded**
   in the action handler and **applied on the next physics tick** (where the headroom ray is valid).
 
+## The mining tool is owned
+
+Nobody starts with a mining tool. `Player.owns_mining_tool` (server-authoritative) is replicated as the
+player property `mining_tool` (whitelisted in `player_def.json`) and persisted with the player like
+every property the server sends; `Server.create_player` reads it back at login.
+
+- **Taken**: an ARES Mining dispenser hands out a `ToolProp` (`props/tools/mining_tool_prop.tscn`, type
+  `tool`); `action` on it puts it into the kit (`PlayerServer._server_take_tool`: the prop is deleted,
+  the tool comes out in the hands) — refused when the player already owns one (prompt `tool_owned`).
+- **Put down**: `action` with the tool out and nothing aimed at (prompt `drop_tool`) spawns a
+  `ToolProp` in front of the player, for anyone to take, and the player owns none.
+- **Gated on the server**: `tools` is refused without the tool, and so is `perforate_rock`. The client
+  says where to get one when `toggle_tool` is pressed without it, and never shows a tool out that the
+  player does not own (records from before the dispensers).
+
 ## Carry is standing-only
 
 Picking a box up is only allowed while **standing** (`stance == 0`): the server refuses the grab

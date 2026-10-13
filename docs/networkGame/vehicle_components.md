@@ -222,16 +222,29 @@ hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1
   bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
   batteries in the zone and call `charge(delta)` on the server.
 
-## Getting parts: the component dispenser
+## Getting parts: the ARES vending machines
 
-`scenes/_universe/structures/component_dispenser/component_dispenser.tscn` — an ARES machine in the
-garage (CSG blockout for now): pick a part on its screen, it drops into the hatch at waist height.
+`scenes/_universe/structures/dispenser/` — one machine (`ItemDispenser`, CSG blockout for now) for
+every catalogue: pick an item on its screen, it drops into the hatch at waist height after a delivery.
 
-- **Catalogue**: `VehicleComponentCatalog.all()` lists every spec `.tres` in
-  `scenes/_universe/vehicles/specs/` — a new part shows up in the menu with no list to edit. The
-  spec's `display_name` is a translation key (`%%PART_ENGINE_T1`), its `icon` the dashboard pictogram.
-- **Server**: `update_screen` only accepts a spec of the catalogue (it never loads a path the client
-  sent) and refuses while a delivery runs. A delivery lasts `delivery_s` (5 s, against spam); it is
+| Scene | Run by | Offers | Where |
+|---|---|---|---|
+| `component_dispenser.tscn` | ARES Hauling (yellow) | vehicle parts (`scenes/_universe/vehicles/specs/`) | garage |
+| `food_dispenser.tscn` | ARES Energy (green) | rations, 3 per delivery (`props/food/dispenser_items/`) | villages |
+| `tool_dispenser.tscn` | ARES Mining (orange) | the mining tool, one per player | cargo depot |
+
+- **A variant is an inherited scene**: it sets `brand`, `catalogue_dir`, `title_key`, and resizes the
+  hatch (collision boxes, `Tray`, flap, `TrayMarker`, `tray_box_*`) when its items need it. A rule of its
+  own (one tool per player) is a subclass overriding `refusal(actor)` (`ToolDispenser`).
+- **Brand** (`AresBrand`): the 9 subsidiaries and their colours, one place. The machine paints its
+  `brand_accent` pieces, swaps every `brand_logo` sprite for the subsidiary's logo (the ARES mark
+  `ares_logo_mark.png` tinted, the subsidiary's name under it in Xolonium), and its screen takes the colour.
+- **Catalogue** (`DispenserCatalog.all(dir)`): every item `.tres` of a folder — a `VehicleComponentSpec`,
+  or a `DispenserItem` (`display_name` key, `icon`, `scene_path`, `count`). A new item is a new `.tres`.
+  An item must be a networked prop (a `PropSync` whose type has a `*_def.json` in horizonserver).
+- **Server**: `update_screen` only accepts an item of the catalogue (it never loads a path the client
+  sent) and refuses while a delivery runs or when the variant's `refusal()` says so — the reason is
+  shown on the screen of everyone near (`screen_event` "refused"). A delivery lasts `delivery_s` (5 s, against spam); it is
   announced to the players around (`ScreenTarget.announce`), then, in a physics frame, refused if
   anything lies in the hatch, else the part is spawned at `TrayMarker` (`MarkerSpawn.spawn`, the same
   code as the truck kiosk). A battery comes out full.
