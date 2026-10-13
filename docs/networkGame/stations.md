@@ -135,9 +135,12 @@ The screen (`teleporter_ui.gd`, its lists from `scenes/teleport/teleport_catalog
   10 Earth masses (`GIANT_MIN_EARTHS`), Tarsis V and VI. The list opens on the first body with surveyed
   POI (`preferred_body_index`): SandBox – Tarsis III today.
 - **Destinations** are grouped under folded headings, each with its count: the orbital stations first,
-  then one heading per POI type (`poi_type` of the QGIS export) in alphabetical order, the computed
-  points last. Inside a heading, natural order (F0003 before F0004). A click on a heading opens it;
-  typing in the filter (framed in amber above the list) opens every heading.
+  then one heading per POI type in alphabetical order, the computed points last. A heading is a
+  translation key: `TeleportCatalog.POI_TYPE_GROUPS` maps each `poi_type` of the QGIS export to one
+  (**a new POI type needs its entry there and its `%%TELEPORT_GROUP_*` key**, or it lands under
+  *Points of interest*). Inside a heading, natural order (F0003 before F0004). A click on a heading
+  opens it, and so does Enter / A on a selected heading (a gamepad reaches every destination); typing
+  in the filter (framed in amber above the list) opens every heading.
 
 ## Pitfalls
 
