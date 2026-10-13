@@ -601,7 +601,7 @@ silence: no error, the value simply never reaches the other clients nor the data
 
 ## Dashboard — optional in-cab screen
 
-Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D-screen pattern —
+Show live data (speed, warning lights, power, batteries) on a screen in the cab using the generic 3D-screen pattern —
 see **[GUI on a 3D screen](./in-3d-screen.md)** for the setup (SubViewport, ViewportTexture, and
 the Local-to-Scene / viewport-path gotchas).
 
@@ -615,11 +615,31 @@ so `node_area` (touch) is optional.
 :::
 
 The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
-(`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
-the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
-is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light`, `Limiter`,
-`Odometer` (or adjust them in the script).
+(`VehicleDashboard`) on your UI scene's root (`truck_ui.tscn` is that root alone). It finds its owning
+`Vehicle` in the tree and shows the generic Vehicle data each frame — so it is reusable by any
+vehicle, and the Vehicle knows nothing about it. It builds its layout in code.
+
+**Laid out to the screen's shape.** The viewport takes the screen mesh's aspect
+(`Gui3D.surface_size()`) at 400 px high: the truck's `ScreenFront` is a strip 54 × 8 cm, about
+6.5:1, and an interface drawn at 1921 × 1112 was squashed almost four times into it.
+
+**One strip, read left to right, pictograms in place of words**
+(`assets/_universe/vehicles/ui/dashboard_icons/`, white, tinted by code):
+
+| Zone | Shows |
+|---|---|
+| Driving | the speed, big; the odometer under it |
+| Warning lights | headlights, handbrake, speed limiter (with its limit), load (with `cargo / payload kg`) |
+| Energy | the motor and the drive (4x4), the **power used**, each battery's charge |
+
+A light that is off stays in place, faint, so the eye always finds it where it was. Colours follow
+real dashboards: **green** on (headlights), **amber** caution (limiter on), **red** danger (handbrake
+held, blinking when the truck is driven against it; limiter holding the truck back; overload).
+
+**Power, not RPM.** An electric truck has no meaningful RPM: the gauge shows the share of the
+motors' full force the drive uses. The server knows it (`Vehicle.power_share`, set each tick by
+`_draw_energy`) and replicates it as `power`, rounded to 5 % so it only travels when it changes
+(`vehicle_def.json` in the game's `items_def/` **and** in horizonserver's props, both).
 
 ## Rear-view camera & mirrors
 

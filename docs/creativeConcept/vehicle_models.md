@@ -39,7 +39,7 @@ pivot**.
 | Doors | ends with `_door` → `Front_l_door`, `Front_r_door` | one object per door |
 | Reversing-cam screen | `Recul_Screen` | a flat screen surface |
 | Mirror screens | `RetroL_Screen`, `RetroD_Screen` | left / right mirror |
-| Dashboard screen | `ScreenFront` | shows speed / RPM / load |
+| Dashboard screen | `ScreenFront` | shows speed, warning lights, power and batteries; the interface takes its aspect |
 | Collision pieces | start with `col_` → `col_cab`, `col_bed_floor`, `col_bed_left`… | the physical shape (see **Collision** below). Several **convex** pieces. |
 
 ### Origins = pivots (critical for moving parts)
