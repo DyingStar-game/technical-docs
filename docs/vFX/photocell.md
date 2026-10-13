@@ -53,7 +53,7 @@ Unique** on its `tuning`.
 
 | Setting | Default | Meaning |
 |---|---|---|
-| `on_below_lux` | 1100 lux | At dusk, the lights come on when the light on the ground falls under this |
+| `on_below_lux` | 1900 lux | At dusk, the lights come on when the light on the ground falls under this |
 | `off_above_lux` | 3100 lux | At dawn, they go off when it rises above this. Keep it above `on_below_lux` |
 | `max_delay_s` | 120 s | The longest a lamp waits after the threshold (below) |
 
@@ -67,16 +67,16 @@ same calculation that dims the sunlight on screen). 1 is the star at the zenith 
 night. Weather, when there is some, will multiply in there, and the lamps will follow storms without
 any change to the photocell.
 
-The defaults (1100 and 3100 lux, daylight shares of 0.011 and 0.031) keep what was tuned by eye over the plateau: they are the light of the star at +2° and +4°
-over a village at 5130 m, the median altitude of Tarsis 3's villages. Lower down, the air takes more
+The defaults (1900 and 3100 lux, daylight shares of 0.019 and 0.031) were tuned in game over the plateau: they are the light of the star at +2.9° and +4°
+over a village at 5130 m, the median altitude of Tarsis 3's villages (1100 lux, the star at +2°, came on too late). Lower down, the air takes more
 of the light, and the same thresholds come with the star higher:
 
 | Altitude | On under | Off above |
 |---|---|---|
-| 5650 m | 2.0° | 4.0° |
-| 3684 m (in the top of the veil) | 6.2° | 9.0° |
-| 2000 m | 20° | 26.5° |
-| -406 m (under the veil) | 31.5° | 41.6° |
+| 5650 m | 2.8° | 3.9° |
+| 3684 m (in the top of the veil) | 7.5° | 9.0° |
+| 2000 m | 23° | 26.4° |
+| -406 m (under the veil) | 36° | 41.5° |
 
 Under the veil, the star overhead still lets 13 % through: the lamps are off at noon there.
 
