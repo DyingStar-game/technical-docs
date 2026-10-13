@@ -74,8 +74,10 @@ ScreenTarget.send(self, {"state": "dispense", "spec": spec_path})
 ```
 
 `send` adds the screen's address (`target_uuid` of the networked node carrying it — the owner or
-its nearest ancestor with a `PropSync` — and the `screen` path inside it) to a `screen_state`
-action. `PlayerServer` resolves it (`ScreenTarget.resolve`) and refuses a screen farther than
+its nearest ancestor whose `PropSync` has a uuid, `PropSync.networked_from` — and the `screen` path
+inside it) to a `screen_state` action. A `PropSync` without a uuid is skipped: a machine placed in a
+village layout is networked on its own, the same machine placed inside a garage never gets a uuid,
+and the garage names it. `PlayerServer` resolves it (`ScreenTarget.resolve`) and refuses a screen farther than
 `ScreenTarget.USE_RANGE_M` from the player's eye. Treat `data` as a request, never as an
 instruction: check every field against the server's own state (the dispenser only hands out a part
 of its own catalogue, the teleporter re-resolves the destination).
@@ -88,6 +90,12 @@ and `PlayerClient` hands it to the screen it names (`ScreenTarget.receive` → `
 stamped with the server's clock (`at`): a client arriving midway joins at the right second
 (`ScreenTarget.time_left`), one arriving after it is over ignores the re-broadcast. The key is
 whitelisted in `player_def.json` — the game's **and** horizonserver's.
+
+:::warning[An event arrives many times]
+Horizon sends a player's properties again with each of their updates — every turn of the head. A
+`screen_event` therefore reaches the screen over and over: `receive` hands it over **once** per
+screen and `at`. Without that, the dispenser's fan restarted at every mouse move.
+:::
 
 ## Gotchas
 

@@ -252,6 +252,18 @@ every catalogue: pick an item on its screen, it drops into the hatch at waist he
   and runs the fan (`sfx_delivery`); the part and the flap's sound come at the end.
 - **Clients**: each one looks into the hatch itself (the server's own box test) and lets the flap
   fall open, with a sound, when a part arrives — right for a late joiner too, with nothing sent.
+- **What fills the hatch** (`MarkerSpawn.blocker`): solids, players excepted (one leaning on the machine
+  is not an item). The bodies of the networked node the machine belongs to are left out — the garage's
+  model reaches into the hatch — but **not** a networked prop parented to it: a handed-out item is
+  parented to the nearest networked node, the cargo depot for the tool, and leaving it out kept the
+  flap shut on it.
+- **Where it can stand**: inside a building scene (garage, cargo depot), it comes with the building. In
+  a village layout (`ares_village_mining.tscn`) it is spawned on its own: the machine carries a
+  `PropSync` of the generic `simple_building` type, and `poi_villages.gd` spawns only a layout's
+  networked props — without it, it was skipped as decoration and never seen in game. A village spawns
+  its items once (`is_spawned`): one added to an existing world shows after a database purge.
+- **Sound**: an idle hum (`IdleHum`, an `AmbientLoop3D`) heard within ~8 m, besides the hatch and the
+  delivery fan. All three are set on the base scene and inherited by every variant.
 - **Why waist height**: the carry prompt is decided by the server's own aim ray, and the client has
   no wall collision. A part under an overhang near the floor could be picked up (the grab uses the
   part the client aimed at) but showed no prompt (the server's ray grazed the overhang).

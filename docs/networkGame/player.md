@@ -196,6 +196,22 @@ every property the server sends; `Server.create_player` reads it back at login.
   says where to get one when `toggle_tool` is pressed without it, and never shows a tool out that the
   player does not own (records from before the dispensers).
 
+:::note[Local dev: a new player at every connection]
+"Persisted with the player" means with the player's **identity**. The local stack runs Horizon with
+`BYPASS_AUTH=true`, which draws a new uuid at each connection (`ds_player_authentication`): back to the
+menu and in again is another player, without the tool. The record of the first one still says
+`"mining_tool": true`. With a real login the identity comes from the account and the tool follows.
+:::
+
+## Small props must be reachable on the floor
+
+The interact ray starts at the eye (1.62 m) and is `interact_ray_length` (1.5 m) long. A prop's aim
+volume (its `Area3D` on layer 32, the one the ray looks for) must therefore stand high enough to be
+reached **standing**, since a crouched player may not lift anything: a 10 cm ration on the floor was
+out of reach, with no prompt and no way to take it. Small props (rations, the mining tool) use a
+**sphere** — the same height whichever side they land on — of 25 cm (40 cm for the tool).
+`test_small_prop_reach.gd` checks it against the player's own eye height and reach.
+
 ## Carry is standing-only
 
 Picking a box up is only allowed while **standing** (`stance == 0`): the server refuses the grab
