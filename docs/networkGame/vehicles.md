@@ -629,12 +629,14 @@ vehicle, and the Vehicle knows nothing about it. It builds its layout in code.
 | Zone | Shows |
 |---|---|
 | Driving | the speed, big; the odometer under it |
-| Warning lights | headlights, handbrake, speed limiter (with its limit), load (with `cargo / payload kg`) |
+| Warning lights | headlights, handbrake, speed limiter (with its limit), load (with `cargo / payload kg`), doors |
 | Energy | the motor and the drive (4x4), the **power used**, each battery's charge |
 
 A light that is off stays in place, faint, so the eye always finds it where it was. Colours follow
 real dashboards: **green** on (headlights), **amber** caution (limiter on), **red** danger (handbrake
-held, blinking when the truck is driven against it; limiter holding the truck back; overload).
+held, blinking when the truck is driven against it; limiter holding the truck back; overload). The
+**doors** light is orange while a door or hatch is open and turns red at 80 % of the speed at which the
+wind will shut the first open door (`Vehicle.open_doors_wind_kmh`, the `DoorWind` sum that does it).
 
 **Power, not RPM.** An electric truck has no meaningful RPM: the gauge shows the share of the
 motors' full force the drive uses. The server knows it (`Vehicle.power_share`, set each tick by
