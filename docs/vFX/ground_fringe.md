@@ -30,6 +30,22 @@ Three things, and it is worth knowing which is which when something looks wrong:
 ![The same effect on a shaded face: the band stays as bright as the lit ground in front of it
 instead of darkening with the wall](./static_files/ground_fringe_shaded.png)
 
+### Its colour is the ground's, by the terrain's own rule
+
+The colour comes from `GroundLook` (`scenes/common/ground_look.gd`), the one place that answers
+"what colour is the ground here" for the fringe, the dust the wheels and feet raise and the
+[wind-blown dust](./wind_dust.md):
+
+- **The tint** is the colour the terrain bakes into its vertices at that spot: the rock of the zone
+  (or the planet's default rock) shaded the way the terrain shades it, the biome's colour elsewhere.
+  It is the rule the roads already use (`PlanetChunk.road_ground_tint`). An earlier version used the
+  rock's bare light/dark mottle instead, and two buildings on the same plateau came out one pale and
+  one rust-red.
+- **On textured ground** (the corundum plateaus, all of Tarsis 3) the fringe multiplies the ground's
+  texture by that tint, as strongly as the ground shader does (`vertex_color_strength`, copied from the
+  ground material). Without it the band showed the bare texture: white marble on every plateau.
+- **The dust's colour** is what the ground *shows* on average: the texture's mean colour times the tint.
+
 ## Networked props: nothing to do
 
 **Any prop spawned through the network registry gets the fringe automatically.** You do not add

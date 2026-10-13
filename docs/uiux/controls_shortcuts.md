@@ -28,7 +28,7 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 | **Alt + wheel** | `vehicle_limiter_up` / `_down` | — | Speed limit **±5 km/h** (shown on the dashboard) |
 | **F7** | `screenshot` | **Photo**: the world alone, no interface nor debug visuals | (same) |
 | **F8** | `screenshot_debug` | **Bug-report shot**: the screen as it is, plus the debug panels | (same) |
-| **F2** | `star_map` | Open / close the **star map** | (same) |
+| **F2** | `star_map` | Open / close the **star map**, in the DataPad's NAVIGATION tab. **Escape** then closes the DataPad (opened from the DataPad itself, Escape goes back to its home) | (same) |
 | **+** / **−** | `star_map_zoom_in` / `_out` | Zoom the star map, held (numpad or the top row; triggers on the pad) | (same) |
 
 ### Star map

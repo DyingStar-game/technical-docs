@@ -115,6 +115,16 @@ a rest captured with the same collapse applied, so a constant shift cancels on b
 hang off the spine, not the neck.
 :::
 
+The hidden head took its **shadow** with it: your own shadow had no head. A stand-in casts it
+(`CharacterAnimator.add_head_shadow`): a capsule the size of a head, drawn in shadows only
+(`SHADOW_CASTING_SETTING_SHADOWS_ONLY`), carried by the bone above the neck, on the own-body render
+layer so your own torch ignores it.
+
+Seated or floating, the camera stands at its **rest** plus the seated eye height. That rest is taken
+**once**, from where the scene puts the pivot (`HeadCam.capture_base`): taken again every frame, as it
+was until the player had stood once, it climbed the eye height each frame, and a player who
+reconnected in EVA watched their body from kilometres up.
+
 ### The eye is the centre of rotation
 
 `Camera3D` sits **at** `CameraPivot`, not offset from it, and the eye is nudged a little forward of the
