@@ -615,9 +615,12 @@ so `node_area` (touch) is optional.
 :::
 
 The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
-(`VehicleDashboard`) on your UI scene's root (`truck_ui.tscn` is that root alone). It finds its owning
-`Vehicle` in the tree and shows the generic Vehicle data each frame — so it is reusable by any
-vehicle, and the Vehicle knows nothing about it. It builds its layout in code.
+(`VehicleDashboard`) on your UI scene's root (`scenes/_universe/vehicles/vehicle_dashboard.tscn` is
+that root alone, instanced in the truck's SubViewport). It finds its owning `Vehicle` in the tree and
+shows the generic Vehicle data each frame — so it is reusable by any vehicle, and the Vehicle knows
+nothing about it. It builds its layout in code; the script is `@tool` only so that the editor shows a
+still preview with sample values instead of an empty panel (its nodes have no owner, nothing of it is
+saved into the scene).
 
 **Laid out to the screen's shape.** The viewport takes the screen mesh's aspect
 (`Gui3D.surface_size()`) at 400 px high: the truck's `ScreenFront` is a strip 54 × 8 cm, about
@@ -629,14 +632,22 @@ vehicle, and the Vehicle knows nothing about it. It builds its layout in code.
 | Zone | Shows |
 |---|---|
 | Driving | the speed, big; the odometer under it |
-| Warning lights | headlights, handbrake, speed limiter (with its limit), load (with `cargo / payload kg`), doors |
-| Energy | the motor and the drive (4x4), the **power used**, each battery's charge |
+| Warning lights | headlights, handbrake, doors; speed limiter (with its limit), load (with `cargo / payload kg`) |
+| Component bays | one box per bay, in bay order: **green** with the fitted part's pictogram (its spec's `icon`), grey and empty when free |
+| Energy | the drive (4x4) over the motor, the **power used** and the rpm, each battery's charge |
 
 A light that is off stays in place, faint, so the eye always finds it where it was. Colours follow
 real dashboards: **green** on (headlights), **amber** caution (limiter on), **red** danger (handbrake
 held, blinking when the truck is driven against it; limiter holding the truck back; overload). The
 **doors** light is orange while a door or hatch is open and turns red at 80 % of the speed at which the
 wind will shut the first open door (`Vehicle.open_doors_wind_kmh`, the `DoorWind` sum that does it).
+
+**Door alarm.** `DoorAlarm` gives ONE beat to the doors light's blink and to a quiet beep, so the two
+never drift apart: a beep once a second with a door open, then quicker and quicker from 80 % of the
+shutting speed (one every 0.5 s) to the shutting speed itself (one every 0.12 s). The sound and its four
+knobs (`sfx_door_alarm*`, the same as every vehicle sound, see `Sfx3D`) are on the dashboard scene's
+root; it plays at the screen, heard in the cab and just around it. Engine off: no beep, like the rest
+of the screen.
 
 **Power, not RPM.** An electric truck has no meaningful RPM: the gauge shows the share of the
 motors' full force the drive uses. The server knows it (`Vehicle.power_share`, set each tick by
