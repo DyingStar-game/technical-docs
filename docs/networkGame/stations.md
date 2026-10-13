@@ -129,6 +129,15 @@ Stations are destinations. Players only: vehicles in the cabin are refused and s
 is a **cabin standing aboard** (the test station has one). There is no Return button: you only ever leave
 from a cabin, and a trip lands you where there is none.
 
+The screen (`teleporter_ui.gd`, its lists from `scenes/teleport/teleport_catalog.gd`):
+
+- **Bodies** are marked ○ planet, ● moon (indented under its planet), ◌ giant: a body over
+  10 Earth masses (`GIANT_MIN_EARTHS`), Tarsis V and VI.
+- **Destinations** are grouped under folded headings, each with its count: the orbital stations first,
+  then one heading per POI type (`poi_type` of the QGIS export) in alphabetical order, the computed
+  points last. Inside a heading, natural order (F0003 before F0004). A click on a heading opens it;
+  typing in the filter (framed in amber above the list) opens every heading.
+
 ## Pitfalls
 
 - **The dev clock (+ / −) is client-only.** Shifted, a client draws the station somewhere else than the
