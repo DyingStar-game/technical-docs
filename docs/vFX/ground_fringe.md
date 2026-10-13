@@ -46,6 +46,17 @@ The colour comes from `GroundLook` (`scenes/common/ground_look.gd`), the one pla
   ground material). Without it the band showed the bare texture: white marble on every plateau.
 - **The dust's colour** is what the ground *shows* on average: the texture's mean colour times the tint.
 
+### Where the ground is
+
+The band is laid on the ground **as drawn**: the pad a building is seated on and the road beds
+included (`PlanetData.carved_surface_dist`), not the raw relief, which can stand metres above or below
+a pad. It is measured two frames after the object appears, then again 2 s and 10 s later: the tiles
+under a building often stream in after it, and a pad is re-seated when a neighbour's level changes.
+
+To see each measure, put `debug_fringe_probe=true` in the `[debug]` section of `client.ini`: one
+`[FringeProbe]` line per object, with its clearance over the drawn ground and over the raw relief, the
+band height and whether it got a fringe.
+
 ## Networked props: nothing to do
 
 **Any prop spawned through the network registry gets the fringe automatically.** You do not add
