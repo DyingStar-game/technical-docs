@@ -19,7 +19,8 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 |---|---|---|---|
 | **F** | `action` | Pick up / drop a prop, open / close a door, **enter** a seat, use a console | — |
 | **Y** | `exit` | — | Leave the vehicle |
-| **L** | `toggle_flashlight` / `vehicle_lights` | Torch on/off | Head lights on/off |
+| **U** · pad D-pad ↑ | `toggle_flashlight` | Torch on/off | Torch on/off |
+| **L** · pad D-pad ↓ | `vehicle_lights` | — | Head lights on/off (D-pad ↓ is prone on foot) |
 | **Space** | `jump` / `brake` | Jump | Brake — **hold** at low speed = hand brake |
 | **R** | `vehicle_reset` | — | Flip the vehicle upright |
 | **2** | `zapette` | Toggle the admin cleanup tool ("Zapette") | (same) |
@@ -175,9 +176,10 @@ The same helper names keys in the controls list, so there is one answer per key 
 :::danger[A modifier does not separate two actions on its own]
 `is_action_pressed()` **ignores modifiers**: an action bound to `L` matches a plain `L` *and* `Alt+L`.
 So binding `Alt+L` next to an existing `L` gives you two actions that both fire on the same press —
-the torch toggles while you meant to cut the moon lights.
+the head lights toggle while you meant to cut the moon lights.
 
-Three actions currently sit on **L** and two on **I** for exactly this reason. When you add a
+Two actions currently sit on **L** (the head lights, and the moon lights on **Alt+L**) and two on
+**I** for exactly this reason. When you add a
 modified variant of a key that is already taken, guard **both sides symmetrically**: the plain action
 must reject the press when the modifier is held, and the modified one must require it. Checking only
 the new action leaves the old one firing.
