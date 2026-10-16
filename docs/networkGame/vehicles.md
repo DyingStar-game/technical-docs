@@ -664,8 +664,8 @@ cameras and cargo bay still use these numbers.
 | Property | Default | Role |
 |---|---|---|
 | `torque_response` | `2.5` | How fast torque ramps to the throttle (1/s). Lower = gentler launch (keeps a heavy vehicle from leaping off the line). |
-| `brake_force` | `30` | Brake force per wheel. |
-| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep well **below** `brake_force`. |
+| `brake_deceleration` | `7.0` *(0.5–15)* | Deceleration (m/s²) the brakes ask of the vehicle at its **current** mass, empty or loaded (the truck: `10`). The tyres' grip still caps it. |
+| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep it well **below** the brakes: it bleeds speed off gently. |
 | `handbrake_hold` | `30` | Parking-brake damping (m/s per s) **above** the release speed. A real collision impulse exceeds this, so a hit parked truck still gets pushed (then re-settles). |
 | `handbrake_release_speed` | `2` | Horizontal speed (m/s) **below** which the engaged hand brake fully cancels motion — a parked truck must not move from a player bump or a gentle slope. |
 | `drive_mode` | `ALL` | Driven wheels: `FRONT` (FWD), `REAR` (RWD) or `ALL` (4×4). |
