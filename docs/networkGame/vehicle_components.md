@@ -219,8 +219,8 @@ hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1
   battery with its percentage, the one in use at full strength.
 - **Recharge**: `VehicleBattery.charge(delta)` follows the sheet's curve — full rate (500 kW) between
   20 and 80 %, half rate below 20 % and above 80 %, empty to full in **504 s**. The garage's charging
-  bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
-  batteries in the zone and call `charge(delta)` on the server.
+  bay hooks in through `ChargingZone._charge_batteries(delta)`: every server tick it charges each
+  **loose** battery lying in the zone; one fitted in a vehicle's bay is left alone.
 
 ## Getting parts: the ARES vending machines
 
@@ -270,7 +270,8 @@ every catalogue: pick an item on its screen, it drops into the hatch at waist he
 
 ## Factory components
 
-`startup_items.json` seeds vehicles with empty bays — so **none of them would move**.
+A vehicle comes out of its scene (the garage's trucks, `garage.tscn`) with empty bays — so **none of
+them would move**.
 `factory_components: Array[VehicleComponentSpec]` on the `Vehicle` is what the chassis leaves the
 works with (the MVP truck: two T1 motors and a T1 battery), and the server turns it into **real,
 removable parts** with
@@ -316,7 +317,8 @@ A CSG node only draws when it is the **root** of its CSG tree. Under a `RigidBod
 
 ## Testing
 
-Four suites. GUT is **disabled in CI**, so run them by hand:
+The main suites. CI runs the whole GUT suite (that step reports failures without blocking a merge);
+to run them by hand:
 
 ```bash
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://test/unit -gexit
@@ -333,5 +335,5 @@ godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://test/integration \
 
 In game, the HUD carries the same instrument: the model's prediction and the **measured**
 acceleration side by side, with a 0–100 stopwatch. A model you cannot compare against a measurement
-is a model you have to take on faith. It can be hidden from **Settings ▸ General ▸ Vehicle
+is a model you have to take on faith. It can be hidden from **Settings ▸ Debug ▸ Vehicle
 dashboard**.

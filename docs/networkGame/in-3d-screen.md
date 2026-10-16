@@ -32,7 +32,10 @@ component dispenser (`component_dispenser.tscn`) and the vehicle dashboard
    `SubViewport` containing your UI scene, plus the screen mesh.
 3. `SubViewport` → **Update Mode = Always** (otherwise the screen freezes), and set its **Size**
    to your UI size.
-4. Screen mesh → `StandardMaterial3D`:
+4. Screen mesh: usually nothing to do. When the mesh has no `material_override`, `Gui3D` builds an
+   unshaded material showing the SubViewport itself (`_ready`), so any mesh works, even one from a GLB,
+   given 0..1 UVs and its front face toward the viewer. For a material of your own, set it as the
+   mesh's `material_override` (`Gui3D` then leaves it alone):
    - **Resource → Local to Scene = On** (required, see below),
    - **Albedo → Texture → New ViewportTexture → Viewport = this scene's `SubViewport`**,
    - **Shading = Unshaded** (or use Emission) so it stays readable.
