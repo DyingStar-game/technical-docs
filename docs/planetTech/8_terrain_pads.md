@@ -77,6 +77,11 @@ You do not choose the platform's altitude: the pad takes the **median** of the n
 sampled on a 9 × 9 grid over the footprint and its apron. On a regular slope that splits cut and
 fill evenly. Unlike an average, a single crack or boulder under one corner does not move it.
 
+Pads whose aprons touch share **one** level (`PadLevels`): each stands at the level of the largest
+pad touching it whose footprint is strictly larger, so a depot beside a bigger one is flat with it
+instead of two aprons ramping into each other. Equal footprints keep their own levels, so a row of
+identical habs down a slope is not pulled onto one terrace.
+
 The same rule applies to a building placed by hand and to one spawned at runtime, where no
 designer is there to adjust it.
 
@@ -133,8 +138,9 @@ flattened into a small **pad record**:
 ```
 
 `lon`/`lat` place the box centre, `yaw` its heading, `hx`/`hy` its half size, `z_off` the
-`height_offset`. `z` (the platform altitude) and `talus_m` (the talus width) are computed from the
-relief when the pad registers.
+`height_offset`. `z` (the platform altitude) and `talus_m` (the talus width) are measured from the
+relief once, on the server, and persisted in the building's `terrain_settled` (with the `span` they
+cover): the next loads level from that record, without sampling or waiting for tiles.
 
 The mesh workers, the collision builder, the server's surface catch and the editor snap only
 ever see records, never nodes. The geometry itself is in `PadBed`, pure functions with no scene
@@ -219,8 +225,9 @@ All in `scenes/planet/pad/pad_settings.gd`:
 | `ROAD_CUT_MARGIN_M` | 0.5 m | How far past the footprint a road stops. |
 | `Q_DEG`, `Q_RAD`, `Q_M` | 1e-7°, 1e-4 rad, 1 cm | Quantisation steps. |
 
-`PadSettings.signature()` is part of the terrain cache key: changing any of these re-bakes the
-cached meshes and collision instead of serving a stale pad.
+A chunk that any pad reaches stays out of the terrain disk cache
+(`PlanetData.chunk_cache_ineligible`): it is rebuilt from scratch whenever a pad appears or goes, so
+changing any of these never serves a stale pad.
 
 ## Troubleshooting
 
@@ -253,9 +260,12 @@ and set `PAD_PROBE_PLANET` / `PAD_PROBE_SIZE` as needed. Results go to `user://p
 | `scenes/planet/pad/pad_bed.gd` | Pure geometry: record, quantisation, median altitude, platform and talus. |
 | `scenes/planet/pad/pad_index.gd` | Pads bucketed by HEALPix pixel for the chunk builders. |
 | `scenes/planet/pad/pad_settings.gd` | Every shared constant. |
+| `scenes/planet/pad/pad_levels.gd` | `PadLevels`: one level for pads whose aprons touch. |
+| `scenes/planet/pad/terrain_notch.gd` | `TerrainNotch`: a pad that cuts a shaft straight down (the vehicle lift). |
 | `scenes/planet/planet_data.gd` | `register_pad`, `unregister_pad`, `pad_altitude`, tile waiting. |
 | `scenes/planet/planet_terrain.gd` | Chunk rebuilds when a pad changes, warm-up of the pads already in the scene. |
 | `test/unit/test_terrain_pad.gd` | Unit tests. |
+| `test/unit/test_terrain_pad_settled.gd`, `test_terrain_pad_shared_level.gd`, `test_terrain_pad_from_data.gd` | The persisted measure, the shared level, pads rebuilt from data. |
 | `test/parity/pad_probe.tscn` | Offline bench on the real planet data. |
 
 Related: [How the game reads elevation](./6_elevation_runtime.md) for chunks, tiles and the
