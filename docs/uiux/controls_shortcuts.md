@@ -56,7 +56,7 @@ their angle when released (they straighten up on their own only while rolling).
 F7 and F8 save a PNG and **copy it to the clipboard**. Files go to `<game folder>/screenshots` (F8 in
 `screenshots/debug`, the F6 recordings in `screenshots/records`) — the game folder being the
 executable's in a build, the project's in the editor. When that folder is not writable they fall
-back to `Documents/DyingStar/screenshots`. **Settings › Video › Screenshot gallery** opens it.
+back to `Documents/DyingStar/screenshots`. **Settings › Graphics › Gallery** opens it.
 
 For developers: the photo hides everything drawn on the window's canvas by itself, but it cannot tell
 a **debug visual drawn in the 3D world** from scenery — such a node must join the group
@@ -138,7 +138,8 @@ in Settings → Controls and cannot be rebound.
 `event.keycode == KEY_X` is invisible to the settings menu and can't be rebound.
 
 1. Add the action in **Project Settings → Input Map** (or `project.godot` `[input]`), with a
-   default key. Name it readably — the menu label is the action name upper-cased with `_` → spaces.
+   default key. Name it readably, and file it with its `%%ACT_*` label (see *Families and labels*): an
+   unfiled action is shown by its bare name, `_` → spaces.
 2. Read it with `event.is_action_pressed("my_action")` (events) or
    `Input.is_action_pressed("my_action")` (polling).
 
@@ -146,8 +147,8 @@ It then appears in **Settings → Controls** and is rebindable + persisted, with
 
 ## Families and labels
 
-The controls page groups its actions into tabs — **General, On foot, In a vehicle, In flight,
-Debug** — from `MenuConfig.ACTION_GROUPS`, which maps family → action → translation key. That is
+The controls page groups its actions into tabs — **General, On foot, In a vehicle, EVA
+(weightless), Debug** — from `MenuConfig.ACTION_GROUPS`, which maps family → action → translation key. That is
 one table, not a list of families beside a table of labels: two of those drift, and you end up with
 an action in a family with no label, or the reverse.
 
@@ -156,15 +157,15 @@ shows the opened-out form of its name. Filing it is one line.
 
 Give it a label whenever the action name does not say what the key does. `jump` also starts a vault
 and a climb — it was reported as "the vault key is not configurable" when it had been configurable
-all along, under a name that never mentioned vaulting. `action` and `interact` are worse: two
-different keys whose names say the same thing.
+all along, under a name that never mentioned vaulting. `action` and `interact` were worse: two
+different keys whose names said the same thing, until `interact` was folded into `action` (**F**).
 
 The search box searches **all** families, not the open tab — you type in it precisely because you do
 not know where the key lives. See [Localization](./localization.md) for the label keys themselves.
 
 ## Prompts show the key that is bound
 
-Never write a key into a prompt. `"[E] Drop"` lies to anyone who rebound `interact`.
+Never write a key into a prompt. `"[F] Drop"` lies to anyone who rebound `action`.
 
 ```gdscript
 # InputLabel names the key as printed on the player's own layout ("²" on AZERTY)
