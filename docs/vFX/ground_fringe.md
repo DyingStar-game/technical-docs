@@ -111,7 +111,7 @@ at startup, so an edit made mid-session only touches the template.
 | `blend_noise_strength` | 0.6 | How much the limit rises and falls. Raise it for a more broken edge. |
 | `blend_noise_scale` | 0.15 | Size of the pattern. **Lower** it for longer, wider tongues of sand. |
 | `blend_noise_swell` | 0.22 | The low, slow octave — the one that makes the band deep in places and thin in others. |
-| `blend_curve` | 3.5 | How fast the band gives way as it climbs. Higher fades sooner. |
+| `blend_curve` | 2.0 | How fast the band gives way as it climbs. Higher fades sooner. |
 | `blend_normal_lift` | 0.85 | How much the band is lit like ground rather than like the wall. |
 | `blend_face_weight` | 1.0 | How much a **horizontal** surface loses the band. A slab is a floor, not a contact line. |
 | `blend_inward_weight` | 1.0 | How much an **inward-facing** wall loses it — the inside of a building. |

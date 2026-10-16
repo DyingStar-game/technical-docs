@@ -64,7 +64,9 @@ the floor faces it, and **−Z along the motion** — one turn per orbit.
 
 `orbital_station.tscn` is a shell around a model: its root carries the `OrbitalStation` script, a `PropSync`
 child (type `station`), the model under **`Model`**, an **`Arrival`** marker where travellers land, and
-a teleporter cabin — the way back — which an inherited scene keeps. For another look:
+nothing else. The teleporter cabin — the way back — is not in the scene: it is its own networked
+`simple_building` (`teleporter.tscn`), seeded in Horizon's `startup_items.json` with the station as its
+`parent_id`, so a station of another look gets it too. For another look:
 
 1. **Scene → New Inherited Scene** from `orbital_station.tscn`, and save it under
    `scenes/_universe/environment/space/stations/`.

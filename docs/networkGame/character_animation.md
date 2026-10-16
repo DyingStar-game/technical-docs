@@ -65,7 +65,7 @@ names **without** `_Loop`.
 The clip vocabulary is the resource
 **`scenes/_universe/characters/humanoids/ual_animation_set.tres`** (a `CharacterAnimationSet`). Open it
 in the Godot **Inspector** and you get **one `@export` field per state**, grouped by family
-(**Idle · Walk · Run · Sprint · Crouch · Prone · Turn · Jump · Carry · Sit · Emote**). Each field holds
+(**Idle · Walk · Run · Sprint · EVA · Crouch · Prone · Turn · Jump · Climb · Carry · Sit · Emote**). Each field holds
 the **name of the clip** to play for that state:
 
 | Family (group) | Example fields → clip name |
@@ -75,7 +75,7 @@ the **name of the clip** to play for that state:
 | Crouch / Prone | `crouch_idle → "Crouch_Idle"`, `crouch_fwd…`, `prone_idle → "Crawl_Idle"`… |
 | Jump | `jump_start`, `jump_loop`, `jump_land` |
 | Sit | `sit_driving → "Driving"`, `sit_passenger → "Sitting_Nodding"` |
-| Emote | `emote_dance`, `emote_wave`, … (referenced by `EmoteCatalog`) |
+| Emote | `emote_dance`, `emote_celebration`, … (referenced by `EmoteCatalog`) |
 
 An **empty field** means "this model doesn't have that clip" → the animator falls back to a sensible
 one (nearest direction → forward → idle). The set is assigned to the `CharacterAnimator` node's
@@ -91,7 +91,7 @@ one (nearest direction → forward → idle). The set is assigned to the `Charac
 | Jump start / loop / land | `action = "jump:<n>"` and `"land:<n>"` events | See [the event-field idiom](./player.md#the-action-field-one-shot-events). |
 | Crouch / prone gait | `stance` (0/1/2) | Directional crouch / crawl clips, with enter/exit transitions. |
 | Carrying | `carrying` (bool) | You can only carry **standing** (see [Player](./player.md#carry-is-standing-only)). |
-| Sit / drive / passenger | Seat state (`seat:`/`unseat:` events) | See [Vehicles](./vehicles.md#seated-poses). |
+| Sit / drive / passenger | `seat:`/`unseat:` events, and the `seat` state for a player who arrives later | See [Vehicles](./vehicles.md#seated-poses). |
 | Emote | `action = "emote:<key>:<n>"` | Chosen from the emote wheel (T). |
 | Head aim | `head` (pitch) + `head_yaw` (seated) | See below. |
 
@@ -205,7 +205,7 @@ Both are clamped so the neck never snaps to an impossible angle.
 
 ## Emote wheel
 
-Hold **T** to open a radial menu of emotes (dance, wave, sit on the ground, rock-paper-scissors…).
+Hold **T** to open a radial menu of emotes (dance, celebration, sit on the ground, rock-paper-scissors…).
 Picking one sends the emote **to the server**, which validates it and replicates it as an
 `action = "emote:<key>:<n>"` event, so **every** player sees it play.
 
