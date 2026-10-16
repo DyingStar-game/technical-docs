@@ -12,7 +12,7 @@ graphics background needed.
 ## The world is lit by the *real* star
 
 There is **no fake rotating light** anymore. Everything is lit by the actual star of the system
-(`scenes/star/star.tscn`).
+(`scenes/_universe/environment/space/star.tscn`).
 
 - Each client gets its **own "sun"** — a `DirectionalLight3D` (`PlayerSunLight`) aimed **from the
   star toward the player**. It provides the crisp cast shadows (a mountain or a wall shades you
