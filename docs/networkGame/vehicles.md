@@ -206,13 +206,14 @@ A vehicle only replicates if the network layer knows it:
    UID rename does not touch string paths.)
 
 2. **Replication definition** — vehicles use the `vehicle` prop type, defined in
-   `horizonserver/ds_genericprops/props/vehicle_def.json`, split across three channels by **how
-   often each property actually changes**:
+   `horizonserver/ds_genericprops/props/vehicle_def.json`, split across four channels by **how
+   often each property actually changes** (Horizon enforces each rate, see `ds_genericprops/src/lod.rs`):
 
    | Zone | Rate | Properties |
    |---|---|---|
-   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
+   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `velocity_local`, `wheel_kmh`, `grounded`, `power`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
    | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension`, `odometer_km` |
+   | 2 | 30 Hz, 200 m | `suspension_shocks` — sent only when a suspension takes a knock (see [Suspension knocks](#suspension-knocks--tyre-noise)) |
    | 6 | 1 Hz | `scenename`, `parent_id` |
 
    If you reuse the `vehicle` type, there is nothing to add. A brand-new type needs its own
@@ -531,6 +532,11 @@ code. The driver toggles them with **L**; the state is server-authoritative and 
 client sees them. Shown on the HUD (`[L] lights`) and on the dashboard. The truck ships with two
 front SpotLights as the example.
 
+Aim them **nearly level**. The truck's are pitched **2° down**, energy 7: from about 1 m up, a lamp
+pitched 20° down lights a patch two metres in front of the bumper and leaves the road ahead black.
+The road ahead still fades with distance — the light reaches it grazing — while walls facing the
+beam stay bright: that is the physics, not a bug.
+
 `L` is **contextual**: it drives the **head lights** while seated as driver, and the player's
 **flashlight** on foot — the two never fire at once.
 
@@ -584,15 +590,48 @@ the server takes it back through the same restore path as the doors. Shown on th
 If Horizon re-seeds a vehicle with a **new uuid**, that vehicle starts again from 0 km.
 :::
 
+## Suspension knocks & tyre noise
+
+**Suspension knocks.** A bump, a pothole or a landing drives a wheel up towards the body; its
+suspension answers with a pneumatic knock, heard by everyone around, **where that suspension is**
+(the wheel's top mount). Only the game server simulates the wheels, and the wheel heights it
+replicates (`suspension`) travel at 1 Hz — far too slow for a client to see a bump in them. So the
+**server** detects each knock from its own 60 Hz physics (`VehicleSuspensionShocks`): a knock is the
+**peak** compression speed of a stroke, fired once per stroke at that peak, with a per-wheel cooldown.
+It travels as an event: one shot counter per wheel with the strength of its last shot
+(`suspension_shocks`, its own zone 2, so only a knock sends it). A client that sees a counter move
+plays that wheel's sound; the first counters it receives (a vehicle coming into range) are taken as
+the starting point, never replayed.
+
+The harder the knock, the louder, the lower and the heavier the sample: list the samples **from the
+softest to the hardest** in **Audio SFX ▸ Suspension shocks** — a knock plays one of the three
+nearest its strength, never the same twice in a row, with a random pitch spread on top. The
+thresholds are in m/s of compression: below `suspension_shock_min_speed` (0.8) the suspension is
+just following the ground; `suspension_shock_full_speed` (3) is a full-strength knock. In a debug
+build the server logs every knock: `[Vehicle shock] <vehicle> <wheel>: 1.84 m/s -> 51 %`.
+
+**Tyre roll.** The rolling noise follows the speed, like a real tyre's (`VehicleTyreSound`): it fades
+in from standstill to `sfx_wheel_roll_kmh`, then gains `sfx_wheel_roll_db_per_doubling` decibels at
+each doubling of the speed up to `sfx_wheel_roll_top_kmh`, where it reaches `sfx_wheel_roll_db`; its
+pitch rises from `sfx_wheel_roll_low_pitch` to `sfx_wheel_roll_high_pitch` with it. Off the ground the
+tyres touch nothing: the roll fades out like the dust (`grounded`) and the steering scrub stops.
+
+:::warning[A held sound that changes level must move `max_db` with it]
+`Sfx3D.configure` caps a sound at its configured level (`max_db`), because closer than its falloff
+distance the distance gain grows without bound. A held loop whose `volume_db` is then turned down
+(a speed curve, a fade) must lower that cap too — otherwise the **driver**, a metre from the source,
+hears it at the cap whatever the speed, while the players around hear it right.
+:::
+
 ### Adding replicated vehicle state — `VehicleNetPart`
 
-The limiter and the odometer are **parts** (`vehicle_net_part.gd`): each one knows what it last sent,
+The limiter, the odometer and the suspension knocks are **parts** (`vehicle_net_part.gd`): each one knows what it last sent,
 writes only its **changed** keys (`write_changes`), and takes received keys back (`read`), remembering
 them as sent so a value restored from the database is not sent straight back. `Vehicle` asks every
 part in `_replicate_transform`, and hands every part the received data in `client_channel_data_update`
 and `server_adopt_state` — so a new piece of vehicle state is **a new part**, not new lines in those
-three functions. Parts are exposed as properties (`vehicle.limiter`, `vehicle.odometer`), not getters:
-`vehicle.gd` sits two below gdlint's 40-public-method ceiling.
+three functions. Parts are exposed as properties (`vehicle.limiter`, `vehicle.odometer`,
+`vehicle.shocks`), not getters: `vehicle.gd` sits two below gdlint's 60-public-method ceiling.
 
 :::warning[Whitelist every new key]
 A key a part writes must also be listed in `vehicle_def.json` — Horizon drops anything else in
