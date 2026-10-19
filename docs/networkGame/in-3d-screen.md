@@ -52,6 +52,33 @@ A path that does not exist in the current scene shows a blank screen and throws
 `SubViewport`.
 :::
 
+## Pointing a screen from code
+
+A screen can also be driven by a ray rather than the mouse — the crosshair on a console, the cab
+screen's chart. `Gui3D` (`scenes/interactables/gui_3d.gd`) exposes the pieces:
+
+| Method | What it does |
+|---|---|
+| `hit(from, dir, reach)` | Where a ray meets the screen (world point), or `null`. |
+| `pointer_at(point)` | A mouse motion at that point (hover). |
+| `click_at(point, pressed)` | The left button pressed / released there. |
+| `push_at(event, point)` | Any real mouse event (a button, the wheel) placed at that point; a copy is pushed. |
+| `point_at_uv(uv)` | The inverse: the world point at a screen UV (0..1, top-left = (0, 0)). |
+
+### Tilted screen meshes: `uv_frame`
+
+By default a hit is mapped to the screen through the mesh's **local XY plane**, which assumes the screen
+face lies flat in its node's frame. A screen **modelled tilted inside its mesh** breaks that: the
+truck's middle cab screen leans about 33° in its own frame, and the XY reading pointed beside the
+crosshair.
+
+Tick **`uv_frame`** on such a `Gui3D`: it then maps hits through the mesh's **own UVs**. It takes three
+vertices of the first surface whose UVs are not in a line and solves `P(u, v) = origin + u·du + v·dv`
+(`Gui3D.frame_from`, static and tested); the plane's normal goes through the inverse-transpose, so an
+unevenly scaled mesh still hits right. It needs a **flat** mesh whose UVs span the face **linearly
+0..1** — what a screen showing a viewport has anyway. `RearCamera` turns it on for the switchable cab
+screen's `Gui3D` (see [Adding a vehicle](./vehicles.md#the-switchable-cab-screen)).
+
 ## Reference
 
 The mining depot (`mining_depot.tscn` → its `Gui3D`) is a complete, working example, including the

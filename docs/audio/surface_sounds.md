@@ -80,9 +80,11 @@ sound played confidently is worse than a neutral one, and it hides the hole inst
 
 ## Authoring the sounds
 
-A `SurfaceSounds` resource holds the clips. Three exist today — `scenes/common/footsteps.tres`,
-`scenes/common/prop_landing.tres` and `scenes/common/wheel_scrub.tres` — and each object points at
-one (`Sfx Footsteps` on the Player, `Sfx Wheel Scrub` on a vehicle).
+A `SurfaceSounds` resource holds the clips. Four exist today — `scenes/common/footsteps.tres`,
+`scenes/common/prop_landing.tres`, `scenes/common/metal_box_landing.tres` and
+`scenes/common/wheel_scrub.tres` — and each object points at one (`Sfx Footsteps` on the Player,
+`Sfx Wheel Scrub` on a vehicle). `metal_box_landing.tres` fills **Default Samples** only, on purpose:
+a metal box (hauling box, battery, engine) makes one put-down sound whatever it lands on.
 
 | Field | What to put in it |
 |---|---|
