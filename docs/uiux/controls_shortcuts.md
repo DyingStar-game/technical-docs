@@ -17,7 +17,7 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 
 | Default | Action | On foot | Driving a vehicle |
 |---|---|---|---|
-| **F** | `action` | Pick up / drop a prop, open / close a door, **enter** a seat, use a console | — |
+| **F** | `action` | Pick up / drop a prop, open / close a door, **enter** a seat, use a console | Seated: a door handle, or the **cab screen** under the crosshair (offline → star chart → rear camera) |
 | **Y** | `exit` | — | Leave the vehicle |
 | **L** | `toggle_flashlight` / `vehicle_lights` | Torch on/off | Head lights on/off |
 | **Space** | `jump` / `brake` | Jump | Brake — **hold** at low speed = hand brake |
@@ -25,7 +25,8 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 | **2** | `zapette` | Toggle the admin cleanup tool ("Zapette") | (same) |
 | **I** | `vehicle_ignition` | — | Start / stop the engine |
 | **T** | `emote_wheel` / `vehicle_speed_limiter` | Hold to open the **emote wheel**, release on a slice to play it | **Speed limiter** on/off |
-| **Alt + wheel** | `vehicle_limiter_up` / `_down` | — | Speed limit **±5 km/h** (shown on the dashboard) |
+| **Ctrl + T** | `vehicle_cruise_control` | — | **Cruise control** on at the speed driven / off (exclusive with the limiter) |
+| **Wheel** | `vehicle_limiter_up` / `_down` | — | **±5 km/h** on whichever holds the speed: the cruise control when on, else the limit (shown on the dashboard). With the crosshair on the cab screen's chart, the wheel is the chart's |
 | **F7** | `screenshot` | **Photo**: the world alone, no interface nor debug visuals | (same) |
 | **F8** | `screenshot_debug` | **Bug-report shot**: the screen as it is, plus the debug panels | (same) |
 | **F2** | `star_map` | Open / close the **star map** | (same) |
@@ -38,11 +39,18 @@ map**, so any of them can move to another button, a key or the pad:
 
 | Default (mouse / pad) | Action | What it does |
 |---|---|---|
-| **Left click** / **A** | `star_map_select` | Select what is under the pointer (the centre of the screen on the pad); **twice** = go there |
-| **Right click** / **X** | `star_map_reset` | Reset the view: the whole system |
+| **Left click** / **A** | `star_map_select` | Select what is under the pointer (the centre of the screen on the pad), or drop a pin on bare ground; **twice** = go there |
+| **Left drag** | `star_map_select` | Turn the view |
+| **Ctrl + left drag** | `star_map_tilt` | Turn the view (never also a select) |
+| **Right click** | `star_map_menu` | Context menu: copy the coordinates, set / clear the marker |
+| **Right drag** | `star_map_menu` | Zoom (down = closer) |
+| **Tab** | `star_map_search` | Into the search box |
+| **X** (pad) | `star_map_reset` | Reset the view: the whole system |
 | **Middle click (hold)** | `star_map_orbit` | Turn the view as the mouse moves (about the station, over one) |
 | **Right stick** | `star_map_orbit_left/right/up/down` | Turn the view |
 | **Wheel up / down** | `star_map_zoom_step_in` / `_out` | Zoom one notch |
+
+How the gestures, markers and pins work: [Star map](./star_map.md).
 
 The help line at the **foot of the map** is built from these bindings, for the device in your hands: a
 rebound gesture shows its new key, an unbound one is left out. Mouse buttons are named in the game's

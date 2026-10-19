@@ -24,8 +24,8 @@ All the moving parts already exist as reusable pieces — in most cases a new ve
 
 | Script | Role |
 |---|---|
-| `scenes/vehicles/vehicle.gd` (`class_name Vehicle`) | The vehicle base: body/wheels, physics, driving, networking, cargo. Put it on the scene root. |
-| `scenes/vehicles/vehicle_powertrain.gd` | Engine math (electric / thermal gearbox). Owned by `Vehicle`, configured through its `@export`s — you don't touch it. |
+| `scenes/_universe/vehicles/vehicle.gd` (`class_name Vehicle`) | The vehicle base: body/wheels, physics, driving, networking, cargo. Put it on the scene root. |
+| `scenes/_universe/vehicles/vehicle_powertrain.gd` | Engine math (electric / thermal gearbox). Owned by `Vehicle`, configured through its `@export`s — you don't touch it. |
 | `scenes/vehicles/vehicle_seat.gd` (`class_name VehicleSeat`) | One seat (driver or passenger), boarded by looking at it. You drop one per seat. |
 | `scenes/vehicles/vehicle_debug_hud.gd` | Optional on-screen dashboard (speed, RPM, load). |
 
@@ -80,8 +80,9 @@ Its scene tree — the GLB `Model` plus the rig nodes you add around it:
 - **`SeatDriver` / `SeatPassenger`** (`VehicleSeat`) — the seats, boarded by looking at them (§3).
 - **`Gui3D → SubViewport →` dashboard UI** — the in-cab screen (§Dashboard).
 - **`Light`** — the `vehicle_light` lamps (head / brake / cabin).
-- **`RearCamera_*`** — reversing camera + mirrors.
-- **`Cargo_loading_zone`** — where dropping loads the bed.
+- **`RearCamera_*`** — reversing camera + mirrors (the middle one is the
+  [switchable cab screen](#the-switchable-cab-screen)).
+- **`MapMarker`** — how the truck shows on the star chart (see [Star map](../uiux/star_map.md)).
 - **`HandleFL` / `HandleFR`** (`VehicleDoorHandle`) — the door handles (§Doors).
 
 Note the handles are placed at the **root** (siblings of `Model`), each on its door's visible handle.
@@ -211,7 +212,7 @@ A vehicle only replicates if the network layer knows it:
 
    | Zone | Rate | Properties |
    |---|---|---|
-   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
+   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh`, `cruise_on`, `cruise_kmh`, `rear_screen`, `chart_view` |
    | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension`, `odometer_km` |
    | 6 | 1 Hz | `scenename`, `parent_id` |
 
@@ -436,21 +437,27 @@ facing forward (`-Z`).
 
 ## Cargo — loading the bed
 
-Two **designer-placed** zones drive cargo (no per-vehicle code):
+The bed is **read off the model**, like the hatches: no zone to place by hand.
 
-- **`cargo_bay`** — where cargo *sits*. Tune it via the **Cargo** export group (`cargo_bay_size`,
-  `cargo_bay_offset`, `max_payload`, `overload_immobilize`). It is also the passive zone the player's
-  detector overlaps to count their weight while standing in the bed.
-- **`Cargo_loading_zone`** — where dropping is *allowed to load* (it sticks). Add a `CollisionShape3D`
-  with a `BoxShape3D` named `Cargo_loading_zone` (or assign it to the `Vehicle`'s **Cargo loading
-  zone** export), sized a bit larger than the bay so reaching over the wall counts. Its physics
-  collision is turned off at runtime — it is only a zone marker. If unset, the `cargo_bay` box is
-  used as a fallback.
+- **The bed box** — the box around every `col_bed*` collision piece of the GLB (`col_bed_floor`,
+  `col_bed_left`, `col_bed_rear`…), raised by **`bed_headroom_m`** (0.4 m) above the side boards so a
+  crate stacked proud of them, or put down reaching over from outside, still counts
+  (`Vehicle._bay_box()` / the static, unit-tested `Vehicle.bay_box()`). That one box is where a dropped
+  item **loads**, where settled loads are **scanned**, and the passive zone the player's detector
+  overlaps to count their weight while standing in the bed.
+- **Blockout fallback** — a model with no `col_bed*` piece uses `cargo_bay_size` / `cargo_bay_offset`.
+
+:::note[`CargoLoadingZone` is gone]
+The truck used to carry a hand-placed `CargoLoadingZone` box (and the `cargo_loading_zone` export)
+beside the `cargo_bay` box: two boxes to keep in step with the model by hand. Both are replaced by the
+model's own bed pieces. Checked by `test/unit/test_vehicle_bed_volume.gd`.
+:::
 
 The load counts toward `max_payload`, the overload limiter shown on the dashboard.
 
-- **Loading** — carry a prop (a crate, a mined rock) and **drop it inside the loading zone** —
-  whether you stand in the bed *or* reach over from outside; the zone (not your position) decides. The
+- **Loading** — carry a prop (a crate, a mined rock) and **drop it inside the bed box** —
+  whether you stand in the bed *or* reach over from outside; where the carry placement ray puts the
+  item (not your position) decides. The
   `[E]` prompt reads **`[E] Cargo`** when dropping would load it (it sticks) and **`[E] Drop`**
   otherwise. The carrier hands it to the truck: the prop is frozen, parented to the vehicle so it
   rides along, and its mass is folded into the load. The bed never polls — loading happens on drop.
@@ -553,7 +560,7 @@ live. Nothing new on the wire: the client still sends the steer axis, the server
 
 ## Speed limiter
 
-The driver turns it on/off with **T** and moves the limit by **5 km/h** with **Alt + mouse wheel**
+The driver turns it on/off with **T** and moves the limit by **5 km/h** with the **mouse wheel**
 (between 5 km/h and `limiter_max_kmh`). The chosen limit is kept while the limiter is off, so **T**
 brings the same one back. Server-authoritative: the client only asks (`vehicle_limiter`,
 `vehicle_limiter_step`), the server checks that the sender is the pilot.
@@ -562,14 +569,83 @@ brings the same one back. Server-authoritative: the client only asks (`vehicle_l
   vehicle settles on the limit instead of banging against it.
 - **At the limit**, the engine stops pushing.
 - **More than 1 km/h over it**, the throttle counts as **closed**, so the usual engine braking (the one
-  of a released pedal) brings the vehicle back down. This matters: the game models **no drag at all**
-  — no air, and no rolling resistance while the pedal is down — so an engine that merely stopped
-  pushing left a vehicle that was already over the limit rolling at that speed for ever.
+  of a released pedal) brings the vehicle back down. The air and the tyres
+  ([VehicleResistance](#air-drag--rolling-resistance)) alone would take far too long to bring a truck
+  that is already over the limit back down: switching the limiter on at 50 km/h with a 30 limit has to
+  be felt at once.
 - It **never adds a brake**: downhill the vehicle may still run over the limit; slowing down is the
   driver's job.
 
 On the dashboard the limit is **dimmed** when the limiter is off, **green** when it is on, **red**
 while it is holding the vehicle back. Replicated as `limiter_on` / `limiter_kmh` (and so persisted).
+
+The wheel steps **whichever system holds the speed**: the cruise control while it is on, else the
+limiter (on or off, so the limit can be set before it is used). The limiter and the cruise control are
+**exclusive** — switching one on switches the other off (`PlayerServer`, actions `vehicle_limiter` and
+`vehicle_cruise`): one caps the speed, the other sets it, and both at once would leave the driver
+wondering which one holds the truck.
+
+## Cruise control
+
+`VehicleCruiseControl` (`scenes/_universe/vehicles/vehicle_cruise_control.gd`, a
+[`VehicleNetPart`](#adding-replicated-vehicle-state--vehiclenetpart), exposed as `vehicle.cruise`).
+**Ctrl + T** (action `vehicle_cruise_control`) switches it on **at the speed being driven**, rounded to
+the km/h; the wheel then moves the set speed by one step. It shares the limiter's step and range
+(`limiter_step_kmh`, `limiter_max_kmh`), and its lowest set speed is one step.
+
+- **Hold**: with the pedal released the throttle is `(set_kmh − speed) × gain` (`gain` 0.3, clamped to
+  0..1) — a proportional hold, like a real one: it settles a little under the set speed, by what the
+  air and the slope need. It **never brakes**: at or over the set speed it only closes the throttle.
+- **Never engages under `min_kmh`** — standing still or backing up included (the server passes the
+  **signed** `Vehicle.forward_speed_kmh()`): a hold set there would drive a parked or reversing truck
+  forward on its own.
+- **What switches it off**: pressing the pedal either way (accelerating or braking), a reverse, the
+  brake, the hand brake, the engine stopping, the driver leaving the seat (`server_exit`,
+  `server_release_seat`), and the limiter being switched on. A pedal **already held** when Ctrl+T is
+  pressed only counts once it has been let go, so Ctrl+T at speed with the foot still down does not undo
+  itself (`drive_throttle`).
+- Applied in `Vehicle._apply_drive`, **before** the hand brake's release: its throttle must never let a
+  hand brake off.
+
+Replicated as **`cruise_on`** / **`cruise_kmh`** (zone 0, so persisted). On the dashboard the speed
+cell shows the cruise icon (`assets/_universe/vehicles/ui/dashboard_icons/cruise.png`) and the set
+speed, in green, while it holds; the limiter's otherwise. Tests: `test/unit/test_vehicle_cruise_control.gd`.
+
+## Air drag & rolling resistance
+
+`VehicleBody3D` models neither the air nor the tyres' rolling resistance. Without them a truck at full
+throttle needed no push at all to keep its speed, and its batteries stopped draining at top speed.
+`VehicleResistance` (`scenes/_universe/vehicles/vehicle_resistance.gd`, static and pure) adds both as
+**real forces**, applied in `Vehicle._integrate_forces` against the velocity — on the game server (or a
+vehicle off the network simulating itself), never on a client replica:
+
+| Force | Formula | Inputs |
+|---|---|---|
+| Air drag | ½·ρ·Cd·A·v² | ρ = `air_density_now()`, `drag_coefficient`, `frontal_area_m2` |
+| Rolling resistance | Crr·m·g, faded in over the first 0.5 m/s | `rolling_coefficient × rolling_factor`, the body's `mass`, the local gravity; only while the driven wheels touch the ground |
+
+- **ρ is the planet's**: `Vehicle.air_density_now()` reads the planet's `AtmosphereProfile` at the
+  vehicle's altitude (`Planet.elevation_of`), falling back to the `air_density` export (1.26) when the
+  profile carries no pressure or there is no planet. A truck runs freer up on the plateau and meets no
+  air at all on an airless world. The drag and the drive model both ask for it every tick, so it is
+  **read once per physics tick** (cached on `Engine.get_physics_frames()`); `VehicleComponentBays`
+  hands the same value to `VehicleDriveSpec`.
+- **The taper ends at the motor's own top speed** (`VehicleDriveSpec.v_max_motor_ms()`), not the air's:
+  with drag a real force, a taper ending at the speed the air allows counted the air twice. Where the
+  air holds the vehicle back first, that force alone stops it, below the taper. The motor pull is now
+  the full `tractive_force_n()`; rolling resistance is no longer subtracted from it in advance.
+- `engine_brake` is now the motor's braking alone, and `coast_drag` defaults to **0** (kept for a
+  vehicle that wants more engine braking).
+
+Tests: `test/unit/test_vehicle_resistance.gd`.
+
+## Wheel speed sign
+
+`Vehicle.get_wheel_kmh()` reads **positive forwards, negative in reverse**. Godot's `VehicleWheel3D.get_rpm()`
+is positive rolling toward the body's **+Z**, and our vehicles drive toward **−Z**
+(`_forward_speed_kmh`), so `_rolling_wheel_kmh()` negates it. Every reading used to take the absolute
+value; the reversing camera is the first to read the sign. Anything new that needs the direction of
+travel should read `get_wheel_kmh()` (wheels) or `forward_speed_kmh()` (body), never `get_rpm()` raw.
 
 ## Odometer
 
@@ -586,7 +662,8 @@ If Horizon re-seeds a vehicle with a **new uuid**, that vehicle starts again fro
 
 ### Adding replicated vehicle state — `VehicleNetPart`
 
-The limiter and the odometer are **parts** (`vehicle_net_part.gd`): each one knows what it last sent,
+The limiter, the odometer, the cruise control, the suspension shocks, the cab screen's mode and its
+chart view are **parts** (`vehicle_net_part.gd`, listed in `Vehicle._net_parts()`): each one knows what it last sent,
 writes only its **changed** keys (`write_changes`), and takes received keys back (`read`), remembering
 them as sent so a value restored from the database is not sent straight back. `Vehicle` asks every
 part in `_replicate_transform`, and hands every part the received data in `client_channel_data_update`
@@ -594,9 +671,20 @@ and `server_adopt_state` — so a new piece of vehicle state is **a new part**, 
 three functions. Parts are exposed as properties (`vehicle.limiter`, `vehicle.odometer`), not getters:
 `vehicle.gd` sits two below gdlint's 40-public-method ceiling.
 
-:::warning[Whitelist every new key]
-A key a part writes must also be listed in `vehicle_def.json` — Horizon drops anything else in
-silence: no error, the value simply never reaches the other clients nor the database.
+:::warning[Whitelist every new key — in both repositories, deployed together]
+A key a part writes must also be listed in **two** copies of the vehicle def — Horizon drops anything
+else in silence: no error, the value simply never reaches the other clients nor the database.
+
+1. Write the part: `extends VehicleNetPart`, with `write_changes` (only changed keys), `read` (remember
+   what was read as sent) and `forget_sent`; add it to `Vehicle._net_parts()`.
+2. Add the key to the zone-0 list of `items_def/vehicle_def.json` in the **game** repository.
+3. Add it to `ds_genericprops/props/vehicle_def.json` in **horizonserver**, in the same zone.
+4. Rebuild and redeploy **`horizon-data`** (`build-and-deploy.ps1 horizon-data` in local dev): Horizon
+   reads the defs from that image, and without the rebuild it keeps the old whitelist.
+
+The two pull requests go out in **lockstep**: the cruise control and the cab screen
+(`cruise_on`, `cruise_kmh`, `rear_screen`, `chart_view`) are game PR DyingStar#411 with
+horizonserver#123.
 :::
 
 ## Dashboard — optional in-cab screen
@@ -623,7 +711,7 @@ is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Lab
 
 ## Rear-view camera & mirrors
 
-A live camera feed on an in-cab screen — a **drop-in** (`scenes/vehicles/rear_camera.tscn`),
+A live camera feed on an in-cab screen — a **drop-in** (`scenes/_universe/vehicles/rear_camera.tscn`),
 reusable and **client-only** (no render on the headless server). Use it for a reversing camera and
 for side / rear-view mirrors (the GDD allows "mirrors **or** relayed cameras"). Godot has no cheap
 real reflective surface, so a mirror is just a camera too.
@@ -666,12 +754,74 @@ Also keep `resolution` small.
 
 ### Screens power off with the engine
 
-The rear-view screens **and** the dashboard go **dark when the engine is off**, and light up again on
-ignition — so a parked truck reads as powered-down, not frozen. Each screen reads the vehicle's
-replicated **`is_engine_on()`** on its own (the `Vehicle` knows nothing about its screens): a rear
-camera swaps its feed for a black image **and stops rendering** (no wasted GPU) while off, and the
-dashboard multiplies its panel to black. Since the engine state is replicated, every nearby player
-sees the same on/off. No setup — it's automatic on any screen wired as above.
+The rear-view screens **and** the dashboard go **dark without power**, and light up again on
+ignition — so a parked truck reads as powered-down, not frozen. Power is one rule,
+**`Vehicle.screens_powered()`**: the engine runs **and** the battery holds (`is_engine_on()` and
+`energy.has_energy()`), read by the screens and by the server, which refuses to switch a dark screen.
+Each screen reads it on its own (the `Vehicle` knows nothing about its screens): a rear camera swaps its
+feed for a black image **and stops rendering** (no wasted GPU) while off, and the dashboard multiplies
+its panel to black. Since the engine state is replicated, every nearby player sees the same on/off. No
+setup — it's automatic on any screen wired as above.
+
+### The switchable cab screen
+
+A `RearCamera` with **`switchable`** on (the truck's middle screen) shows what the vehicle's
+**`VehicleScreenMode`** says (`scenes/_universe/vehicles/vehicle_screen_mode.gd`, exposed as
+`vehicle.screen_mode`), in the order the key cycles them:
+
+| Mode | Shown |
+|---|---|
+| `OFF` (a new truck's) | **OFFLINE** under the logo of the ARES subsidiary that runs the vehicle (`brand`, `AresBrand`), drawn once on black |
+| `MAP` | the **star chart** of the player looking at it — each seated player sees the chart of where *they* are |
+| `CAMERA` | the camera feed |
+
+Without power (`screens_powered()` false) it is dark whatever the mode. While the wheels turn
+**backwards** the feed shows over any mode, as a real reversing camera does (`RearCamera.shown_for`,
+`reverse_time_left`, both static and tested).
+
+| `RearCamera` export | Default | Role |
+|---|---|---|
+| `switchable` | `false` | Off: always this camera's feed. On: the three modes above. |
+| `map_resolution` | `(960, 600)` | Pixels of the chart (and of OFFLINE) on the screen. |
+| `brand` | `HAULING` | The ARES subsidiary whose logo shows on OFFLINE. |
+| `show_when_reversing` | `true` | Backing up shows the feed whatever the mode. |
+| `reverse_min_kmh` | `0.5` | Wheels slower than this backwards are not reversing (a truck settling on a slope). Read from the signed [`get_wheel_kmh()`](#wheel-speed-sign). |
+| `reverse_hold_s` | `2.0` | How long the feed stays after the wheels stop turning backwards, so a paused reverse does not flick the screen. |
+
+**Switching it.** Anyone **seated** in the vehicle — driver or passenger, the screen is the cab's —
+aims the crosshair at it and presses **F** (`action`); the prompt names the mode it goes to next. The
+client sends the action **`vehicle_screen_mode`**; the server (`PlayerServer`, `_boarded_vehicle`) checks
+the sender sits in that vehicle and that the screen has power, then calls `screen_mode.cycle()`. The mode
+is a state of the vehicle, replicated as **`rear_screen`** (an int: 0 OFF, 1 MAP, 2 CAMERA), so everyone
+aboard and a late joiner see the same.
+
+**Pointing the chart.** `CabScreenPointer` (`scenes/player/cab_screen_pointer.gd`), fed every frame by
+`PlayerClient` while seated, does three things:
+
+- finds the vehicle's switchable screen (group `RearCamera.GROUP`, `cab_screen`) and whether the
+  crosshair hits it, within `REACH_M` (4 m), through the screen's own `Gui3D` (`RearCamera.map_gui()`);
+- in `MAP` mode, **hosts the player's own `StarMap`** in the screen's viewport (`map_slot()`, via
+  `StarMap.host_in`) with `keys_live = false` — the keys and the pad stay the driver's — and sends it
+  home to the DataPad when the mode changes, the player leaves the seat or the truck leaves the tree;
+- while the crosshair is on the chart, sends it the hover and **every mouse button, the wheel included**
+  (`input()` returns true, so the wheel does not also step the limiter).
+
+The screen's mesh leans inside its own frame, so its `Gui3D` uses [`uv_frame`](./in-3d-screen.md#tilted-screen-meshes-uv_frame).
+
+**A shared view.** `VehicleChartView` (`scenes/_universe/vehicles/vehicle_chart_view.gd`, exposed as
+`vehicle.chart_view`) makes everyone aboard see the same chart view:
+
+- The player who touched the chart counts as **handling it for 1.5 s after their last input**
+  (`CabScreenPointer.HANDLING_S`). Meanwhile they send `StarMap.view_state()` with the action
+  **`vehicle_chart_view`**, at most every 0.1 s and only when it changed; the others show the replicated
+  view with `StarMap.show_view()`.
+- The server accepts it only from a seated player and keeps a **cleaned** copy
+  (`VehicleChartView.clean_view`): only the numbers `zoom`, `yaw`, `pitch`, `lean_turn`, `lean_angle`,
+  `poi` (finite) and the names `watch`, `select` (strings cut to 64 characters). A client's dictionary is
+  data, never trusted.
+- Replicated as **`chart_view`** (a dictionary), sent only when it changed.
+
+Tests: `test/unit/test_cab_screen.gd`.
 
 ## Inspector reference — every `@export`
 
@@ -687,7 +837,8 @@ cameras and cargo bay still use these numbers.
 |---|---|---|
 | `torque_response` | `2.5` | How fast torque ramps to the throttle (1/s). Lower = gentler launch (keeps a heavy vehicle from leaping off the line). |
 | `brake_force` | `30` | Brake force per wheel. |
-| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep well **below** `brake_force`. |
+| `engine_brake` | `6` | Engine braking applied per wheel while coasting (no throttle, no brake): the motor alone, the tyres and the air being real forces now ([VehicleResistance](#air-drag--rolling-resistance)). Keep well **below** `brake_force`. |
+| `coast_drag` | `0` | Throttle released: share of the speed lost per second on top of `engine_brake`. It stood in for the drag the game did not model; kept for a vehicle that wants more engine braking. |
 | `handbrake_hold` | `30` | Parking-brake damping (m/s per s) **above** the release speed. A real collision impulse exceeds this, so a hit parked truck still gets pushed (then re-settles). |
 | `handbrake_release_speed` | `2` | Horizontal speed (m/s) **below** which the engaged hand brake fully cancels motion — a parked truck must not move from a player bump or a gentle slope. |
 | `drive_mode` | `ALL` | Driven wheels: `FRONT` (FWD), `REAR` (RWD) or `ALL` (4×4). |
@@ -710,8 +861,8 @@ cameras and cargo bay still use these numbers.
 
 | Property | Default | Role |
 |---|---|---|
-| `limiter_step_kmh` | `5` | One step of the selector (Alt + wheel), km/h. |
-| `limiter_max_kmh` | `130` | Highest selectable limit, km/h. |
+| `limiter_step_kmh` | `5` | One step of the selector (the wheel), km/h — the cruise control's step too, and its lowest set speed. |
+| `limiter_max_kmh` | `130` | Highest selectable limit (and cruise speed), km/h. |
 | `limiter_default_kmh` | `30` | Limit the selector starts on, km/h. |
 | `limiter_taper_kmh` | `3` | The engine eases off over this many km/h below the limit. |
 
@@ -775,18 +926,18 @@ The chassis's own contribution to the drive model. The motor side of it lives on
 | `pump_efficiency` | `0.8` | Hydraulic pump efficiency — part of the chassis transmission, not of the motor. |
 | `hydraulic_efficiency` | `0.8` | Hydraulic circuit efficiency. `pump × hydraulic` = 0.64 on the MVP truck. |
 | `torque_factor` | `1.0` | Chassis torque multiplier applied to the sum of the motor torques. **No efficiency term** on this path — that is the design sheet's own rule. |
-| `rolling_coefficient` | `0.01` | `Cr`, rolling resistance. The sheet quotes 0.001 on good tarmac to 0.3 on soft sand; per-surface `Cr` is a natural follow-up. |
+| `rolling_coefficient` | `0.01` | `Cr`, rolling resistance, applied as a force (`VehicleResistance`). The sheet quotes 0.001 on good tarmac to 0.3 on soft sand; per-surface `Cr` is a natural follow-up. |
 | `rolling_factor` | `1.0` | Chassis multiplier on `Cr`. |
-| `drag_coefficient` | `1.0` | `Cx`. Only matters once a chassis is **drag-limited** rather than engine-limited, which the MVP truck is not (its aero ceiling is 55.9 m/s against a 28.8 m/s motor ceiling). |
-| `frontal_area_m2` | `3.0` | `S`, frontal area. Same caveat. |
-| `air_density` | `1.26` | Air density (kg/m³) where the vehicle drives — Sandbox at sea level. Could later be read from the planet's atmosphere. |
+| `drag_coefficient` | `1.0` | `Cx`, in the air drag force ½·ρ·Cx·S·v² (`VehicleResistance`). |
+| `frontal_area_m2` | `3.0` | `S`, frontal area, in the same force. |
+| `air_density` | `1.26` | **Fallback** air density (kg/m³), used when the planet's atmosphere cannot say (no planet, or a profile without its pressure). Otherwise `air_density_now()` reads the planet's `AtmosphereProfile` at the vehicle's altitude. |
 | `reverse_max_ratio` | `0.15` | Reverse top speed as a **fraction** of the forward top speed. A fraction, not a km/h, so it cannot contradict whatever engines are fitted. |
-| `speed_taper_kmh` | `10` | Width of the band below top speed over which the drive tapers off. The sheet is an **equilibrium** model, not a torque curve: used as one it has no constant-power region, so the force would fall from 100 % to 0 in 0.1 km/h. Nothing else holds the speed down (no drag is simulated), so downhill at full throttle there would be no limit at all. |
+| `speed_taper_kmh` | `10` | Width of the band below the **motor's own** top speed over which the drive tapers off — the motor reaching its top revs. The sheet is an **equilibrium** model, not a torque curve: used as one it has no constant-power region, so the force would fall from 100 % to 0 in 0.1 km/h. The air usually settles the speed just before the band, the motors still pushing. |
 
-:::note[Aerodynamic drag is not simulated]
-Top speed is applied as `min(motor, aero)`, and on the MVP truck the aero ceiling never bites. The
-day a chassis is drag-limited, the real force belongs in `_integrate_forces` — and it deserves its
-own commit, because it also changes how a vehicle slows down when coasting.
+:::note[Aerodynamic drag is simulated]
+Air drag and rolling resistance are real forces since the 2026-10-19 playtest — see
+[Air drag & rolling resistance](#air-drag--rolling-resistance). The motors push, and draw power, at a
+steady top speed.
 :::
 
 ### Cargo
@@ -795,9 +946,9 @@ own commit, because it also changes how a vehicle slows down when coasting.
 |---|---|---|
 | `max_payload` | `1300` | Max payload (kg) before **overloaded** (load limiter). ⚠️ A fitted component is **not** payload: its mass counts towards the vehicle, or a truck could be immobilised for being overloaded by its own engines. |
 | `overload_immobilize` | `1.2` | Above `max_payload × this` the vehicle is immobilized (1.2 = +20 %). |
-| `cargo_bay_size` | `(2.0, 1.5, 3.1)` | Size of the cargo-bay box. A massive body that comes to rest inside is absorbed (its mass added once). **Also the on-foot bed-walker zone** — a player standing inside adds their weight, so fit it to the real bed (too low/large counts someone standing beside the truck). |
-| `cargo_bay_offset` | `(0.0, 1.0, 0.75)` | Centre of the cargo-bay box, relative to the vehicle origin. |
-| `cargo_loading_zone` | *(unset)* | Optional designer box (`CollisionShape3D` + `BoxShape3D`) marking **where a dropped item may load**. Unset → falls back to the cargo-bay box. Its physics collision is disabled at runtime (zone marker only). |
+| `cargo_bay_size` | `(2.0, 1.5, 3.1)` | Size of the cargo-bay box — **only** for a vehicle whose model has no `col_bed*` piece (a blockout); a real model's bed is read off those pieces. A massive body that comes to rest inside is absorbed (its mass added once). |
+| `cargo_bay_offset` | `(0.0, 1.0, 0.75)` | Centre of that fallback box, relative to the vehicle origin. |
+| `bed_headroom_m` | `0.4` | How far above the top of the side boards (m) a load still counts as in the bed: a crate stacked proud of them, or put down reaching over from outside. |
 | `cargo_settle_speed` | `0.6` | A dropped body locks into the bed once it slows below this (m/s). |
 | `cargo_unlock_tilt_deg` | `65` | Tilt (° from upright) past which the bed unlocks and spills its load (a rollover drops the cargo). `0` disables. |
 | `debug_show_cargo_bay` | `true` | Show a translucent box marking the cargo-bay zone (turn **off** on shipped vehicles). |

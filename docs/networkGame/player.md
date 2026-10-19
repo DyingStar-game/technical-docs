@@ -137,6 +137,7 @@ current set:
 | `floating` | state | weightless (no gravity area for a moment): floating animation, no footsteps, a bare point on the star map. Sent on change. |
 | `carrying` | state | holding a carriable |
 | `flashlight` | state | torch on / off |
+| `datapad` | state | the wrist DataPad is raised (its owner is reading it), so every avatar raises that wrist, a late joiner's view included. Whitelisted in `player_def.json` here **and** in horizonserver's `ds_genericprops/props/player_def.json`. |
 | `tools`, `perforating` | state | equipped tool + mining state |
 | `carry_prompt` | state | server-decided `[F]` prompt (the `action` key) for the owner |
 | `action` | **event** | one-shot events (jump / land / emote / seat / interact) — see below |
@@ -187,3 +188,84 @@ Picking a box up is only allowed while **standing** (`stance == 0`): the server 
 otherwise, and no `[E] Carry` prompt is shown while crouched or prone. Changing to crouch / prone — or
 **jumping** — **drops** whatever you carry. This keeps the carry pose and the
 [belt holster](./tools.md#tools-follow-the-body-belt-holster) simple.
+
+## Your own body on foot: smoothing without prediction
+
+There is **no client prediction** for the player on foot: the server moves the body, its positions come
+back at the network rate (about every 70 ms), and `NetInterpolator`
+(`scenes/globals/net_interpolator.gd`) glides the owner's body after them (`update_position`, position
+only, so the mouse look stays immediate). Two rules keep that from feeling heavy.
+
+### The lead (owner only)
+
+Gliding after targets 70 ms apart, the body caught each one in about 40 ms and waited for the next: it
+moved in steps, 14 times a second. So, **for the owner and only while a move key is held**
+(`PlayerClient` passes `player.input_direction != Vector2.ZERO` as `lead`), the target is carried on at
+the speed of the last two targets:
+
+- for at most **1.5 × the last gap** between targets (`LEAD_GAP_SHARE`) and never more than **0.15 s**
+  (`LEAD_MAX_S`) — a lead that stopped at exactly the last gap stopped the body whenever the next
+  target came a little late;
+- past that cap the lead **comes back as fast as it went** (`lead_time`): the server sends nothing for a
+  body that stopped (a wall, a step), and a held lead kept the view inside the wall;
+- keys released: no lead, the body settles on what the server said;
+- **reset on reparent** (`snap_next()`, called by `Player.net_reset_interp`): the next target is in
+  another frame, so no speed is derived across it.
+
+Remote avatars do not lead. Tests: `test/unit/test_net_interpolator_lead.gd`.
+
+### One gait rule: `Player.gait_speed`
+
+The speed the gait asks for — sprint or the wheel-chosen walk speed, capped by the stance, slowed while
+aiming or carrying, zero while perforating — is **one function**, `Player.gait_speed(sprint_held,
+walk_target, stance, carrying)`, used by the server to move the body **and** by the owner's client to
+animate it. On foot (not seated, weightless, airborne or in god mode) the owner's animation and
+footsteps follow the gait **its keys** ask for (`PlayerClient.intent_step`, ramped at the same
+`acceleration`), instead of the motion measured on the body, which only moves after a round trip:
+pressing Shift used to show the run 0.6 s later. Only the owner sees its own animation, so this guess
+never becomes state; remote avatars keep the measured motion. If the keys ask for a gait the body does
+not take — the body moving under 35 % of it for 0.4 s (`INTENT_FOLLOW_SHARE`, `INTENT_BLOCKED_S`), walking into a wall — the measured motion takes over again.
+
+`acceleration` is now **30 m/s²** (a sprint reached or stopped in 0.17 s; it was 10). Tests:
+`test/unit/test_player_gait.gd`.
+
+## Debug probes (`client.ini`)
+
+Two instruments for stutters you feel but cannot see in the code. Add the key to `client.ini` (any
+section — `ClientConfig` reads keys from every section; `[debug]` is the convention), restart the client,
+and read the client's log (the editor's Output, or the client console).
+
+### `debug_move_probe=true` — on-foot stutters
+
+`MovementProbe` (`scenes/player/movement_probe.gd`) watches the owner's on-foot movement. Each event is
+printed at once as a `[MoveHitch]` line with the time since boot (to match what you felt):
+
+| Kind | Meaning |
+|---|---|
+| `net` | a position came late (a gap over 2.5 × the usual one, and at least 60 ms): the body ran out of target |
+| `jump` | one position stepped more than 1 m (a burst after a gap, or a server correction) |
+| `back` | the target went back against its direction, keys held (the server put you back) |
+| `stall` | keys held, the body drawn under 30 % of its recent speed (once it moved over 1 m/s) |
+| `frame` | the frame itself took over 50 ms (the `[CPerf]` hitch lines say why) |
+| `snap` | the interpolation was reset: a reparent, with the new frame's name |
+
+Every 2 s a `[MoveProbe]` line sums the period up (the format, with example values):
+
+```
+[MoveProbe] positions=28 gap avg 71 max 84 ms | step max 0.42 m | behind avg 0.12 max 0.31 m | frame max 18 ms | keys 100% | cam swing y 1.2 z 2.4 cm | net=0 jump=0 back=0 stall=0 frame=0 snap=0
+```
+
+`positions` / `gap` are the server's targets, `behind` is how far the drawn body trails the last target,
+`keys` the share of frames with a move key held, and **`cam swing`** how far the first-person camera
+pivot moved (y, z, cm) while walking. At most 12 hitch lines per period are printed. Tests:
+`test/unit/test_movement_probe.gd`.
+
+### `debug_wrist_probe=true` — the raised wrist
+
+Prints `[WristProbe]` lines from `CharacterAnimator` for **every** avatar (local and remote): one `hold`
+line when a wrist starts rising (stance, target distance from the shoulder, eye distance, current clip),
+then twice a second the hand's distance from the IK target, the elbow's bend and the clip. It is measured
+**after the skeleton is posed** (on `Skeleton3D.skeleton_updated`): read earlier in the frame the bones
+are still the clip's, since the IK runs at the end of the frame, and every arm read 0.6 m off target.
+A hand far from its target, or an elbow near 180° (straight), is an arm the IK did not move.
+

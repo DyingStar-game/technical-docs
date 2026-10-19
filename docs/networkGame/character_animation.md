@@ -133,13 +133,19 @@ because that one movement carries what the view must keep — but it is split by
 | **Bounce & sway** | up/down and side to side, a few times a second | **Never followed** |
 | **Posture** | standing, crouched, prone | The camera holds that stance's **eye point**, taken once from the head the first time the stance is held still |
 | **One-shot moves** | a stance transition, a vault | **Followed in full**: the view goes down as you crouch, up over the ledge |
-| **Lean** | forward, as the torso pitches over into a jog or a sprint | **Followed in full while moving** — or you look at your own neck |
+| **Lean** | forward, as the torso pitches over into a jog or a sprint | **Followed in full while moving** — or you look at your own neck — eased at its own pace (`head_cam_lean_smooth`) |
 
 Standing still, turning on the spot, playing an emote or reading a 3D screen, **nothing moves the view**:
 the eye point is fixed, so idle breathing and the turn clip move the body under a still camera. There is
-nothing to tune per clip either — a new animation set brings its own eye points. The two settings left
+nothing to tune per clip either — a new animation set brings its own eye points. The settings left
 under **Head camera (first person)** are `head_cam_smooth` (how fast the camera reaches its target,
-which is also how fast the view drops when you crouch) and `head_cam_forward` (above).
+which is also how fast the view drops when you crouch), `head_cam_forward` (above) and
+**`head_cam_lean_smooth`** (5 /s): the catch-up rate of the **forward lean alone**. The lean differs by
+some 24 cm between a walk and a run, and followed at `head_cam_smooth` it pushed the view that far in
+80 ms — a jolt on every walk / run switch — while the stride itself moves the camera under 3 cm
+(measured with the [movement probe](./player.md#debug_move_probetrue--on-foot-stutters)'s `cam swing`).
+A posture change or a vault still moves the whole view at `head_cam_smooth`. Too low, and the neck shows
+for a moment as a run starts: `head_cam_forward` is the margin.
 
 :::note[Why not a low-pass filter on the head]
 A filter was tried. Slow enough to ignore the stride, it is also slow enough to lag a whole gait change,

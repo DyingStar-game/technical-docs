@@ -25,6 +25,12 @@ samples. See [Surface sounds](./surface_sounds.md) for the family list and how t
 `scenes/common/prop_landing.tres` is the shared one — most props should point at it rather than get
 their own, so a crate sounds like a crate wherever it is dropped.
 
+**Metal boxes** — the hauling box (`hauling_box.tscn`), the battery (`battery_t1.tscn`) and the engine
+(`engine_t1.tscn`) — have their own pick-up (`metal-box-pick-up.mp3`) and point their landing at
+`scenes/common/metal_box_landing.tres`. That resource has **no per-family entry**: its single put-down
+sample sits in **Default Samples**, so a metal box sounds the same whatever it lands on
+(see [Surface sounds](./surface_sounds.md#authoring-the-sounds)).
+
 :::tip[A crate is heavier than a step]
 Props default to a longer **Falloff** (4 m) and a larger **Distance** (30 m) than footsteps. Something
 being set down carries further than someone walking past; keep that gap.
@@ -46,13 +52,17 @@ in:
 The loop only needs a clean, steady sample — looping is forced at runtime, so don't set the *Loop* flag
 in the import dock (same rule as the [vehicle engine](./vehicle_audio.md)).
 
-## Machines that hum: `AmbientLoop3D`
+## Machines that hum: `AmbientLoop3D` and `LoopSound`
 
 A sound that loops for as long as its object stands, such as the generator at the base of the
-floodlight. Under the object: **Add Child Node** → `AmbientLoop3D`. Place it where the sound comes
-from (the generator's box, not the lamp's head) and give it a `stream`.
+floodlight. Under the object: **Add Child Node** → `AmbientLoop3D` (`scenes/common/ambient_loop_3d.gd`).
+Place it where the sound comes from (the generator's box, not the lamp's head) and give it a **`sound`**.
 
-| Setting | Default | What it does |
+`sound` is a **`LoopSound`** resource (`scenes/common/loop_sound.gd`): the loop's settings as data.
+Saved as a `.tres`, **one file is shared by every loop that must sound alike** — tuning the file retunes
+them all — instead of the same five fields copied on every node.
+
+| `LoopSound` field | Default | What it does |
 |---|---|---|
 | `stream` | | The sample to loop. Looping is forced at runtime, no *Loop* flag to set |
 | `volume_db` | -6 dB | Loudness at the falloff distance |
@@ -60,7 +70,11 @@ from (the generator's box, not the lamp's head) and give it a `stream`.
 | `distance` | 25 m | Hard cut-off: not heard at all beyond it |
 | `attenuation` | Realistic | How it fades with distance, as for every other sound |
 
-It starts on its own on every client as soon as the object is there: the object being there is all
+`AmbientLoop3D` itself keeps one setting, **`autoplay`** (on): the loop starts on its own and never
+stops (a generator). Off, it is silent until `set_running(true)` — for a machine that only runs now and
+then. An empty `sound`, or one with no stream, is silent.
+
+With `autoplay`, it starts on every client as soon as the object is there: the object being there is all
 the state it needs, so nothing is replicated. Each copy starts at a random point of the sample, so a
 village full of the same machine does not hum in phase. It is silent on the server and in the editor.
 
@@ -76,6 +90,35 @@ ffmpeg -i generator_loop.mp3 -c:a libvorbis -q:a 6 generator-loop.ogg
 
 As every sound, a loop has its credit in a `.txt` of the same name beside it.
 
+## The vehicle lift
+
+The vehicle lift (`scenes/_universe/structures/industrial/vehicle_lift/`) has three loops, each an
+`AmbientLoop3D` with `autoplay` off, switched by the lift as it runs:
+
+| Loop | Node | `LoopSound` |
+|---|---|---|
+| Winch hum, at the top | `Base/Animated Axis/WinchHum` | `sounds/winch.tres` |
+| The cart rolling | `Platform System/RollingNoise` (spawned at run time) | `sounds/rolling.tres` |
+| **Departure alarm**, at both landings, for as long as the platform travels | `<landing>/Departure Alarm` | `sounds/alarm.tres` (`lift-departure-alarm.ogg`, 80 m reach) |
+
+The same three files are referenced by the **Vehicle Lift** root, group **Sounds** (`sound_winch`,
+`sound_rolling`, `sound_alarm`), so the lift's loops are tuned **from the lift's own Inspector** —
+including the rolling noise, whose node only exists at run time. Edit the resource's values there;
+picking a different resource in those slots changes nothing, as each node keeps its own reference. The
+one-shot start / stop clunk stays a plain stream (`sfx_start_stop`).
+
+Both landings run **one script**, `landings/lift_landing.gd` (`class_name LiftLanding`, replacing the
+former `upper_landing.gd` / `lower_landing.gd`). What tells them apart is data on each scene's root:
+
+| Export | Role |
+|---|---|
+| `is_upper` | Which end it stands at: its call button sends the platform up (on) or down (off) — and the server refuses a call naming the other end. |
+| `railing_json_path` | The railing layout (JSON) drawn around it in the editor (`VehicleLift.generate_railings`). |
+| `landing_interface` | Its kiosk screen, which shows the trip's progress. |
+
+`start_beacons()` / `stop_beacons()` spin the two beacons **and** run the departure alarm. Like the
+other loops, nothing is replicated for the sound: each client hears the lift change state.
+
 ## Who hears what
 
 This is the one thing worth knowing before you set levels, because it decides whether a sound is
@@ -83,7 +126,7 @@ This is the one thing worth knowing before you set levels, because it decides wh
 
 | Reach | Sounds | Why |
 |---|---|---|
-| **Everyone nearby** | the drill loop, equip, unequip, pick up, landing, a machine's hum | the state behind them (perforating, which tool is out, the prop's position) is **replicated**, so every client can play them on its own |
+| **Everyone nearby** | the drill loop, equip, unequip, pick up, landing, a machine's hum, the lift's loops | the state behind them (perforating, which tool is out, the prop's position) is **replicated**, so every client can play them on its own |
 | **You only** | perforate **fail** | it is feedback about *your* aim, not an event in the world — a bystander has no reason to hear you miss |
 
 Nothing about this costs network traffic: no audio is ever sent. Each client plays the sound from state
