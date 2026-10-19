@@ -1,112 +1,129 @@
 # Ares
 
-## Description
-Création : 
-Forme juridique : méga-corporation
-Action : 
-Slogan : 
-Siège social : 
-Direction : 
-Actionaires : 
-Activité : service de sécurité, constructeur, exploitations minières, banques , entreprises chimiques, ,  groupes de transports et logistiques, ...
-Produits : équipementier automobile
-Filiales : 
-Effectif :  
-Site web :  
-Chiffre d'affaire : 
-Résultat net : 
 
+### I. Identité et origines 
 
+ARES Corporation est une méga-corporation fondée par quatre grandes familles d'origine terrienne et leurs sociétés respectives. Grâce à cette alliance stratégique scellée entre les familles dirigeantes, ARES s'est progressivement transformée en un puissant conglomérat militaro-industriel. Lors de cette montée en puissance, le développement de la filiale ARES Défense a joué un rôle déterminant, devenant un levier de domination clef aussi bien pour la protection des infrastructures que pour la conduite d'actions hostiles, d'espionnage et de renseignement. Renforcée par cette assise militaire, la corporation a connu une croissance exponentielle en intégrant au fil du temps de nouvelles entreprises spécialisées ( minage, finance, chimie, etc ) pour en faire des filiales interdépendantes. Aujourd'hui, ARES Corporation s'impose comme une entité monolithique, verticale et tentaculaire dont la croissance ne semble plus avoir aucune limite.
 
-### I. Origines et Modèle de Contrôle Corporatiste 
-
-L'A.R.E.S. Corporation est une méga-corporation d'origine Terrienne. Initialement fondée par 4 grandes sociétés et leurs familles respectives, elle a connu une croissance sans précédent. Elle s'est transformée en un conglomérat militaro-industriel au fil des alliances des familles dirigeantes, intégrant des filiales dans les mines, banques, chimie et transport. Le développement de la filiale ARES Défense a été un levier clé pour la protection de ses infrastructures et la conduite d'actions hostiles (renseignement, espionnage). A.R.E.S est une entité monolithique, verticale et tentaculaire. Son nom (ARES, dieu grec) et son architecture (gréco-romaine, aseptisée) suggèrent une culture occidentale et impérialiste.
-
-ARES n'est pas un État officiel (les institutions politiques et l’armée restant théoriquement supérieures), mais elle exerce un contrôle quasi-absolu par :
-
-- Contrôle Économique : Possession des moyens de production et des terres, ainsi que le contrôle de la circulation des marchandises, des logements et de la monnaie, rendant la population totalement dépendante.
-    
-- Monopole de la Violence : Sa filiale ARES Défense agit comme sa propre force de police et de sécurité, équivalent du monopole de la violence légitime au sein de la corporation.
-    
-- Justice corporatiste : Application de sa propre "loi" par les contrats de travail. Le licenciement entraîne un statut de hors-la-loi (présence illégale sur des terres privées), permettant à ARES d'imposer sa volonté.
-    
+L'ambition ultime d'ARES transcende la simple domination armée ou la croissance aveugle : la corporation cherche en effet à s'imposer comme la véritable colonne vertébrale de la galaxie. Pour y parvenir, ARES œuvre à ce que l'espace habitable devienne incapable de fonctionner sans l'implication directe de ses filiales. L'objectif est de tisser un réseau d'interdépendances économiques, financières, sécuritaires et logistiques si dense que toute action punitive menée par quelque autorité politique que ce soit contre la mégacorporation engendrerait un risque systémique incontrôlable. L’objectif est donc de pousser les pouvoirs publics à craindre l'effondrement général du système plus qu'ils ne désirent la fin du monopole de la corporation. ARES assurerait ainsi son impunité totale et son règne permanent à travers l’univers. 
 
 ---
 
-### II. Structure Hiérarchique et Guerre des Classes
+### II. Structure hiérarchique
 
-La corporation est régie par une structure pyramidale mixte (militaire, politique, entrepreneuriale) qui institutionnalise la compétition interne à tous les niveaux.
+ARES Corporation est régie par une structure pyramidale mixte, à la fois militaire et corporatiste qui institutionnalise et encourage la compétition interne à tous les niveaux. 
 
-1. La chambre dirigeante : Au sommet se trouve Le conseil, composée de neuf familles dirigeantes ploutocratiques. Chaque membre de ce conseil dirigeant est un Doyen. Le conseil est composé des 4 familles originelles (Mining, Machinery, Living Essential, Security) et 5 familles qui ont été intégrées elles et leurs activités au fil du temps. C’est la chambre qui définit les "grands projets" et le "cap à tenir" avec une réunion annuelle visant également à désigner un représentant public parmi les familles : Le porte parole général. 
-    
-2. Secrétaire général : Changeant tous les ans, il est le visage public de la corporation. Sa fonction fait de lui l’interlocuteur principal de toute autre autorité cherchant à négocier avec la corporation. Il est également chargé des campagnes de propagandes internes.
-    
-3. Les directeurissimes : Les directeurissimes sont les dirigeants des grandes filiales. Responsables applicatifs  des directives du Conseil. Ils reçoivent des objectifs semestriels intenables, les poussant parfois au sabotage mutuel pour gagner les faveurs du Conseil.
-    
-4. Les Généralissimes : En charge d'un pôle spécifique au sein d'une filiale. Organisent directement la production et l'organisation du travail.
-    
-5. Les Capos : Officiers supérieurs de la filiale Sûreté SMP. Ils incarnent l'héroïsme moral (mépris de la vie commode), assurant la sécurité des infrastructures et l'application de la loi d'ARES.
-    
-6. Les Pilastres : Position hiérarchique civile la plus haute et la plus stable. Ils jouent des responsabilités clés en tant qu'experts et servent de support structurel. (mimétisme des dominants, d'où le nom Pilastres). Ils incarnent l'ascension sociale fictive. Ces spécialistes bénéficient de privilèges comme l’accès à la propriété. Ils promeuvent l'idéologie technocratique auprès des masses en opérant directement sur le terrain.
-    
-7. Les patrouilleurs : Police/militaires de la SMP. Bras armé d'ARES. Assurent la discipline de fer des travailleurs et le contrôle des marginaux.
-    
-8. Les contremaîtres : Toujours sélectionnés parmi les ouvriers les plus dévoués, ils supervisent des petits groupes de travailleurs et servent de relais entre les employés lambda et les Pilastres. 
-    
-9. Les Ouvriers : Ils possèdent un poste fixe, et leur stabilité est un levier de domination. Leur punition ou promotion est souvent gérée par la mutation entre les sites en ville et les mines profondes. Tous vivent avec l’espoir d’un jour devenir Contremaître. 
-    
+- **La chambre dirigeante** : Au sommet absolu d'ARES se trouve La Chambre, le conseil souverain composé des neuf Doyens représentant les neuf familles ploutocratiques dirigeantes (les 4 familles originelles et les 5 intégrées au fil de l'expansion). La Chambre définit les orientations stratégiques majeures, valide les grands projets et fixe le cap global du conglomérat. Lors de sa réunion annuelle, elle désigne également en son sein le Secrétaire général. Chaque Doyen jouit d'une autonomie totale sur ses domaines et territoires, n'ayant de comptes à rendre qu'à La Chambre dans son ensemble ou aux membres de sa propre famille. Cependant, cette liberté s'exerce au cœur d'une féroce guerre d'influence permanente entre les neuf lignes dynastiques. Pour maintenir la compétition à ce sommet hiérarchique, La Chambre fonctionne sur un système d'engagements solennels : chaque Doyen s'engage publiquement sur des objectifs d'expansion, de rendement ou de projets d'envergure. L'accomplissement de ces promesses est largement récompensé par un gain d'influence politique et la priorité sur l'attribution de futurs contrats du conglomérat. À l'inverse, l'échec est sanctionné par une amende financière dont le montant, bien que dérisoire pour la fortune personnelle d'un Doyen, revêt une portée symbolique dévastatrice en marquant publiquement sa faillite stratégique devant ses pairs.
 
-Les Intérimaires :  Ils constituent la majorité de la main-d'œuvre. Maintenus dans une précarité et une incertitude constantes, ils sont forcés à une compétition acharnée et illusoire pour une promotion qui est un évènement exceptionnel dépendant du bon vouloir des supérieurs.**
-**
+- **Secrétaire général** : Nommé tous les ans, il est le visage public de la corporation. Sa fonction fait de lui l’interlocuteur principal de toute autre instance cherchant à négocier avec la corporation. Il est également chargé des campagnes de propagandes internes. Étroitement surveillé et cible numéro une lors des crises publiques, attentats ou attaques judiciaires de l'Autorité. il sert de fusible si les négociations échouent. Cette fonction est donc autant une opportunité de briller qu’un piège létal. Un secrétaire général reconduit constitue une distinction honorifique et une preuve de confiance immense, largement valorisée.
 
----
+- **Les directeurissimes** : Les directeurissimes sont les présidents exécutifs des 10  grandes filiales. Responsables applicatifs  des directives de la chambre. Ils reçoivent des objectifs semestriels difficilement atteignables, les poussant parfois au sabotage mutuel pour gagner les faveurs des familles dirigeantes. Pour cela, ils ont carte blanche opérationnelle pour constituer et sélectionner les profils souhaités pour piloter les sous filiales et dicter les priorités. Les directeurissimes sont souvent désignés comme responsables des échecs menant parfois à des rétrogradations humiliantes, des destitutions forcées. Leur poste étant clef dans les projets de croissance de la corporation, il arrive meme qu’ils soient la cible de complot et de tentatives d’assassinat.
 
-### III. Les Filiales et leur Rôle Stratégique
+- **Les Généralissimes** : En charge d’une sous-filiale, le généralissime est le directeur opérationnel d’une planète. Il est donc responsable du déploiement des effectifs et du découpage de sa zone d’affectation en  plusieurs ZEE ( Zone économique exclusive ) entre les différents maréchaux sous son commandement. Il a un droit de regard et de décision sur l’ensemble de ses effectifs ( mutations forcées, évictions, promotions etc ). Gestionnaire de son propre budget, il lance les chantiers transcontinentaux et les projets rattachés à ses objectifs avec une autonomie quasi complète, en collaboration avec les autres sous filiales pour les chantiers transverses. 
 
-ARES assure son autosuffisance grâce à une multitude de filiales spécialisées et interdépendantes qui opèrent à différents niveaux. 
+- **Les Maréchaux** : Le maréchal est en charge d’une ZEE, attribuée par son généralissime, souvent pensée autour d’une grande ville clef ( villes ferroviaires sur sandbox ). Il coordonne les différents sites de production à l’échelle continental / régionale, lance les chantiers secondaires et supervise les effectifs de chacun des sites à sa charge. Il est le pont le plus direct entre les strates décisionnaires et les exécutants de terrain. 
 
-- La société mère : ARES Corporation, appellation commune pour désigner ARES dans son ensemble. 
-    
-- Les sociétés affiliées : ARES Capital gère la finance, la vente, et le flux d'informations de l'ensemble de la mégacorporation. ARES Industrie (construction lourde, vaisseaux, usinages ). ARES Transport & Logistique ( flux des marchandises et des personnes ). ARES Défense ( sécurité et renseignement ). ARES Distribution ( (biens vitaux, outillage et équipement). ARES Mine ( (extraction des ressources minières ). ARES Science ( Recherche et développement pour l’ensemble des filiales de la mégacorporation ). ARES pharmaceutique ( Recherche médicale et biologique ).  ARES Energie ( Réseaux énergétiques au service des autres filiales )
-    
-- Les corporations planétaires : Société éducative de Sandbox ( Formation des employés et scolarité des enfants d’employés ), Société bancaire de Sandbox ( contrôle de la monnaie et de la dette des employés ) , Compagnie de la Sûreté de Sandbox ( sécurité quotidienne et surveillances des sites de productions ) , Entreprise de construction et de technique de Sandbox ( Infrastructures et logement ), Institut de santé de Sandbox ( médecine courante ) , Centre de l’Abondance de Sandbox ( distribution et vente des biens de première nécessité ) 
-    
+- **Les Capos** : Officiers supérieurs d'ARES Security et fer de lance de la surveillance interne. Au-delà de la sécurité des infrastructures, le Capo dispose d'un mandat d'investigation et de contrôle politique total sur tous les employés et exécutants. Il est investi d'un droit de passe-droit exceptionnel lui permettant de traquer, dénoncer et sanctionner directement les infractions ou déviances idéologiques à tous les échelons de la hiérarchie. Il dispose d'une autorité punitive considérable. Sur le plan disciplinaire et répressif, un Capo possède autant de pouvoir de décision et de sanction qu'un Maréchal. Il peut ouvrir des enquêtes, suspendre ou condamner des cadres et représentants d'ARES jusqu'au rang de Maréchal inclus, sans nécessiter l'aval préalable de la hiérarchie locale de la filiale ciblée.   
+
+- **Les Pilastres** : Position hiérarchique civile la plus haute, les pilastres sont méticuleusement sélectionnés parmi les contremaîtres les plus performants et les plus dévoués. Ils représentent une élite technique, scientifique ou administrative et occupent des postes de cadre, de directeurs de site de production au titre d’expert métier et servent de support structurel. Ils promeuvent l'idéologie technocratique auprès des masses en opérant directement sur le terrain. Érigés par la propagande corporatiste comme le symbole ultime de la réussite au mérite, ils incarnent le statut auquel chaque travailleur est censé aspirer. Ces spécialistes bénéficient d’une autonomie technique et méthodologique moyenne dans la conduite de leurs projets. Leur pouvoir de décision et d’initiative est strictement encadré et limité aux quotas de production fixés. Soumis à une pression de performance technologique et d'efficacité permanente, où le moindre retard de production ou défaut de conception est  souvent assimilé à du sabotage. En tant qu'élite instruite et dépositaire de secrets industriels cruciaux, ils font l'objet d'une surveillance de masse étouffante de la part des Capos. Ils sont volontairement isolés de la masse laborieuse pour mieux les surveiller mais aussi pour les utiliser comme figures de propagande de la pseudo méritocratie.
+
+- **Les patrouilleurs** : Membres rattachés à la branche sécuritaire, les patrouilleurs constituent le bras armé direct et quotidien d'ARES sur le terrain. Déployés au plus près des populations, ils imposent une discipline de fer au sein des chaînes de production, des cités ouvrières et des zones d'extraction, tout en assurant le contrôle strict des marginaux et des populations précaires. Au-delà du simple maintien de l'ordre, ils sont activement intégrés au réseau d'espionnage industriel et de surveillance de masse de la corporation. Par leur présence physique constante, leurs contrôles inopinés et leur usage décomplexé de la force, ils contribuent directement à entretenir le climat de pression systémique qui pèse sur l'ensemble des strates sociales. Les patrouilleurs appliquent avec une rigueur aveugle les directives et protocoles transmis par les Capos et la hiérarchie militaire. Sur le terrain, ils disposent en revanche d'une marge de manœuvre considérable dans le choix des moyens d'intimidation et d'arrestation. 
+
+- **Les contremaîtres** : Toujours sélectionnés parmi les ouvriers les plus dévoués et les plus dociles, ils supervisent des petits groupes de travailleurs et constituent le premier maillon du commandement sur le terrain. Présents dans les ateliers, sur les chaînes d'assemblage ou au fond des mines, ils encadrent au quotidien les brigades d'ouvriers et d'intérimaires. Leur mission principale est de faire respecter les cadences de travail, de veiller à l'application stricte des consignes données par les Pilastres et d'assurer le rendement maximal de leur secteur. Ils servent également de relais d'information pour la hiérarchie, signalant les baisses de productivité ou les comportements suspects. Pris dans une pression en tenaille particulièrement violente. D'un côté, ils subissent le contrôle impitoyable des Pilastres qui les tiennent directement responsables du moindre retard ou manque à gagner sous peine de destitution. De l'autre, ils essuient le ressentiment et la haine des ouvriers qui les considèrent comme des traîtres à leur classe et des serviteurs du système. Pourtant beaucoup jouent le jeu d’ARES, fantasmant une promotion au rang de pilastre, tant mise en avant par la propagande. 
+
+- **Les Ouvriers** : Les Ouvriers constituent le socle productif stabilisé d'ARES Corporation. Bénéficiant d'un statut de titulaires (matérialisé par un livret ouvrier et une affectation fixe), ils sont déployés au cœur des raffineries, des complexes miniers, des usines d'armement ou des centres logistiques. Leur rôle principal est d'exécuter sans relâche les tâches techniques, manuelles et répétitives indispensables au fonctionnement de la chaîne de valeur du conglomérat. Leurs gestes, horaires et méthodes sont rigoureusement dictés par les protocoles industriels établis par les Pilastres et appliqués sous la surveillance directe des Contremaîtres. Soumis à un rythme de travail exténuant et à un environnement souvent dangereux (usure physique, accidents industriels, exposition aux toxines), leur principale hantise est la perte de leur statut. La moindre baisse de rendement, blessure invalidante ou écart de conduite les expose à des sanctions disciplinaires immédiates : mutations punitives vers des sites d'extraction extrêmes.
+
+- **Les Intérimaires** :  Masse laborieuse précaire constituant la grande majorité  de la main-d'œuvre d'ARES Corporation, les intérimaires sont affectés aux tâches les plus pénibles, périlleuses et insalubres du conglomérat : déblaiement lourd, maintenance en milieu toxique, forage extrême ou manutention à haut risque. Dépourvus d'affectation fixe ou de garanties de contrat à long terme, ils dépendent entièrement des besoins journaliers de la corporation pour obtenir leurs rations et leur hébergement  temporaire. Totalement soumis aux décisions arbitraires des contremaîtres et de la hiérarchie locale qui entretiennent volontairement cette mobilité et cette précarité pour les priver de tout ancrage, ils ne disposent d'aucun levier de négociation et doivent se plier sans réserve aux directives imposées. Plongés dans une compétition intestine permanente avec les autres intérimaires, ils luttent au quotidien pour conserver leur contrat et espérer un jour décrocher le statut stabilisé d'ouvrier.
+
+Au-delà de sa hiérarchie rigide , la stratification d'ARES repose sur une mécanique sociale soigneusement entretenue où l'illusion de la réussite sert de principal levier de soumission. Au cœur de ce dispositif, le statut de Pilastre est érigé en symbole absolu d'ascension sociale : il incarne le mythe de la réussite au mérite, la promesse qu'un travailleur dévoué peut un jour accéder à la propriété, aux privilèges et au respect de l'élite. En réalité, ce plafond demeure totalement étanche pour la masse laborieuse. La corporation entretient délibérément la précarité des intérimaires et des ouvriers, faisant de la rareté des promotions une arme de contrôle social. En canalisant les espoirs des travailleurs vers une compétition intestine acharnée plutôt que vers la solidarité, ARES s'assure d'une main-d'œuvre dociles, mue par l'espoir d'une évolution sociale fictive et la peur constante de la déchéance. 
 
 ---
 
-### IV. Situation Critique et Stratégie d'Avenir
+### II. Les filiales et leur rôle
 
-ARES atteint un tournant critique en 2425 car son monopole est menacé par l'Autorité. En effet, A.R.E.S. a obtenu le monopole d'exploitation de la planète Sandbox. La découverte et la valeur du Dédurium ont créé un déséquilibre de marché menaçant cette Autorité politique supérieure, qui subit la pression des corporations rivales et voit d’un très mauvais œil l’ascension d’A.R.E.S. Ce monopole confère à la corporation une autonomie et une puissance sans précédent, la plaçant au-dessus de la législation.
+ARES Corporation s'articule autour de neuf filiales distinctes, chacune spécialisée dans un secteur stratégique clé. Véritables rouages du conglomérat, ces entités couvrent l'intégralité de la chaîne de valeur : de l'extraction minière brute jusqu'à la gestion financière et militaire. C’est là l’un des principaux atouts d’ARES : son autonomie. Bien qu'engagées dans une compétition permanente, les filiales font progresser l'ensemble de la corporation à travers une interdépendance tantôt lucrative, tantôt conflictuelle. 
 
-En réaction à cette pression extérieure, ARES prétend se conformer aux règles tout en préparant secrètement l'avenir :
+- **ARES Mining**  : Sûrement devenu le pôle le plus central dans le plan d’exploitation de Sandbox, ARES Mine est chargé de l’exploitation et de la valorisation (tri, concassage, pré-traitement) des ressources minérales. L’entité supervise l’installation et la maintenance des Fosses et puits de mine, la prospection géologique, ainsi que le raffinage de la matière première. Spécialisée dans l’optimisation des procédés d’extraction, elle emploie aujourd’hui la grande majorité de la main-d'œuvre ambulante de Sandbox. Les domaines d’activités d’ARES Mine sont : 
+    - Extraction et valorisation des ressources minérales.
+    - Installation et maintenance des infrastructures minières.
+    - Prospection géologique.
+    - Recherche et développement en optimisation des procédés d’extraction.
+Raffinage des minéraux.
 
-- Renforcement militaire : La militarisation aiguë de Sandbox inclut la préparation de nouvelles armes, vaisseaux, et la potentielle revitalisation de l'IA (tabou).
-    
-- Extraction accélérée : Le forage de Dédurium est intensifié.
-    
+- **ARES Hauling** : Entité spécialisée dans la circulation des ressources, des personnes et dans l’approvisionnement général de la mégacorporation, ARES Transport & Logistique supervise les projets interplanétaires et intercontinentaux. Elle gère la distribution des matières aux autres filiales et coordonne la mise en place des réseaux routiers, ferroviaires, spatiaux et orbitaux, garantissant ainsi la continuité des flux, la connectivité et la résilience logistique de l'ensemble d'ARES. Les domaines d’activités d’ARES Transport & Logistique sont : 
+    - Transport de marchandises et de personnes.
+    - Livraison et acheminement des matières premières et transformées.
+    - Logistique des transports routiers, aériens, spatiaux et orbitaux.
+    - Connexion et maillage entre les différents sites d'exploitation.
 
-L'arrivée des réfugiés d'Icare, et l’aide demandée par l'Autorité, est une aubaine masquée en acte solidaire pour obtenir de la main-d'œuvre bon marché, améliorer l'image d'A.R.ES et temporiser la pression extérieure. L’intégration d’une grande population constitue un élément clef de leur plan politique et est très loin d'être un acte désintéressé.
+- **ARES Machinery** : Pôle industriel d'ARES Corporation, cette entité est directement chargée de la conception et de la fabrication des infrastructures de production, des engins de chantier, ainsi que de la flotte de véhicules terrestres et de vaisseaux. Les domaines d’activités d’ARES Industrie sont : 
+Construction de machines lourdes et d'équipements industriels.
+    - Conception et assemblage de raffineries.
+    - Fabrication de véhicules et de vaisseaux spatiaux.
+    - Maintenance des véhicules.
 
-- Le Contrat Piégé : Les réfugiés doivent signer un contrat promettant une ascension sociale fictive. Ce contrat les intègre immédiatement comme Intérimaires, payés au salaire minimum et en coupons ARES (uniquement utilisables dans les services de la corporation), garantissant une dépendance totale.
-    
-- Logistique et répression : L'accueil en ville est supervisé. Il déclenche le "Grand Nettoyage" par ARES Défense : les ouvriers locaux sont mutés, les marginaux expulsés, et les zones populaires sont converties en dortoirs et bureaux pour les nouveaux arrivants. Une partie est directement envoyée dans les villages miniers.
-    
+- **ARES Energy** : Chargée du développement, de la gestion et du commerce (interne comme externe) des infrastructures énergétiques, ARES Énergie supervise la production et la distribution des différentes sources de puissance (nucléaire, solaire, éolien, géothermique). Elle gère le raccordement électrique des sites industriels, miniers et résidentiels, et négocie les contrats d’approvisionnement et de revente d’énergie avec les partenaires extérieurs. Les domaines d’activités d’ARES Énergie sont : 
+    - Recherche et développement en production énergétique.
+    - Conception, installation et maintenance des infrastructures énergétiques.
+    - Gestion et distribution des réseaux électriques.
+    - Négociation des contrats d’approvisionnement énergétique externes.
+    - Montage des batteries
+
+- **ARES Pharmaceutical** : Spécialisée dans la recherche, la production et la distribution de produits pharmaceutiques et bio-médicaux, cette filiale conçoit des médicaments, traitements génétiques et dispositifs médicaux destinés aux employés, au marché civil et aux contractuels externes. Elle joue un rôle stratégique majeur dans l’autonomie sanitaire et opérationnelle de la mégacorporation. Les domaines d’activités d’ARES Pharmaceutique sont : 
+    - Recherche, fabrication et distribution de médicaments et soins génétiques.
+    - Gestion et supervision des laboratoires de recherche et de production biomédicale.
+    - Négociation de contrats médicaux avec des acteurs externes.
+    - Contrôle médical du bien-être physique ou  mental des employés. 
+
+- **ARES Living** : Colonne vertébrale de l’autonomie quotidienne d’ARES Corporation, ARES Distribution fabrique et distribue les biens de première nécessité (nourriture, vêtements, hygiène) ainsi que l’équipement standard des forces d’infanterie. Elle agit comme l'interface directe entre les besoins civils et militaires pour garantir la continuité des opérations sur tous les terrains. Les domaines d’activités d’ARES Distribution sont : 
+    - Fabrication et distribution de biens de première nécessité (textile, denrées alimentaires, hygiène).
+    - Conception et fabrication des équipements d’infanterie militaire.
+    - Gestion des sites de distribution et réseaux de commerce civil et militaire.
+    - Approvisionnement général des filiales en biens et matériels courants.
+
+- **ARES Security** : Clef de voûte de la mégacorporation, ARES Défense assure la sécurité globale, le contrôle et la pérennité du conglomérat. Son champ d'action couvre aussi bien les opérations extérieures que la surveillance interne. Elle est responsable de la protection de l'intégralité des sites de production, de la surveillance de masse et du maintien de l'ordre par la répression si nécessaire. Dotée d'une autorité transversale, elle mène des investigations et exerce un contrôle direct sur l'ensemble de la hiérarchie des autres filiales. À l'extérieur, elle orchestre l'expansion armée d'ARES, l'espionnage industriel et les prestations de mercenariat.  Les domaines d’activités d'ARES Défense sont : 
+    - Sécurisation et protection de l'intégralité des sites et infrastructures de la corporation.
+    - Surveillance de masse, renseignement interne et répression.
+    - Investigations, contrôle de conformité et pression hiérarchique sur toutes les filiales.
+    - Projection militaire extérieure, espionnage industriel.
+    - Formation et encadrement des services de sécurité locaux.
+    - Contrats de mercenariat 
+
+- **ARES Science** : Contrairement aux autres filiales, ARES Science n’a pas pour vocation une rentabilité économique immédiate. Dédiée à la recherche fondamentale (physique théorique, biologie) et appliquée, elle réunit des laboratoires et centres d’essais interdisciplinaires afin de fournir aux autres filiales les découvertes et innovations garantissant la supériorité technologique d'ARES. Les domaines d’activités d’ARES Science sont : 
+    - Recherche fondamentale en physique théorique, technologie et biologie.
+    - Recherche appliquée en collaboration directe avec les filiales industrielles.
+    - Gestion et exploitation des infrastructures scientifiques (laboratoires, centres d'essais).
+
+- **ARES Corporation** : Pôle financier, logistique et administratif, ARES Capital occupe une position transversale unique. Responsable des financements internes, de la gestion des actifs et des transactions majeures, elle détient une vue d'ensemble sur les activités de la mégacorporation. Elle encadre également l'administration de la main-d'œuvre, la communication stratégique et le contrôle de conformité interne. Les domaines d’activités d’ARES Capital sont : 
+    - Gestion et financement des actifs matériels et immatériels.
+    - Négociation des achats et ventes d'envergure avec les entités externes.
+    - Recrutement et gestion de l’ensemble des travailleurs.
+    - Coordination et application des priorités décidées par la chambre.
+    - Contrôle qualité et surveillance des intérêts d’ARES.
+    - Communication interne, externe et propagande.
+
+- **ARES Infra** : Fruit de la plus récente acquisition du conglomérat (bitogno: ca n’explique pas comment il faisait avant pour les implantations spatiales. De plus Ares a plus de 100 ans sur la planète donc je remplacerai récente par jeune. On pourrait dire que c’est la mutualisation (ou concentration) “de savoir-faire et de ressource” en un seul pôle commun). , ARES Infra est dédiée aux chantiers de gros œuvre et au déploiement des infrastructures fondamentales de la corporation. Encore en phase d'intégration, elle ne dispose pas de l'autonomie stratégique des autres filiales et se trouve directement soumise aux besoins et commandes des neuf branches historiques. Dépourvue de contrats externes, elle fonctionne exclusivement comme un outil opérationnel interne strictement surveillé, destiné à bâtir et maintenir les installations du groupe plutôt qu'à constituer un levier de croissance autonome. Les domaines d’activités d’ARES Infra sont :
+    - Génie civil, chantiers et gros œuvre pour le compte des autres filiales. 
+    - Construction et maintenance des infrastructures d’ARES. 
+    - Création des infrastructures d’accueil des réfugiés sur Sandbox
+
+Afin d'adapter son modèle à la diversité des mondes exploités, chacune des neuf filiales majeures est découpée en sous-filiales locales sur chaque planète où la corporation est implantée. Ces entités planétaires disposent d'une autonomie opérationnelle propre pour gérer les contraintes géographiques, industrielles et sociales locales, tout en restant strictement subordonnées aux directives stratégiques fixées par leur directeurissime et les Doyens.  
+
+### IV. Enjeux et dynamiques de pouvoir 
+
+L'année 2425 marque un tournant critique pour ARES Corporation. Forte de son monopole sur l'exploitation de la planète Sandbox, la corporation a acquis une autonomie et une puissance sans précédent, la plaçant au-dessus de toute législation. La découverte et la valeur exponentielle du Dédurium ont toutefois créé un déséquilibre de marché menaçant l'équilibre intergalactique. Ce monopole bouleverse le rapport de force entre ARES et l’Autorité qui perçoit la corporation comme une menace existentielle. L'Autorité subit la pression intense de corporations rivales qui cherchent à briser ce quasi-monopole. La concession d'exploitation de Sandbox n'arrive pas formellement à son terme contractuel, mais l'Autorité a décrété qu'ARES. se livrait à une exploitation déloyale du Dédurium. La stratégie de l'Autorité est claire : déstabiliser la mégacorporation pour forcer l'ouverture du marché.
+
+La stabilité d'ARES est donc directement menacée. Les figures de proue de la corporation sont mises sous pression. La corporation sent le vent tourner pressentant que la sentence des instances politiques est probablement inévitable. Divers projets sont menés dans l'urgence pour temporiser : la propagande s'intensifie, les Pilastres sont mieux rémunérés pour assurer leur loyauté, tandis que la répression s'abat sur les classes laborieuses. Le forage pour extraire toujours plus de Dédurium est accéléré et des chantiers secrets sont lancés. Ces manœuvres, bien qu'encore officieuses, signalent que la corporation prépare activement l'avenir et ne compte se laisser faire. 
+
+ARES utilise la crise actuelle comme une opportunité pour consolider ses intérêts et se défendre. La catastrophe qui s'abat sur le système d'Icare offre le prétexte idéal : le plan d’accueil des réfugiés est perçu comme une aubaine pour ARES, qui s’est immédiatement portée volontaire. L'accueil des réfugiés est subordonné à la signature immédiate d'un contrat de travail. Ce contrat piégé oblige chaque réfugié à se soumettre corps et âme au modèle économique d'ARES. en échange d'une promesse d' ascension sociale fictive et d’une nouvelle vie. Ils sont instantanément intégrés comme de nouveaux Intérimaires, corvéables à souhait. En échange du salaire minimum et de "coupons ARES" (utilisables uniquement dans les services de la corporation), les réfugiés deviennent totalement dépendants et sont soumis au mythe méritocratique et au stakhanovisme d'ARES. L'arrivée massive des réfugiés constitue le déclencheur interne d’une vaste manœuvre de réorganisation sociale et spatiale de la planète : le "Grand Nettoyage".
+- **Réaménagement et façade** : ARES déploie d'importants moyens logistiques via ses filiales ARES Distribution et ARES Industrie pour ériger des lieux d'accueil et ravitailler les réfugiés dans les grandes villes. Cette mise en scène est maintenue pour asseoir la position faussement altruiste de la corporation aux yeux du grand public. Les zones populaires et les espaces de loisirs sont démantelés pour laisser place à des dortoirs et des bureaux pour l'enregistrement de la nouvelle main-d'œuvre.
+- **Éviction interne** : Simultanément, les forces de sûreté d'ARES Défense procèdent à l'éviction brutale de la population jugée indésirable. Les ouvriers les moins productifs qui occupaient des logements centraux et des postes stables sont mutés de force vers des sites miniers plus isolés et hostiles, brisant ainsi toute cohésion sociale potentielle. Les Marginaux (activistes, travailleurs au noir) sont violemment expulsés vers les périphéries désertiques ou les petits villages miniers, coupés de tout regard extérieur.
+- **Affectation réelle** : Si une partie des réfugiés reste en ville pour l'image, une part significative est acheminée directement vers les villages miniers, isolés. Cette surcharge de main-d'œuvre accentue la compétition et la division entre les intérimaires réfugiés et les ouvriers locaux, dont l'image vis-à-vis des nouveaux arrivants est ambiguë mêlant frustration et compassion.
+
+Pour pérenniser son pouvoir, ARES utilise ce temps pour :
+
+- **Négocier la Souveraineté** : Mener des négociations pour un nouveau traité galactique qui établirait la souveraineté économique d'ARES sur toutes les infrastructures de Sandbox, se positionnant comme le seul garant de la stabilité du Dédurium.
+- **Blocus Légitimé** : Poursuivre la militarisation des lunes et des stations orbitales pour établir des zones d'exclusion, déclarant un espace aérien corporatiste exclusif autour de la planète.
 
 ---
 
-### V. Perception par la Population
-
-L'image d'ARES est ambivalente et dépend de la position sociale de l'individu :
-
-- Les Privilégiés voient ARES comme un sauveur.
-    
-- Les Fatalistes l'acceptent comme un état de fait.
-    
-- Les Survivants cherchent l'échappatoire (vol, travail au noir).
-    
-- Les Marginaux l'identifient comme l'ennemi.
-    
-
-La perception des réfugiés est tout aussi complexe : ARES est à la fois le sauveur (pour les avoir accueillis) et le futur exploiteur (pour la nature du Contrat Piégé). Cette ambivalence entretient une méfiance permanente au sein de la nouvelle population.**
-
-## 
