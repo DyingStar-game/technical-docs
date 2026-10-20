@@ -26,7 +26,7 @@ Elle est le siège social et la propriété de la société Ares.
 | Période de révolution | 219.77 | jours |
 | Durée de jour sidéral | 25.0 | h |
 | Inclinaison | 1.5 | ° |
-| rotation | rétrograde/progradre | |
+| rotation | progradre | |
 
 
 
@@ -50,21 +50,23 @@ Elle est le siège social et la propriété de la société Ares.
 | Oxygene | 45 | % |
 | Aluminium | 27 | % |
 | Fer | 10 | % |
-| Calcium | 4.0 | % |
-| Magnesium | 3.0 | % |
-| Phosphore | 3.0 | % |
-| Silicium | 2.0 | % |
+| Calcium | 3.8 | % |
+| Magnesium | 2.8 | % |
+| Phosphore | 2.8 | % |
+| Silicium | 1.8 | % |
 | Chrome | 1.5 | % |
-| Etain | 0.20 | % |
-| Cuivre | 0.20 | % |
-| Or | 0.20 | % |
-| Plomb | 0.20 | % |
-| Argent | 0.20 | % |
+| Etain | 0.18 | % |
+| Cuivre | 0.18 | % |
+| Or | 0.18 | % |
+| Plomb | 0.18 | % |
+| Argent | 0.18 | % |
 | Titane | 1.5 | % |
 | Potassium | 1.0 | % |
-| Carbone | 0.13 | % |
-| Thorium | 0.13 | % |
-| Uranium | 0.13 | % |
+| Carbone | 0.10 | % |
+| Thorium | 0.10 | % |
+| Uranium | 0.10 | % |
+| Dedurium | 0.06 | % |
+| Vanadium | 0.90 | % |
 
 
 ## Biomes
@@ -76,7 +78,7 @@ Elle est le siège social et la propriété de la société Ares.
 
 ## Lunes
 
-### Tarsis IV.M1
+### Tarsis III.M1
 
 #### Description
 
@@ -136,7 +138,7 @@ Elle resemble plus a un noyau planétaire depourvu de son manteau.
 | Cave | Fer, Nickel |
 
 
-### Tarsis IV.M2
+### Tarsis III.M2
 
 #### Description
 

@@ -1,7 +1,9 @@
 # Tarsis IV
 
 ## Description
-
+Gaea est un monde sauvage.
+Gaea est contrôlé par le peuple des gardiens.
+Elle est constitué d'un contient et d'une île majeure qui contenait la première colonie.
 
 ## Informations
 
@@ -98,7 +100,7 @@
 
 ## Lunes
 
-### Tarsis III.M1
+### Tarsis IV.M1
 
 #### Description 
 

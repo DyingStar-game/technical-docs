@@ -1,3 +1,0 @@
-# Compagnie de la Sûreté
-
-- Assure la sécurité des lieux de vie et des lieux publics ainsi que le sauvetage des individus.

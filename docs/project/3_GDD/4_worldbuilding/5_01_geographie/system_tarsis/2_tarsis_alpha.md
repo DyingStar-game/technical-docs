@@ -1,4 +1,6 @@
-# Tarsis VIII
+# Tarsis Alpha
+
+![Tarsis Alpha](/img/GDD/astres/tarsis_alpha.png)
 
 ## Description
 
