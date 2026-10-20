@@ -176,7 +176,25 @@ its preview under its `mat_<family>_<name>` id:
 
 ![The Blender Asset Browser with the DyingStar Materials library selected: catalogs concrete, metal, mineral and wood in the left column, and material previews on the right, the first labelled mat_concrete_wall_rough](./static_files/blender_asset_browser_materials.png)
 
-New materials arrive with `git pull`. Nothing to install, nothing to rebuild.
+New materials arrive with your clone: nothing to install, nothing to rebuild, but
+**only once your clone is up to date**. The Asset Browser reads the library file
+from your clone, so a material published since your last update is simply not
+there.
+
+### Getting the latest library
+
+1. Update your clone, on the `develop` branch:
+   - **GitHub Desktop**: pick the **DyingStar** repository, check that
+     **Current branch** is `develop`, click **Fetch origin**, then **Pull
+     origin**. If it reports local changes, choose **Stash changes**: they are
+     set aside, not lost.
+   - **Command line**: `git checkout develop` then `git pull`.
+2. In Blender, click **Refresh** in the Asset Browser header, or restart Blender.
+3. Pick **DyingStar Materials** again: the new materials are listed.
+
+A material still missing after that means Blender reads another copy of the
+repository: check **Repository Root** in the addon's preferences (step 3 of the
+setup above) and point it at the clone you just updated.
 
 **Link** makes the material read-only. That is deliberate: a model must not be
 able to alter shared metadata, or every model would end up with its own variant
