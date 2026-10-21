@@ -12,7 +12,7 @@ graphics background needed.
 ## The world is lit by the *real* star
 
 There is **no fake rotating light** anymore. Everything is lit by the actual star of the system
-(`scenes/star/star.tscn`).
+(`scenes/_universe/environment/space/star.tscn`).
 
 - Each client gets its **own "sun"** — a `DirectionalLight3D` (`PlayerSunLight`) aimed **from the
   star toward the player**. It provides the crisp cast shadows (a mountain or a wall shades you
@@ -188,7 +188,8 @@ for making it feel big is the **glow**, not the geometry, which is now correct.
   energy), which is how you tell "the night is too dark" from "that moon is 40° below the horizon".
 - **Isolate a light contributor** with `Alt+I`: no aerial perspective, no sky reflection, no sky
   ambient. Each step removes exactly one, so whatever still lights the scene names its own source.
-- Use the **EVA free-flight** dev tool to fly away from the surface and look at the lit
-  planets/moons and the day/night terminator across a whole body.
+- Use **god mode** (the dev free-flight, `$`) to fly away from the surface and look at the lit
+  planets/moons and the day/night terminator across a whole body: the mouse wheel doubles or halves
+  its speed, the middle mouse button lands you back on the ground under you.
 
 Both keys are InputMap actions, so their current bindings are in **Settings → Controls**.
