@@ -228,12 +228,59 @@ hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1
   lays a landscape icon along the long side of a face, and transparent margins make it look square.
 - **Recharge**: `VehicleBattery.charge(delta)` follows the sheet's curve — full rate (500 kW) between
   20 and 80 %, half rate below 20 % and above 80 %, empty to full in **504 s**. The garage's charging
-  bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
-  batteries in the zone and call `charge(delta)` on the server.
+  bay hooks in through `ChargingZone._charge_batteries(delta)`: every server tick it charges each
+  **loose** battery lying in the zone; one fitted in a vehicle's bay is left alone.
+
+## Getting parts: the ARES vending machines
+
+`scenes/_universe/structures/dispenser/` — one machine (`ItemDispenser`, CSG blockout for now) for
+every catalogue: pick an item on its screen, it drops into the hatch at waist height after a delivery.
+
+| Scene | Run by | Offers | Where |
+|---|---|---|---|
+| `component_dispenser.tscn` | ARES Hauling (yellow) | vehicle parts (`scenes/_universe/vehicles/specs/`) | garage |
+| `food_dispenser.tscn` | ARES Energy (green) | rations, 3 per delivery (`props/food/dispenser_items/`) | villages |
+| `tool_dispenser.tscn` | ARES Mining (orange) | the mining tool, one per player | cargo depot |
+
+- **A variant is an inherited scene**: it sets `brand`, `catalogue_dir`, `title_key`, and resizes the
+  hatch (collision boxes, `Tray`, flap, `TrayMarker`, `tray_box_*`) when its items need it. A rule of its
+  own (one tool per player) is a subclass overriding `refusal(actor)` (`ToolDispenser`).
+- **Brand** (`AresBrand`): the 9 subsidiaries and their colours, one place. The machine paints its
+  `brand_accent` pieces, swaps every `brand_logo` sprite for the subsidiary's logo (the ARES mark
+  `ares_logo_mark.png` tinted, the subsidiary's name under it in Xolonium), and its screen takes the colour.
+- **Catalogue** (`DispenserCatalog.all(dir)`): every item `.tres` of a folder — a `VehicleComponentSpec`,
+  or a `DispenserItem` (`display_name` key, `icon`, `scene_path`, `count`). A new item is a new `.tres`.
+  An item must be a networked prop (a `PropSync` whose type has a `*_def.json` in horizonserver).
+- **Server**: `update_screen` only accepts an item of the catalogue (it never loads a path the client
+  sent) and refuses while a delivery runs or when the variant's `refusal()` says so — the reason is
+  shown on the screen of everyone near (`screen_event` "refused"). A delivery lasts `delivery_s` (5 s, against spam); it is
+  announced to the players around (`ScreenTarget.announce`), then, in a physics frame, refused if
+  anything lies in the hatch, else the part is spawned at `TrayMarker` (`MarkerSpawn.spawn`, the same
+  code as the truck kiosk). A battery comes out full.
+- **During the delivery** every client near shows the screen's filling ring with the seconds left,
+  and runs the fan (`sfx_delivery`); the part and the flap's sound come at the end.
+- **Clients**: each one looks into the hatch itself (the server's own box test) and lets the flap
+  fall open, with a sound, when a part arrives — right for a late joiner too, with nothing sent.
+- **What fills the hatch** (`MarkerSpawn.blocker`): solids, players excepted (one leaning on the machine
+  is not an item). The bodies of the networked node the machine belongs to are left out — the garage's
+  model reaches into the hatch — but **not** a networked prop parented to it: a handed-out item is
+  parented to the nearest networked node, the cargo depot for the tool, and leaving it out kept the
+  flap shut on it.
+- **Where it can stand**: inside a building scene (garage, cargo depot), it comes with the building. In
+  a village layout (`ares_village_mining.tscn`) it is spawned on its own: the machine carries a
+  `PropSync` of the generic `simple_building` type, and `poi_villages.gd` spawns only a layout's
+  networked props — without it, it was skipped as decoration and never seen in game. A village spawns
+  its items once (`is_spawned`): one added to an existing world shows after a database purge.
+- **Sound**: an idle hum (`IdleHum`, an `AmbientLoop3D`) heard within ~8 m, besides the hatch and the
+  delivery fan. All three are set on the base scene and inherited by every variant.
+- **Why waist height**: the carry prompt is decided by the server's own aim ray, and the client has
+  no wall collision. A part under an overhang near the floor could be picked up (the grab uses the
+  part the client aimed at) but showed no prompt (the server's ray grazed the overhang).
 
 ## Factory components
 
-`startup_items.json` seeds vehicles with empty bays — so **none of them would move**.
+A vehicle comes out of its scene (the garage's trucks, `garage.tscn`) with empty bays — so **none of
+them would move**.
 `factory_components: Array[VehicleComponentSpec]` on the `Vehicle` is what the chassis leaves the
 works with (the MVP truck: two T1 motors and a T1 battery), and the server turns it into **real,
 removable parts** with
@@ -279,7 +326,8 @@ A CSG node only draws when it is the **root** of its CSG tree. Under a `RigidBod
 
 ## Testing
 
-Four suites. GUT is **disabled in CI**, so run them by hand:
+The main suites. CI runs the whole GUT suite (that step reports failures without blocking a merge);
+to run them by hand:
 
 ```bash
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://test/unit -gexit
@@ -296,5 +344,5 @@ godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://test/integration \
 
 In game, the HUD carries the same instrument: the model's prediction and the **measured**
 acceleration side by side, with a 0–100 stopwatch. A model you cannot compare against a measurement
-is a model you have to take on faith. It can be hidden from **Settings ▸ General ▸ Vehicle
+is a model you have to take on faith. It can be hidden from **Settings ▸ Debug ▸ Vehicle
 dashboard**.
