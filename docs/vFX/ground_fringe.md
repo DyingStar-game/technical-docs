@@ -30,6 +30,33 @@ Three things, and it is worth knowing which is which when something looks wrong:
 ![The same effect on a shaded face: the band stays as bright as the lit ground in front of it
 instead of darkening with the wall](./static_files/ground_fringe_shaded.png)
 
+### Its colour is the ground's, by the terrain's own rule
+
+The colour comes from `GroundLook` (`scenes/common/ground_look.gd`), the one place that answers
+"what colour is the ground here" for the fringe, the dust the wheels and feet raise and the
+[wind-blown dust](./wind_dust.md):
+
+- **The tint** is the colour the terrain bakes into its vertices at that spot: the rock of the zone
+  (or the planet's default rock) shaded the way the terrain shades it, the biome's colour elsewhere.
+  It is the rule the roads already use (`PlanetChunk.road_ground_tint`). An earlier version used the
+  rock's bare light/dark mottle instead, and two buildings on the same plateau came out one pale and
+  one rust-red.
+- **On textured ground** (the corundum plateaus, all of Tarsis 3) the fringe multiplies the ground's
+  texture by that tint, as strongly as the ground shader does (`vertex_color_strength`, copied from the
+  ground material). Without it the band showed the bare texture: white marble on every plateau.
+- **The dust's colour** is what the ground *shows* on average: the texture's mean colour times the tint.
+
+### Where the ground is
+
+The band is laid on the ground **as drawn**: the pad a building is seated on and the road beds
+included (`PlanetData.carved_surface_dist`), not the raw relief, which can stand metres above or below
+a pad. It is measured two frames after the object appears, then again 2 s and 10 s later: the tiles
+under a building often stream in after it, and a pad is re-seated when a neighbour's level changes.
+
+To see each measure, put `debug_fringe_probe=true` in the `[debug]` section of `client.ini`: one
+`[FringeProbe]` line per object, with its clearance over the drawn ground and over the raw relief, the
+band height and whether it got a fringe.
+
 ## Networked props: nothing to do
 
 **Any prop spawned through the network registry gets the fringe automatically.** You do not add
@@ -84,7 +111,7 @@ at startup, so an edit made mid-session only touches the template.
 | `blend_noise_strength` | 0.6 | How much the limit rises and falls. Raise it for a more broken edge. |
 | `blend_noise_scale` | 0.15 | Size of the pattern. **Lower** it for longer, wider tongues of sand. |
 | `blend_noise_swell` | 0.22 | The low, slow octave — the one that makes the band deep in places and thin in others. |
-| `blend_curve` | 3.5 | How fast the band gives way as it climbs. Higher fades sooner. |
+| `blend_curve` | 2.0 | How fast the band gives way as it climbs. Higher fades sooner. |
 | `blend_normal_lift` | 0.85 | How much the band is lit like ground rather than like the wall. |
 | `blend_face_weight` | 1.0 | How much a **horizontal** surface loses the band. A slab is a floor, not a contact line. |
 | `blend_inward_weight` | 1.0 | How much an **inward-facing** wall loses it — the inside of a building. |

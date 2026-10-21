@@ -24,14 +24,15 @@ All the moving parts already exist as reusable pieces — in most cases a new ve
 
 | Script | Role |
 |---|---|
-| `scenes/vehicles/vehicle.gd` (`class_name Vehicle`) | The vehicle base: body/wheels, physics, driving, networking, cargo. Put it on the scene root. |
-| `scenes/vehicles/vehicle_powertrain.gd` | Engine math (electric / thermal gearbox). Owned by `Vehicle`, configured through its `@export`s — you don't touch it. |
-| `scenes/vehicles/vehicle_seat.gd` (`class_name VehicleSeat`) | One seat (driver or passenger), boarded by looking at it. You drop one per seat. |
-| `scenes/vehicles/vehicle_debug_hud.gd` | Optional on-screen dashboard (speed, RPM, load). |
+| `scenes/_universe/vehicles/vehicle.gd` (`class_name Vehicle`) | The vehicle base: body/wheels, physics, driving, networking, cargo. Put it on the scene root. |
+| `scenes/_universe/vehicles/vehicle_powertrain.gd` | Engine math (electric / thermal gearbox). Owned by `Vehicle`, configured through its `@export`s — you don't touch it. |
+| `scenes/_universe/vehicles/vehicle_seat.gd` (`class_name VehicleSeat`) | One seat (driver or passenger), boarded by looking at it. You drop one per seat. |
+| `scenes/_universe/vehicles/vehicle_readout.gd` (`class_name VehicleReadout`) | The driver's debug readout (speed, RPM, load, bays) in the debug panel; the in-cab screen is `VehicleDashboard`. |
 
 ## 1. Where to put the files
 
-- **Scene**: `scenes/vehicles/<category>/<name>.tscn` (e.g. `scenes/vehicles/trucks/truck.tscn`).
+- **Scene**: `scenes/_universe/vehicles/<category>/<type>/<name>.tscn` (e.g.
+  `scenes/_universe/vehicles/ground/trucks/truck.tscn`).
 - **Assets** (3D model, materials, textures): follow the project conventions in
   [Files structure](../creativeConcept/files_structure.md) and
   [3D models](../creativeConcept/3d_models.md). Do **not** invent a new layout.
@@ -80,8 +81,8 @@ Its scene tree — the GLB `Model` plus the rig nodes you add around it:
 - **`SeatDriver` / `SeatPassenger`** (`VehicleSeat`) — the seats, boarded by looking at them (§3).
 - **`Gui3D → SubViewport →` dashboard UI** — the in-cab screen (§Dashboard).
 - **`Light`** — the `vehicle_light` lamps (head / brake / cabin).
-- **`RearCamera_*`** — reversing camera + mirrors.
-- **`Cargo_loading_zone`** — where dropping loads the bed.
+- **`RearCameraRear` / `RearCameraRetroL` / `RearCameraRetroR`** — reversing camera + mirrors.
+- **`CargoLoadingZone`** — where dropping loads the bed.
 - **`HandleFL` / `HandleFR`** (`VehicleDoorHandle`) — the door handles (§Doors).
 
 Note the handles are placed at the **root** (siblings of `Model`), each on its door's visible handle.
@@ -131,7 +132,7 @@ Truck (VehicleBody3D, vehicle.gd)
 You don't wire anything: the `Vehicle` discovers its seats automatically. A seat is a **look-at
 target**, like a door handle: on the `interactable` layer, never monitoring. You board the seat you
 **look at** — not a patch of ground you stand on — so two seats side by side are never confused.
-Looking at a seat shows `[E] Driver seat` / `[E] Passenger seat`; a taken seat shows `Driver seat
+Looking at a seat shows `[F] Driver seat` / `[F] Passenger seat`; a taken seat shows `Driver seat
 taken`, a shut door *"Open the door first (aim at the handle)"* (its handle box covers the seat
 behind it, so it takes the aim first).
 
@@ -198,8 +199,8 @@ A vehicle only replicates if the network layer knows it:
    `server/server.gd`:
 
    ```
-   'scenes/vehicles/<category>/<name>.tscn':
-       preload('res://scenes/vehicles/<category>/<name>.tscn'),
+   'scenes/_universe/vehicles/<category>/<type>/<name>.tscn':
+       preload('res://scenes/_universe/vehicles/<category>/<type>/<name>.tscn'),
    ```
 
    (These are plain string paths — if you ever **move** the scene, update them by hand; Godot's
@@ -211,7 +212,7 @@ A vehicle only replicates if the network layer knows it:
 
    | Zone | Rate | Properties |
    |---|---|---|
-   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
+   | 0 | 30 Hz (LOD: 10 Hz past 100 m) | `position`, `rotation`, `pilot_uuid`, `steering`, `speed`, `velocity_local`, `wheel_kmh`, `power`, `handbrake`, `headlights`, `engine`, `doors`, `seats`, `components`, `limiter_on`, `limiter_kmh` |
    | 1 | 1 Hz | `horn`, `horn_special`, `mass`, `cargo_mass`, `suspension`, `odometer_km` |
    | 6 | 1 Hz | `scenename`, `parent_id` |
 
@@ -319,8 +320,8 @@ with no clip falls back to a code hinge-swing on the mesh named `door_id` (about
    - **`Reverse`** — swing the other way (fallback) / play the clip backwards (anim). Two doors that
      should open outward need **opposite** `Reverse`.
 
-The handle sits on the interact layer, so the player **looks at it** and presses **E** to toggle the
-door — no proximity zone, no per-vehicle wiring. Prompt: `[E] Open door` / `[E] Close door`.
+The handle sits on the interact layer, so the player **looks at it** and presses **F** (`action`) to
+toggle the door — no proximity zone, no per-vehicle wiring. Prompt: `[F] Open door` / `[F] Close door`.
 
 Operating a handle **on foot** also plays a short **reach-out gesture** on your character, replicated
 to everyone (a non-wheel emote — see [Character animation](./character_animation.md)). A driver or
@@ -441,8 +442,8 @@ Two **designer-placed** zones drive cargo (no per-vehicle code):
 - **`cargo_bay`** — where cargo *sits*. Tune it via the **Cargo** export group (`cargo_bay_size`,
   `cargo_bay_offset`, `max_payload`, `overload_immobilize`). It is also the passive zone the player's
   detector overlaps to count their weight while standing in the bed.
-- **`Cargo_loading_zone`** — where dropping is *allowed to load* (it sticks). Add a `CollisionShape3D`
-  with a `BoxShape3D` named `Cargo_loading_zone` (or assign it to the `Vehicle`'s **Cargo loading
+- **`CargoLoadingZone`** — where dropping is *allowed to load* (it sticks). Add a `CollisionShape3D`
+  with a `BoxShape3D` named `CargoLoadingZone` (or assign it to the `Vehicle`'s **Cargo loading
   zone** export), sized a bit larger than the bay so reaching over the wall counts. Its physics
   collision is turned off at runtime — it is only a zone marker. If unset, the `cargo_bay` box is
   used as a fallback.
@@ -451,7 +452,7 @@ The load counts toward `max_payload`, the overload limiter shown on the dashboar
 
 - **Loading** — carry a prop (a crate, a mined rock) and **drop it inside the loading zone** —
   whether you stand in the bed *or* reach over from outside; the zone (not your position) decides. The
-  `[E]` prompt reads **`[E] Cargo`** when dropping would load it (it sticks) and **`[E] Drop`**
+  prompt reads **`[F] Load`** when dropping would load it (it sticks) and **`[F] Drop`**
   otherwise. The carrier hands it to the truck: the prop is frozen, parented to the vehicle so it
   rides along, and its mass is folded into the load. The bed never polls — loading happens on drop.
 - **Placed in the bay** — a loaded item is tucked **entirely inside** the `cargo_bay` (using its real
@@ -459,7 +460,7 @@ The load counts toward `max_payload`, the overload limiter shown on the dashboar
   dropped from far / over the rim.
 - **A held prop passes through vehicles** while carried, so a held box can't shove or flip a much
   heavier truck — you load by dropping, not by ramming.
-- **Retrieve** — aim at a loaded item and press **E** (`[E] Carry`); it leaves the load and goes
+- **Retrieve** — aim at a loaded item and press **F** (`[F] Carry`); it leaves the load and goes
   into your hands, like any [carriable](./props.md#carriables-carry--drop).
 - **What counts as load**:
   - the props locked in the bed — each prop's weight is its `RigidBody` **mass**;
@@ -546,8 +547,8 @@ code. The driver toggles them with **L**; the state is server-authoritative and 
 client sees them. Shown on the HUD (`[L] lights`) and on the dashboard. The truck ships with two
 front SpotLights as the example.
 
-`L` is **contextual**: it drives the **head lights** while seated as driver, and the player's
-**flashlight** on foot — the two never fire at once.
+**L** drives the **head lights** only; the player's **torch** has its own action, `toggle_flashlight`
+(**U**, pad D-pad ↑).
 
 ## Steering
 
@@ -607,7 +608,7 @@ them as sent so a value restored from the database is not sent straight back. `V
 part in `_replicate_transform`, and hands every part the received data in `client_channel_data_update`
 and `server_adopt_state` — so a new piece of vehicle state is **a new part**, not new lines in those
 three functions. Parts are exposed as properties (`vehicle.limiter`, `vehicle.odometer`), not getters:
-`vehicle.gd` sits two below gdlint's 40-public-method ceiling.
+`vehicle.gd` must stay under gdlint's 60-public-method ceiling (`gdlintrc`).
 
 :::warning[Whitelist every new key]
 A key a part writes must also be listed in `vehicle_def.json` — Horizon drops anything else in
@@ -616,7 +617,7 @@ silence: no error, the value simply never reaches the other clients nor the data
 
 ## Dashboard — optional in-cab screen
 
-Show live data (speed, RPM, load…) on a screen in the cab using the generic 3D-screen pattern —
+Show live data (speed, warning lights, power, batteries) on a screen in the cab using the generic 3D-screen pattern —
 see **[GUI on a 3D screen](./in-3d-screen.md)** for the setup (SubViewport, ViewportTexture, and
 the Local-to-Scene / viewport-path gotchas).
 
@@ -630,15 +631,48 @@ so `node_area` (touch) is optional.
 :::
 
 The **vehicle-specific** part is only the UI script: put `vehicle_dashboard.gd`
-(`VehicleDashboard`) on your UI scene's root. It finds its owning `Vehicle` in the tree and shows
-the generic Vehicle data each frame (speed, RPM, load, overload, powertrain, transmission) — so it
-is reusable by any vehicle, and the Vehicle knows nothing about it. Name the Labels `speed`,
-`RPM`, `Load`, `Overloaded`, `Elec_THerm`, `Transmission`, `hanbreak`, `Light`, `Limiter`,
-`Odometer` (or adjust them in the script).
+(`VehicleDashboard`) on your UI scene's root (`scenes/_universe/vehicles/vehicle_dashboard.tscn` is
+that root alone, instanced in the truck's SubViewport). It finds its owning `Vehicle` in the tree and
+shows the generic Vehicle data each frame — so it is reusable by any vehicle, and the Vehicle knows
+nothing about it. It builds its layout in code; the script is `@tool` only so that the editor shows a
+still preview with sample values instead of an empty panel (its nodes have no owner, nothing of it is
+saved into the scene).
+
+**Laid out to the screen's shape.** The viewport takes the screen mesh's aspect
+(`Gui3D.surface_size()`) at 400 px high: the truck's `ScreenFront` is a strip 54 × 8 cm, about
+6.5:1, and an interface drawn at 1921 × 1112 was squashed almost four times into it.
+
+**One strip, read left to right, pictograms in place of words**
+(`assets/_universe/vehicles/ui/dashboard_icons/`, white, tinted by code):
+
+| Zone | Shows |
+|---|---|
+| Driving | the speed, big; the odometer under it |
+| Warning lights | headlights, handbrake, doors; speed limiter (with its limit), load (with `cargo / payload kg`) |
+| Component bays | one box per bay, in bay order: **green** with the fitted part's pictogram (its spec's `icon`), grey and empty when free |
+| Energy | the drive (4x4) over the motor, the **power used** and the rpm, each battery's charge |
+
+A light that is off stays in place, faint, so the eye always finds it where it was. Colours follow
+real dashboards: **green** on (headlights), **amber** caution (limiter on), **red** danger (handbrake
+held, blinking when the truck is driven against it; limiter holding the truck back; overload). The
+**doors** light is orange while a door or hatch is open and turns red at 80 % of the speed at which the
+wind will shut the first open door (`Vehicle.open_doors_wind_kmh`, the `DoorWind` sum that does it).
+
+**Door alarm.** `DoorAlarm` gives ONE beat to the doors light's blink and to a quiet beep, so the two
+never drift apart: a beep once a second with a door open, then quicker and quicker from 80 % of the
+shutting speed (one every 0.5 s) to the shutting speed itself (one every 0.12 s). The sound and its four
+knobs (`sfx_door_alarm*`, the same as every vehicle sound, see `Sfx3D`) are on the dashboard scene's
+root; it plays at the screen, heard in the cab and just around it. Engine off: no beep, like the rest
+of the screen.
+
+**Power, not RPM.** An electric truck has no meaningful RPM: the gauge shows the share of the
+motors' full force the drive uses. The server knows it (`Vehicle.power_share`, set each tick by
+`_draw_energy`) and replicates it as `power`, rounded to 5 % so it only travels when it changes
+(`vehicle_def.json` in the game's `items_def/` **and** in horizonserver's props, both).
 
 ## Rear-view camera & mirrors
 
-A live camera feed on an in-cab screen — a **drop-in** (`scenes/vehicles/rear_camera.tscn`),
+A live camera feed on an in-cab screen — a **drop-in** (`scenes/_universe/vehicles/rear_camera.tscn`),
 reusable and **client-only** (no render on the headless server). Use it for a reversing camera and
 for side / rear-view mirrors (the GDD allows "mirrors **or** relayed cameras"). Godot has no cheap
 real reflective surface, so a mirror is just a camera too.
@@ -714,8 +748,8 @@ cameras and cargo bay still use these numbers.
 | Property | Default | Role |
 |---|---|---|
 | `max_steer_deg` | `30` | Maximum front-wheel steering angle (degrees). |
-| `steer_speed` | `1.6` | How fast a **held** key turns the wheels further (rad/s). Lower = more progressive (the truck uses `0.8`). |
-| `steer_return_speed` | `3.0` | How fast a held key winds the wheels back when it points **against** the current angle (rad/s). |
+| `steer_speed` | `1.6` | How fast a **held** key turns the wheels further (rad/s). Lower = more progressive (the truck uses `0.2`). |
+| `steer_return_speed` | `3.0` | How fast a held key winds the wheels back when it points **against** the current angle (rad/s). The truck uses `1.0`. |
 | `steer_self_center_speed` | `0.3` | Hands-off drift back to centre while rolling (rad/s), reached at `steer_self_center_ref_kmh`. `0` = the wheels never move on their own. |
 | `steer_self_center_ref_kmh` | `50` | Speed at which the hands-off drift reaches `steer_self_center_speed`; it scales linearly below. Parked = no drift. |
 | `steer_speed_falloff_kmh` | `80` | Above this speed the steering lock shrinks (toward `steer_min_ratio`) — agile when slow, stable when fast. `0` disables. |
@@ -739,8 +773,10 @@ cameras and cargo bay still use these numbers.
 
 ### Body / Cab / Bed (blockout dimensions, meters)
 
-Only used by (and only editable on) the **procedural blockout** — a real GLB model replaces the visual.
-Changing any of these rebuilds the blockout live.
+They size the **procedural blockout**, and with a real GLB model they still place the cameras, the
+exit point and the fallback collision. Changing any of these rebuilds the blockout live. In the
+Inspector they sit in the **Body**, **Cab** and **Bed** groups; `cab_cutout_*`, `wheel_width` and
+`track_width` sit in **Blockout (no 3D model)**.
 
 | Property | Default | Role |
 |---|---|---|
@@ -759,7 +795,6 @@ Changing any of these rebuilds the blockout live.
 |---|---|---|
 | `wheel_radius` | `0.55` | Wheel radius (blockout + physics contact). |
 | `wheel_width` | `0.35` | Blockout wheel width. |
-| `wheel_visual_drop` | `0.5` *(0–1.5)* | **Client replica only**: drops the wheel meshes to ~ground level (a replica has no physics, so `VehicleWheel3D` never lowers them). Tune so the replica's wheels touch. |
 | `wheelbase` | `3.0` | Distance between front and rear axles. |
 | `track_width` | `1.55` | Distance between left and right wheels. |
 | `suspension_rest` | `0.4` | Suspension rest length (how far the wheel hangs below its mount) → ride height. |
@@ -773,8 +808,9 @@ Optional — present a GLB (group `vehicle_model`, or named wheel meshes) and th
 | Property | Default | Role |
 |---|---|---|
 | `real_wheel_spin_axis` | `(1,0,0)` | Spin axis of a real wheel mesh, **in the mesh's local space** (its axle). A Blender +Y-up export with transforms applied usually leaves the axle on local X. Change if the wheels spin around the wrong axis (e.g. "on their edge"). |
-| `door_open_angle_deg` | `75` | **Fallback only** (door with no Blender animation clip): instant open angle (degrees)… |
+| `door_open_angle_deg` | `75` | **Fallback only** (door with no Blender animation clip): open angle (degrees), swung over `door_swing_secs`… |
 | `door_hinge_axis` | `(0,1,0)` | …about this local hinge axis. The real swing is normally authored in Blender. |
+| `door_swing_secs` | `0.45` | **Fallback only**: how long that swing takes (s). |
 
 ### Chassis physics
 
@@ -794,7 +830,7 @@ The chassis's own contribution to the drive model. The motor side of it lives on
 | `rolling_factor` | `1.0` | Chassis multiplier on `Cr`. |
 | `drag_coefficient` | `1.0` | `Cx`. Only matters once a chassis is **drag-limited** rather than engine-limited, which the MVP truck is not (its aero ceiling is 55.9 m/s against a 28.8 m/s motor ceiling). |
 | `frontal_area_m2` | `3.0` | `S`, frontal area. Same caveat. |
-| `air_density` | `1.26` | Air density (kg/m³) where the vehicle drives — Sandbox at sea level. Could later be read from the planet's atmosphere. |
+| `air_density` | `1.26` | Air density (kg/m³) used only where the planet has no atmosphere profile; otherwise it is read from the planet's `AtmosphereProfile` at the vehicle's altitude (`air_density_now()`). |
 | `reverse_max_ratio` | `0.15` | Reverse top speed as a **fraction** of the forward top speed. A fraction, not a km/h, so it cannot contradict whatever engines are fitted. |
 | `speed_taper_kmh` | `10` | Width of the band below top speed over which the drive tapers off. The sheet is an **equilibrium** model, not a torque curve: used as one it has no constant-power region, so the force would fall from 100 % to 0 in 0.1 km/h. Nothing else holds the speed down (no drag is simulated), so downhill at full throttle there would be no limit at all. |
 

@@ -64,7 +64,9 @@ the floor faces it, and **−Z along the motion** — one turn per orbit.
 
 `orbital_station.tscn` is a shell around a model: its root carries the `OrbitalStation` script, a `PropSync`
 child (type `station`), the model under **`Model`**, an **`Arrival`** marker where travellers land, and
-a teleporter cabin — the way back — which an inherited scene keeps. For another look:
+nothing else. The teleporter cabin — the way back — is not in the scene: it is its own networked
+`simple_building` (`teleporter.tscn`), seeded in Horizon's `startup_items.json` with the station as its
+`parent_id`, so a station of another look gets it too. For another look:
 
 1. **Scene → New Inherited Scene** from `orbital_station.tscn`, and save it under
    `scenes/_universe/environment/space/stations/`.
@@ -128,6 +130,19 @@ The spin gravity is **visual**: a ring has no gravity area.
 Stations are destinations. Players only: vehicles in the cabin are refused and stay behind. The way back
 is a **cabin standing aboard** (the test station has one). There is no Return button: you only ever leave
 from a cabin, and a trip lands you where there is none.
+
+The screen (`teleporter_ui.gd`, its lists from `scenes/teleport/teleport_catalog.gd`):
+
+- **Bodies** are marked ○ planet, ● moon (indented under its planet), ◌ giant: a body over
+  10 Earth masses (`GIANT_MIN_EARTHS`), Tarsis V and VI. The list opens on the first body with surveyed
+  POI (`preferred_body_index`): SandBox – Tarsis III today.
+- **Destinations** are grouped under folded headings, each with its count: the orbital stations first,
+  then one heading per POI type in alphabetical order, the computed points last. A heading is a
+  translation key: `TeleportCatalog.POI_TYPE_GROUPS` maps each `poi_type` of the QGIS export to one
+  (**a new POI type needs its entry there and its `%%TELEPORT_GROUP_*` key**, or it lands under
+  *Points of interest*). Inside a heading, natural order (F0003 before F0004). A click on a heading
+  opens it, and so does Enter / A on a selected heading (a gamepad reaches every destination); typing
+  in the filter (framed in amber above the list) opens every heading.
 
 ## Pitfalls
 

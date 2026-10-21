@@ -115,6 +115,11 @@ client-side instead of a full round trip, and the anti-cheat checks (`_can_see`,
 `_is_blocked_by_geometry`) are already in place. Removing is free: the part is in the `carriable`
 group, so **[E] Carry** takes it back out.
 
+Both are done **standing**: the server refuses a grab while crouched or prone (`_stance != 0`), and
+crouching with something in your hands drops it. At a part, the carry prompt says so in red — *Stand
+up to fit or remove a part* (`PlayerServer.grab_prompt` returns `"stand"`) — where it used to show
+nothing and E simply did nothing. A crate still shows no prompt there.
+
 The bay owns what it means to sit in it — `VehicleComponentSlot.seat()`:
 
 - frozen **KINEMATIC** (a `STATIC` frozen body gets its world transform rewritten every physics
@@ -217,6 +222,10 @@ hatches. Figures from the *Calculateur Batterie* sheet: **180 MJ** (50 kWh), **1
   `vehicle_component_def.json`, zone 0), published in 0.1 kWh steps. A gauge (bar + `35.1 / 50.0 kWh`)
   is painted under the pictogram (`ComponentFace` lays out both); the cab dashboard shows one bar per
   battery with its percentage, the one in use at full strength.
+- **One pictogram per kind**: the spec's `icon` is the dashboard's own drawing
+  (`assets/_universe/vehicles/ui/dashboard_icons/motor.png`, `battery.png`), painted white on the part
+  and shown green in the dashboard's bay boxes. Keep an icon trimmed to its drawing: `ComponentFace`
+  lays a landscape icon along the long side of a face, and transparent margins make it look square.
 - **Recharge**: `VehicleBattery.charge(delta)` follows the sheet's curve — full rate (500 kW) between
   20 and 80 %, half rate below 20 % and above 80 %, empty to full in **504 s**. The garage's charging
   bay hooks in through `ChargingZone._charge_batteries(delta)`, **left empty on purpose**: find the
