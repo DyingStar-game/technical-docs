@@ -514,6 +514,21 @@ Turn on **Settings → General → Cargo debug** to draw a green envelope around
 gets none — a quick way to tell "stuck" from "just sitting there".
 :::
 
+## Brakes
+
+The **decelerate key** (`vehicle_decelerate`, **S**) pressed **against the motion** is the service
+brake: rolling forward it brakes, by how far it is pressed (a trigger half-way, half the brake), and
+only once the vehicle is under **2 km/h** does the same key back it up. The other way round,
+`vehicle_accelerate` while rolling back brakes too. The engine stops pushing while it brakes. **Space**
+(`brake`) brakes at full.
+
+The brakes are set as a **deceleration**, not a force: **`brake_deceleration`** (m/s², default 7.0 ≈
+0.7 g, what a real truck is built for). Every physics step the impulse each wheel may apply is worked
+out from the vehicle's **current mass**, cargo included, so a loaded truck stops as hard as an empty
+one. A fixed force could not: the same setting braked an empty truck at 5 m/s² and one carrying 3 t at
+1.6. The tyres' grip still caps it (`wheel_friction_slip_default`, under the body's own gravity): ask
+for more than they hold and the wheels lock and slide.
+
 ## Hand brake
 
 Vehicles **spawn with the hand brake engaged** (parked), and the driver toggles it with a **long press
@@ -686,8 +701,8 @@ cameras and cargo bay still use these numbers.
 | Property | Default | Role |
 |---|---|---|
 | `torque_response` | `2.5` | How fast torque ramps to the throttle (1/s). Lower = gentler launch (keeps a heavy vehicle from leaping off the line). |
-| `brake_force` | `30` | Brake force per wheel. |
-| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep well **below** `brake_force`. |
+| `brake_deceleration` | `7.0` *(0.5–15)* | Deceleration (m/s²) the brakes ask of the vehicle at its **current** mass, empty or loaded (the truck: `10`). The tyres' grip still caps it. |
+| `engine_brake` | `6` | Engine braking + rolling resistance applied per wheel while coasting (no throttle, no brake) — without it the truck rolls forever. Keep it well **below** the brakes: it bleeds speed off gently. |
 | `handbrake_hold` | `30` | Parking-brake damping (m/s per s) **above** the release speed. A real collision impulse exceeds this, so a hit parked truck still gets pushed (then re-settles). |
 | `handbrake_release_speed` | `2` | Horizontal speed (m/s) **below** which the engaged hand brake fully cancels motion — a parked truck must not move from a player bump or a gentle slope. |
 | `drive_mode` | `ALL` | Driven wheels: `FRONT` (FWD), `REAR` (RWD) or `ALL` (4×4). |
