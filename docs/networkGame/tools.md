@@ -10,8 +10,8 @@ maybe a welder, scanner or cutter tomorrow.
 
 :::note[No `Tool` base class yet]
 There is currently **one** tool, so there is no formal `Tool` base class. `MiningTool`
-(`scenes/normal_player/mining_tool.gd`) is the **reference implementation**, and the generic,
-reusable piece is the **`EquipmentMount`** (`scenes/normal_player/equipment_mount.gd`). This
+(`scenes/mining/mining_tool.gd`) is the **reference implementation**, and the generic,
+reusable piece is the **`EquipmentMount`** (`scenes/mining/equipment_mount.gd`). This
 page describes the pattern to follow; copying `MiningTool`'s structure is the fastest start.
 See the [recommendation](#recommendation) at the end about factoring a base class.
 :::
@@ -26,8 +26,8 @@ See the [recommendation](#recommendation) at the end about factoring a base clas
 
 ## 1. Where to put the model
 
-Tool models live under `assets/models/equipments/tools/<category>/` (e.g. the drill is
-`assets/models/equipments/tools/mining/hammerdrill.glb`). Follow
+Tool models live under `assets/_universe/props/tools/tools/<category>/` (e.g. the drill is
+`assets/_universe/props/tools/tools/mining/hammerdrill.glb`). Follow
 [Files structure](../creativeConcept/files_structure.md) and
 [3D models](../creativeConcept/3d_models.md).
 
@@ -89,6 +89,12 @@ instead of floating at a fixed offset from the body origin. The mechanism is sha
 The local owner doesn't see his own stowed tool (first-person clutter); it's the **remote** avatars
 that show the holstered tool following the body. Tune the offset with a second client watching.
 :::
+
+Nobody starts with the mining tool: it is taken at the ARES Mining dispenser and held in the replicated,
+persisted `mining_tool` property (`Player.owns_mining_tool`). Whether the drill is drawn is **one rule**,
+`MiningTool.shows_tool(owned, out, is_owner)`, read every frame on every instance: **owned**, and either
+out, or stowed on someone else's belt. A pickup, a drop or a late join changes the property and the
+next frame follows it — no signal to wire.
 
 ## Recommendation
 

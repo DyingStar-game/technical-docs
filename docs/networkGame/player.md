@@ -11,7 +11,7 @@ no code. This page is the hands-on guide for the parts that are specific to the 
 :::
 
 In plain terms: your character is just another networked object — the difference is that *your*
-game also sends **your inputs** (move, jump, press E) up to the server, which decides the result
+game also sends **your inputs** (move, jump, press F) up to the server, which decides the result
 and sends it back to everyone.
 
 The player and every generic prop replicate their state to nearby players through the **same**
@@ -117,7 +117,7 @@ The carry/pickup illustrates the pattern:
   of a bed still works. Very small or fragmented props (e.g. a mining rock) are **exempt** from
   the line-of-sight check: their thin, broken-up colliders made the ray report a false block, so
   the server skips the wall test for them and relies on reach alone.
-- **The prompt is server-driven.** The server computes `[E] Carry` / `[E] Drop` (reachable, in
+- **The prompt is server-driven.** The server computes `[F] Carry` / `[F] Drop` (reachable, in
   line of sight, not already carried by someone else) and replicates it to the owning client,
   which only displays it — the client never decides the prompt itself.
 - Because that prompt is a replicated player property, it must be whitelisted in
@@ -139,6 +139,10 @@ current set:
 | `flashlight` | state | torch on / off |
 | `tools`, `perforating` | state | equipped tool + mining state |
 | `carry_prompt` | state | server-decided `[F]` prompt (the `action` key) for the owner |
+| `seat` | state | the seat taken (`driver` / `passenger` / empty), for a client that arrives later |
+| `screen_event` | state | what a 3D screen near the player is doing, stamped (`ScreenTarget`) |
+| `mining_tool` | state | owns the mining tool (taken at the ARES dispenser) |
+| `is_npc`, `conversation`, `npc_arrived` | state | non-player characters: the flag, the line said, arrived at the target |
 | `action` | **event** | one-shot events (jump / land / emote / seat / interact) — see below |
 | `name`, `scenename`, `spawn_appartment_id` | state | identity / scene |
 
@@ -159,14 +163,15 @@ every occurrence is a **new** value that always replicates:
 ```
 action = "jump:7"            # the 7th jump
 action = "land:7"            # touched down
-action = "emote:wave:3"      # played an emote
+action = "emote:dance:3"     # played an emote
 action = "seat:driver:2"     # took the driver seat  (and "unseat:2" on exit)
 action = "emote:interact:5"  # reached for a vehicle door, on foot
 ```
 
 Each client remembers the last value it saw **per event type** and reacts only to a new one. This
 needs **no new whitelisted property** — `action` is already in `player_def.json` — which is why
-jump, landing, emotes, seating and the door-interact gesture all cost zero extra networking.
+jump, landing, emotes and the door-interact gesture cost zero extra networking. Seating adds one
+state, `seat`, sent with its event, so a client that arrives later still sees who sits where.
 
 ## Movement stances (crouch / prone)
 
@@ -175,11 +180,17 @@ The player has three stances, held in the replicated **`stance`** property: `0` 
 
 - The owner sends `{"action": "stance", "value": <0|1|2>}`; the server sets `stance`, replicates it,
   and every client (owner included) reads the echo to drive the crouch / crawl animation.
-- The server **caps the speed** (crouch ≈ 0.8 m/s, prone ≈ 0.5 m/s, no sprint) and **shrinks the
+- The server **caps the speed** (crouch ≈ 2.0 m/s, prone ≈ 0.5 m/s, no sprint) and **shrinks the
   collision capsule** so a crouched or prone player fits under low obstacles. Standing up is **gated by
   a headroom raycast** — you can't stand up under a ceiling.
 - The physics space state is only valid during the physics step, so the stance request is **recorded**
   in the action handler and **applied on the next physics tick** (where the headroom ray is valid).
+- `stance`, `floating` and `seat` are sent **only when they change**. A server that takes a player — a
+  new connection, or a body handed over by another server — therefore **publishes the posture it holds
+  once, even at its defaults** (`PlayerServer.spawn_state`, sent by `Server._register_player` after the
+  update signal is wired and a hand-over has re-seated the player). Without it, Horizon and the client
+  kept the last session's crouch, EVA or driver's seat while the new body stood on foot: the stand-up
+  the client asked for was no change to the server, got no answer, and the player stayed stuck.
 
 ## The mining tool is owned
 
@@ -215,6 +226,6 @@ out of reach, with no prompt and no way to take it. Small props (rations, the mi
 ## Carry is standing-only
 
 Picking a box up is only allowed while **standing** (`stance == 0`): the server refuses the grab
-otherwise, and no `[E] Carry` prompt is shown while crouched or prone. Changing to crouch / prone — or
+otherwise, and no `[F] Carry` prompt is shown while crouched or prone. Changing to crouch / prone — or
 **jumping** — **drops** whatever you carry. This keeps the carry pose and the
 [belt holster](./tools.md#tools-follow-the-body-belt-holster) simple.
