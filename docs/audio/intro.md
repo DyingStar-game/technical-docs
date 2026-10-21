@@ -11,9 +11,11 @@ follow, and where each object's sounds are configured. Good news: **adding a sou
 
 ## How sound works in the game
 
-Every sound in DyingStar is a **positional 3D sound**: it plays *at* the object that makes it (a player,
-a truck…) and gets quieter with distance, so you can tell where it comes from. There is **no music/UI
-mixer to wire** — a shared helper (`Sfx3D`) plays every one-shot the same way, and each object exposes
+Every sound effect in DyingStar is a **positional 3D sound**: it plays *at* the object that makes it (a
+player, a truck…) and gets quieter with distance, so you can tell where it comes from. Music and the
+interface are the exceptions: they are not positional and have their own buses (`Music`, `MenuMusic`,
+`UI`, beside `SFX`, `VoIP` and `Record` in `default_bus_layout.tres`); the music is played by
+`MusicDirector` only. A shared helper (`Sfx3D`) plays every effect the same way, and each object exposes
 its sounds as **`@export` slots** grouped under **Audio SFX** in the Inspector.
 
 Each slot comes with the same five knobs, so a knob means the same thing everywhere:
@@ -39,6 +41,12 @@ Each slot comes with the same five knobs, so a knob means the same thing everywh
 The game **server has no audio** — sounds play on each **client**, from the state that's replicated to
 them. So other players hear your footsteps, your torch click, a truck's horn… all without sending any
 audio over the network. Nothing to do on your side; just know a sound you add is heard by everyone nearby.
+:::
+
+:::note[Music is the exception]
+Music is not positional and has no slot on an object: one system plays it for the whole game, from a
+table that pairs each situation (menu, wilderness, a point of interest, EVA, a station, a building)
+with a playlist. See **[Music](./music.md)**.
 :::
 
 ## File rules
@@ -79,12 +87,27 @@ Audio assets go under `assets/_universe/audio/`:
 - `ambience/` — looping ambiences (sandstorm…)
 - `music/` — tracks
 - `sfx/` — one-shots and short loops, split by source:
-  - `sfx/characters/` — footsteps (per surface: grass / metal / sand / stone), jump…
+  - `sfx/characters/` — footsteps (per surface: grass / metal / stone so far), jump…
   - `sfx/machine/`, `sfx/machine/tools/` — buttons, the torch on/off…
   - `sfx/vehicles/ground/` — the truck's doors, engine, horn…
   - `sfx/ui/` — menu buttons
 
 Follow the existing folders and naming; don't invent a new layout.
+
+### Credit file
+
+Every audio file has a `.txt` file of the same name beside it (`step_metal_1.mp3` →
+`step_metal_1.txt`), one line per author:
+
+```
+Discord - <name> - <numeric Discord id>
+<Site> - <author> - <URL> - <licence>
+```
+
+The first is a community member (CC0, nothing after the id); the second a sound taken from a site,
+such as `Freesound - RescopicSound - https://freesound.org/s/750433/ - CC BY-NC 4.0`. These files
+feed the **Credits** page of the main menu: see [Credits](../creativeConcept/credits.md) for the
+details and the check that runs on every pull request.
 
 ## Which sounds does each object have?
 
@@ -95,5 +118,6 @@ The actual list of sounds per object lives on that object's **Audio SFX** group 
   the material underfoot, and how to add a new surface.
 - **[Vehicle sounds](./vehicle_audio.md)** — doors, engine (start / stop / running loop), lights,
   handbrake, horn, and the tyres — a scuff when the wheel is turned, a roll that rises with speed.
+- **[Music](./music.md)** — which playlist plays where, and how to give a place its own.
 - **[Prop & tool sounds](./prop_audio.md)** — carriable crates, and the perforator's drill loop,
   equip and miss.
