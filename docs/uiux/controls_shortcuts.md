@@ -18,6 +18,7 @@ Several keys are **contextual** — the same key does one thing on foot and anot
 | Default | Action | On foot | Driving a vehicle |
 |---|---|---|---|
 | **F** | `action` | Pick up / drop a prop, open / close a door, **enter** a seat, use a console | — |
+| **Z / S** | `move_forward` / `move_back` · `vehicle_accelerate` / `vehicle_decelerate` | Walk forward / back | Accelerate / slow down and reverse — the vehicle's **own** actions: on the walk's keys by default, rebindable alone (a pad player can put them on the triggers and keep walking on the stick) |
 | **Y** | `exit` | — | Leave the vehicle |
 | **L** | `toggle_flashlight` / `vehicle_lights` | Torch on/off | Head lights on/off |
 | **Space** | `jump` / `brake` | Jump | Brake — **hold** at low speed = hand brake |
