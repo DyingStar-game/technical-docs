@@ -16,7 +16,13 @@ There is **no fake rotating light** anymore. Everything is lit by the actual sta
 
 - Each client gets its **own "sun"** — a `DirectionalLight3D` (`PlayerSunLight`) aimed **from the
   star toward the player**. It provides the crisp cast shadows (a mountain or a wall shades you
-  automatically) and drives the day/night look.
+  automatically) and drives the day/night look. A shadow stops **all** of its light
+  (`shadow_opacity = 1`, the moons' too): the sky's ambient is what fills a shadow outside. Below 1
+  is not a softer shadow but direct light through every roof — at 0.69, 31 % of the sun lit the inside
+  of the containers.
+- **Indoors** the sky is replaced: a habitat container's interior carries a `ReflectionProbe` in
+  **interior** mode over its own box, so its ambient and reflections come from the room, not from the
+  sky (no blue sky nor sun disc in a metal door).
 - The **star's own glow** comes from the star mesh's shader — it lights itself.
 - **Distant planets and moons** are lit differently (see below), because a normal light can't
   reach across billions of units.
@@ -188,8 +194,15 @@ for making it feel big is the **glow**, not the geometry, which is now correct.
   energy), which is how you tell "the night is too dark" from "that moon is 40° below the horizon".
 - **Isolate a light contributor** with `Alt+I`: no aerial perspective, no sky reflection, no sky
   ambient. Each step removes exactly one, so whatever still lights the scene names its own source.
+- **Name what lights a point** with `Alt+P` (the light probe): aim at it, and the log lists the star and
+  moons (open toward them, or hidden by which body, and the meshes of that body the ray crosses with
+  their `cast_shadow`), then every lamp whose reach covers it, with its shadow and the wall in between
+  (`LEAK`). An F8 debug capture is taken with it. A wall that hides the star but leaves the point lit
+  names the shadow computation itself, not a missing mesh. The sun's shadow settings can be overridden
+  for a measurement from `client.ini` (`debug_sun_shadow_bias`, `debug_sun_normal_bias`,
+  `debug_sun_shadow_blur`, `debug_sun_pancake_m`), read at start-up only.
 - Use **god mode** (the dev free-flight, `$`) to fly away from the surface and look at the lit
   planets/moons and the day/night terminator across a whole body: the mouse wheel doubles or halves
   its speed, the middle mouse button lands you back on the ground under you.
 
-Both keys are InputMap actions, so their current bindings are in **Settings → Controls**.
+These keys are InputMap actions, so their current bindings are in **Settings → Controls**.
