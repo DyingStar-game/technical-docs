@@ -56,7 +56,7 @@ never appears in the game.
 ```text
         natural relief                                        natural relief
    ╲                                                                  ╱
-     ╲  talus (slope 1:2, ≤ 120 m wide)                             ╱
+     ╲  talus (S curve, steepest 1:2, ≤ 120 m wide)                 ╱
         ╲______________ ___________________________ ______________╱
                apron     │   footprint (the box)   │   apron
               (8 m)      │   levelled platform     │   (8 m)
@@ -66,10 +66,12 @@ never appears in the game.
 |---|---|---|
 | **Footprint** | The box's area. Level, at the platform altitude. | the box |
 | **Apron** | Flat ground past the box, at the same altitude, to walk around the building and park a vehicle in front of it. | 8 m (`apron_m`) |
-| **Talus** | A slope from the apron back to the natural ground. It **cuts** into higher ground and **fills** lower ground. | slope 0.5 (≈ 27°), at most 120 m wide |
+| **Talus** | An S curve from the apron back to the natural ground: it leaves the apron level and meets the relief level, with no crease at either edge. It **cuts** into higher ground and **fills** lower ground. | steepest point 0.5 (≈ 27°), at most 120 m wide |
 
-The talus slope is walkable and drivable: 27° is well under the character's 45° limit, and a
-truck climbs onto the apron from any side.
+The talus is walkable and drivable: its steepest point, in the middle, is 27°, well under the
+character's 45° limit, and a truck climbs onto the apron from any side. An S curve is steeper in
+the middle than a straight ramp of the same width, so it is spread `TALUS_SPREAD` (1.5) times wider
+(`PadBed.talus_width`): a 2 m step costs 6 m of ground, a 12 m step 36 m.
 
 ### Where the platform sits
 
@@ -84,6 +86,27 @@ identical habs down a slope is not pulled onto one terrace.
 
 The same rule applies to a building placed by hand and to one spawned at runtime, where no
 designer is there to adjust it.
+
+### A village's common ground
+
+Pads alone, on a bumpy hillside, put each building at the median of the relief under it: two
+neighbours sat metres apart and the talus between them was a cliff. So a village (a `poi_village`
+with a `spawn_scene`) first lays its **common ground** (`VillageBed`, `scenes/planet/pad/village_bed.gd`):
+
+- **Where**: the footprint of its layout (`LayoutFootprint`): the rectangle around every TerrainPad box
+  of the networked items it spawns, plus 10 m, in the layout's frame, at the village's pose and heading.
+- **What**: one plane, the least-squares fit of the raw relief on a 17 × 17 grid over that
+  footprint, its slope capped at **8°** (drivable by a loaded truck), quantised. Inside the footprint
+  the ground is that plane; around it, an S curve leads back to the relief over at least 40 m, never
+  steeper than the talus, at most 120 m.
+- **Then the pads**: the buildings of the village measure their median **on the plane**, not on the raw
+  relief (`PlanetData.pad_sampler`), so they follow one gentle slope and their aprons meet without a step.
+  A pad registered before its village is measured again when the village arrives, and its building
+  re-seated (`_remeasure_pads_on`); a persisted `terrain_settled` is not trusted on a village's ground.
+
+Order of the ground rules, everywhere (mesh, collision, server surface catch): railway cutting, then
+the village's ground, then the pads. Server and clients fit the same plane from the same tiles
+(`PlanetTerrain.set_poi_zone`, from the village's data on the server, from its node on a client).
 
 ### Settings
 

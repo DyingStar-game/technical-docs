@@ -386,8 +386,8 @@ and comes from a scene**, one per village:
   node, as its definition (`items_def/<type>_def.json`) lists them.
 
 To add a building to every village, instance its scene as a direct child of the layout, under a
-name of its own, and position it there. The garage, the teleporter, the floodlights, the lampposts
-and the containers are placed this way. The name is part of the uuid: two children of one layout
+name of its own, and position it there. The garage, the teleporter, the lampposts and the containers
+are placed this way. The name is part of the uuid: two children of one layout
 never share a name.
 
 Which layout a POI gets is its `spawn_scene`, in its `poi_village` entry of Horizon's seed. The
@@ -408,6 +408,57 @@ scene whose `PropSync` names a type without a definition.
 A village that has already spawned (`is_spawned`, saved in the database) does not read the layout
 again: it only gets the new building after a purge of the world.
 :::
+
+### The mining village (village MVP)
+
+The mining village follows the sketch of *level design > village MVP*, digitised in the NPC service
+(`services/npc/config/village/mining_village.yaml`: an id, a centre and a size per building, at
+0.5 m per pixel). The mine stands to the west, the village along **one avenue** for vehicles
+(`urban/streets/avenue_segment_12x40.tscn`, 12 m wide, z = -28 m in the layout), and the pedestrian
+alleys between the buildings are closed to vehicles by rows of bollards
+(`urban/streets/bollard_row_6m.tscn`). The containers of the new players are the sketch's
+"temporary housing for refugees".
+
+**One scene per building.** Until the real models arrive, each building is a CSG placeholder: a grey
+block (`assets/_universe/_shared/materials/placeholder_grey.tres`) with its name in neon, a
+`TerrainPad`, a `PropSync` of type `simple_building`, and a `MapMarker` when it serves the player.
+Under `scenes/_universe/structures/`:
+
+| Folder | Buildings |
+|---|---|
+| `buildings/civic/` | `town_hall`, `guard_post`, `school`, `infirmary`, `security_fire_station`, `server_room`, `geology_department`, `municipal_services`, `cemetery` |
+| `buildings/commerce/` | `bar`, `canteen`, `retail_shop` |
+| `buildings/houses/` | `worker_houses`, `dormitory` (the NPCs' homes: the NPCs spawn in the containers like the players) |
+| `industrial/mines/` | `mine_portal`, `spoil_heap`, `crusher`, `changing_rooms`, `mine_administration`, `mine_maintenance` |
+| `industrial/power/` | `transformer_station`, `battery_park`, `wind_farm` (20 `wind_turbine` in one scene) |
+| `industrial/refinery/` | `refinery`, and `ore_processor_machine`, the machine it shares with the crusher: the two differ by their sign only |
+| `industrial/storage/` | `imports_warehouse` |
+| `urban/walls/` | `wall_segment_20m`: the wall around the mine (north, east, south; the cliff of its entrance to the west), open where the avenue crosses it at the guard post |
+
+The garage, the cargo depot (the export warehouse) and the mining depot are the existing scenes.
+The neon signs wear the colour of the ARES subsidiary that runs the building (`NeonSign.branded` /
+`brand`, read from `AresBrand`): MINING for the mine, HAULING for the warehouses, LIVING for the homes
+and the bar, and so on.
+
+Everything a client shows of a building lives **in its scene** (size, sign, colour): a value set on
+the instance in the layout never reaches a client, which builds the object from its scene and from
+the properties its definition lists. Hence one scene per building, not one scene with settings.
+
+**Roads.** A road drawn in QGIS knows nothing of the villages. Drop a `RoadSnap`
+(`urban/streets/road_snap.gd`, a Marker3D with a `kind`: road, path, highway, railway) at the edge of
+the layout, its −Z pointing out along the way the road leaves; the editor shows it as an arrow. Then
+run `godot --headless --path . res://tools/planettech/layout_snaps_export.tscn`, which writes every
+layout's footprint and snaps to `assets/qgis/export/layout_snaps.json` (`test_layout_snaps` fails
+until you do), and re-export the roads in QGIS: `export_roads.py` cuts every road out of every village
+footprint (the villages' poses come from Horizon's `startup_items.json`) and leads each cut end round
+the village to the nearest snap of its kind (`export/planet/village_snaps.py`). With no snap of its
+kind, the road stops at the village's edge.
+
+The town hall, the general store and the import warehouse are hollow, with `Marker3D` anchors for
+what comes next: `MissionScreenSpot1..4` (the mission screens), `NpcCounterSpot` (where the NPC
+stands behind the counter), `VehicleBay`. `test_village_mining_layout` checks that every building
+of the sketch stands in the layout, under a name of its own, that the avenue runs straight and that
+each placeholder is networked, named in both languages and stands on levelled ground.
 
 ### What needs a purge, and what only a restart
 
