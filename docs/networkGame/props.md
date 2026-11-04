@@ -521,6 +521,20 @@ Sink the box until its top face is just under the building's floor. The pad's me
 state of its own can use that type and needs no new definition. A pad more than ~50 km from the
 surface (a station in orbit) levels nothing.
 
+:::warning[Every fixed object needs a TerrainPad]
+Anything meant to stay where it is in the world (a building, a row of bollards, a wind farm, a
+spoil heap, a wall, a street lamp) **must** have a `TerrainPad`. Without one it keeps the height it
+was stored at and never meets the ground the village actually builds: the bollards of the first
+mining village floated in the air. Only movable props (a `RigidBody3D`: crates, carts) and the
+props a layout places **under** another item (the containers of a storage area) go without.
+`test_layout_fixed_items_have_pads` checks it for every village and city layout.
+:::
+
+The grey and dark placeholder materials are named `mat_rock_placeholder_grey` and
+`mat_rock_placeholder_dark`: the footsteps read the family in the material's name, so a CSG
+placeholder sounds like rock. `SurfaceProbe` reads the material of the CSG primitive under the point
+when the collider is a CSG blockout.
+
 ## Moving or reparenting a prop on the Horizon side (GORC)
 
 Most prop work is done from the game server (Godot). But if you ever **change an object's position
