@@ -454,6 +454,58 @@ footprint (the villages' poses come from Horizon's `startup_items.json`) and lea
 the village to the nearest snap of its kind (`export/planet/village_snaps.py`). With no snap of its
 kind, the road stops at the village's edge.
 
+### The factory city (village MVP, screen 2)
+
+The 47 factory POIs (`ares_city_factory.tscn`, under `urban/cities/`) follow the second sketch of
+*level design > village MVP*, read at **0.27 m per pixel**: about 1.1 km by 1.4 km. North is −Z and
+the layout's origin is the crossroads of its avenue and its north road. Around it, from north to
+south:
+
+- a **civic centre** along the avenue and the north road: prison, cemetery, schools, sports halls,
+  place of worship, courthouse, town hall, police, fire station, bank, shops, bar, cinema, clinic,
+  science department;
+- **quarters** filled with repeated buildings: refugee shelters, worker houses and dormitories,
+  executive residences, a motel, the prefab module factory;
+- the **fenced factory** south of the avenue: its main road runs between two control posts, a
+  diagonal crosses it to the canteen; the iron and copper unloading yards (the mining depots, in rows
+  of four and three, on level areas), the furnaces, casting halls and loading bays of each metal, the
+  empty containers' yard;
+- along the **south road**: the logistics zone (the two cargo depots and their containers), the
+  municipal services, the recycling centre, the power zone (battery parks, transformers), and at its
+  end the **fenced Dedurium refinery**;
+- a **wind field** to the south-west: four `wind_field_block` (nine turbines each, one networked
+  prop and one pad per block, on the sketch's grid).
+
+Nobody lives here as a player: the homes are scenery (no `spawn_building`), Horizon sends new
+players to the mining villages. The four outer roads leave the city at a `RoadSnap` each.
+
+**New placeholder scenes** (same template as the mining village's):
+
+| Folder | Buildings |
+|---|---|
+| `buildings/civic/` | `prison`, `courthouse`, `place_of_worship`, `police_station`, `fire_station`, `clinic`, `gymnasium`, `sports_hall` |
+| `buildings/commerce/` | `bank`, `small_bar`, `party_hall_cinema`, `driving_school`, `car_dealership`; `grocery_store`, `clothing_store`, `hardware_store` (the `retail_shop` under another sign) |
+| `buildings/houses/` | `refugee_shelters`, `executive_houses`, `motel` |
+| `industrial/metallurgy/` | `arc_furnace`, `blast_furnace`, `oxygen_plant`, `pierce_smith_converter`, `electrolytic_refinery`, `pelletizing_plant`, `factory_office`; `casting_hall` and `loading_bay`, each with an `_iron`, `_copper` and `_rare_earths` variant |
+| `industrial/modules/`, `industrial/recycling/` | `prefab_module_factory`, `recycling_centre` |
+| `industrial/storage/` | `cold_storage`, `water_reserve` |
+| `industrial/power/` | `wind_field_block` |
+| `urban/streets/` | `parking_lot` (painted bays on a levelled lot, shown on the map) |
+
+A **variant** is an inherited scene that changes the sign and the map label only: the building
+itself stays in one place. Each building shows on the map with its own icon
+(`assets/textures/map_markers/`).
+
+**A sign never overhangs its facade.** Set `NeonSign.max_width` to the width the text may take
+(the facade's, less a margin): a translation that would run wider is drawn with smaller letters, in
+any language. `letter_height` stays the size it has when the text fits. At 0 (the default) a sign
+has no limit.
+
+Tests: `test_factory_city` (every building of the sketch, the gameplay buildings, the mining depots'
+rows, the containers around the cargo depots, the roads and their snaps, the fences open at their
+gates, unique names), `test_factory_city_buildings` (each new scene networked, levelled, named in
+both languages, its sign within its facade, on the map).
+
 ### Roads, alleys and fences drawn in the layout
 
 The ways **inside** a village are not QGIS roads: they are drawn in the layout scene itself, and so

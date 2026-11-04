@@ -106,8 +106,10 @@ with a `spawn_scene`) first lays its **common ground** (`VillageBed`, `scenes/pl
   on an 8° slope, one level buried walls 21 m under the plane and raised bollards 15 m above it.
   The exception is a **level area** of the layout (a TerrainPad under its root, `LayoutPads`): the pads
   touching it take its level, so a yard's buildings stand on the yard.
-  A pad registered before its village is measured again when the village arrives, and its building
-  re-seated (`_remeasure_pads_on`); a persisted `terrain_settled` is not trusted on a village's ground.
+  A pad within the village's reach (its footprint and the S curve around it, `VillageBed.reaches`)
+  counts as on its ground. A pad registered before its village is measured again when the village
+  arrives, or moves (under its old and its new ground), and its building re-seated
+  (`_remeasure_pads_on`); a persisted `terrain_settled` is not trusted on a village's ground.
 
 - **Then the village roads** (`VillageRoadBed`): under a road drawn in the layout, the plane and the
   level areas across its width plus a 1 m kerb, then an S back over 6 m. See *Roads, alleys and fences
@@ -117,12 +119,18 @@ Order of the ground rules, everywhere (mesh, collision, server surface catch): r
 the village's ground, then the pads, then the village roads. Server and clients fit the same plane
 from the same tiles (`PlanetTerrain.set_poi_zone`, from the village's data on the server, from its
 node on a client). A village registered before the terrain has its data waits and is replayed.
-`PadSettings.LEVEL_RULE` is part of the chunk cache key: bump it when a rule changes, or the cached
-chunks keep the old ground.
+The pad rules (`PadSettings.signature()`: the apron, the talus slope and spread, the quantisation,
+`LEVEL_RULE`) are part of the chunk cache key, and the talus rule (`PadSettings.talus_rule()`) is saved
+with each building's persisted measure (`terrain_settled`), which a different rule refuses: bump
+`LEVEL_RULE` when a rule changes that no constant there tells. A chunk any village ground or village
+road reaches is never served from, nor written to, the disk cache.
 
-To see how a village sits on its plane, read the `[VillageBed]` lines the server and each client
-print 120 s after a village's ground is laid: the plane's slope and footprint, then the pads drawn
-farthest from it, with `<- niveau d'un voisin plus grand` when a pad took a level area's.
+To see how a village sits on its plane, switch on its report: `village_bed_report=true` in the
+`[debug]` section of `server.ini` on the server, `village_bed_report=true` in `client.ini` on a client,
+or `DS_VILLAGE_BED_REPORT=1` on either (`=0` keeps it off). It is off by default: about 120 lines per
+start. Then the `[VillageBed]` lines, printed 120 s after a village's ground is laid, give the plane's
+slope and footprint, then the pads drawn farthest from it, with `<- level of a larger neighbour` when a
+pad took a level area's.
 
 ### Settings
 
