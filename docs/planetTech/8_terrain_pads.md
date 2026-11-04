@@ -94,19 +94,35 @@ neighbours sat metres apart and the talus between them was a cliff. So a village
 with a `spawn_scene`) first lays its **common ground** (`VillageBed`, `scenes/planet/pad/village_bed.gd`):
 
 - **Where**: the footprint of its layout (`LayoutFootprint`): the rectangle around every TerrainPad box
-  of the networked items it spawns, plus 10 m, in the layout's frame, at the village's pose and heading.
+  of the networked items it spawns and of the layout's own level areas, plus 10 m, then out to the ends
+  of the roads and fences drawn in it, in the layout's frame, at the village's pose and heading.
 - **What**: one plane, the least-squares fit of the raw relief on a 17 × 17 grid over that
   footprint, its slope capped at **8°** (drivable by a loaded truck), quantised. Inside the footprint
   the ground is that plane; around it, an S curve leads back to the relief over at least 40 m, never
   steeper than the talus, at most 120 m.
 - **Then the pads**: the buildings of the village measure their median **on the plane**, not on the raw
-  relief (`PlanetData.pad_sampler`), so they follow one gentle slope and their aprons meet without a step.
+  relief (`PlanetData.pad_sampler`), so they follow one gentle slope. On the plane a pad **keeps its own
+  level**: it does not take a larger neighbour's (`PadLevels`). Borrowed from pad to pad across a village
+  on an 8° slope, one level buried walls 21 m under the plane and raised bollards 15 m above it.
+  The exception is a **level area** of the layout (a TerrainPad under its root, `LayoutPads`): the pads
+  touching it take its level, so a yard's buildings stand on the yard.
   A pad registered before its village is measured again when the village arrives, and its building
   re-seated (`_remeasure_pads_on`); a persisted `terrain_settled` is not trusted on a village's ground.
 
+- **Then the village roads** (`VillageRoadBed`): under a road drawn in the layout, the plane and the
+  level areas across its width plus a 1 m kerb, then an S back over 6 m. See *Roads, alleys and fences
+  drawn in the layout* in the props page.
+
 Order of the ground rules, everywhere (mesh, collision, server surface catch): railway cutting, then
-the village's ground, then the pads. Server and clients fit the same plane from the same tiles
-(`PlanetTerrain.set_poi_zone`, from the village's data on the server, from its node on a client).
+the village's ground, then the pads, then the village roads. Server and clients fit the same plane
+from the same tiles (`PlanetTerrain.set_poi_zone`, from the village's data on the server, from its
+node on a client). A village registered before the terrain has its data waits and is replayed.
+`PadSettings.LEVEL_RULE` is part of the chunk cache key: bump it when a rule changes, or the cached
+chunks keep the old ground.
+
+To see how a village sits on its plane, read the `[VillageBed]` lines the server and each client
+print 120 s after a village's ground is laid: the plane's slope and footprint, then the pads drawn
+farthest from it, with `<- niveau d'un voisin plus grand` when a pad took a level area's.
 
 ### Settings
 
@@ -283,7 +299,10 @@ and set `PAD_PROBE_PLANET` / `PAD_PROBE_SIZE` as needed. Results go to `user://p
 | `scenes/planet/pad/pad_bed.gd` | Pure geometry: record, quantisation, median altitude, platform and talus. |
 | `scenes/planet/pad/pad_index.gd` | Pads bucketed by HEALPix pixel for the chunk builders. |
 | `scenes/planet/pad/pad_settings.gd` | Every shared constant. |
-| `scenes/planet/pad/pad_levels.gd` | `PadLevels`: one level for pads whose aprons touch. |
+| `scenes/planet/pad/pad_levels.gd` | `PadLevels`: one level for pads whose aprons touch (off a village's plane, or in a level area). |
+| `scenes/planet/pad/village_bed.gd` | `VillageBed`: a village's common ground, one plane over its layout. |
+| `scenes/planet/pad/village_road_bed.gd` | `VillageRoadBed`: the ground under a road drawn in a layout. |
+| `scenes/_universe/structures/urban/layout_pads.gd` | `LayoutPads`: the level areas of a layout (TerrainPads under its root). |
 | `scenes/planet/pad/terrain_notch.gd` | `TerrainNotch`: a pad that cuts a shaft straight down (the vehicle lift). |
 | `scenes/planet/planet_data.gd` | `register_pad`, `unregister_pad`, `pad_altitude`, tile waiting. |
 | `scenes/planet/planet_terrain.gd` | Chunk rebuilds when a pad changes, warm-up of the pads already in the scene. |
