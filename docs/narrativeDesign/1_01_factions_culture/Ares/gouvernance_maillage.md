@@ -39,7 +39,7 @@ L'immense majorité des sites de travail (villages miniers, usines isolées, fer
 | Code fonctionnel ( T ) | Typologie | Description |
 |----------|----------|----------|
 | M | Village miniers | Extraction et traitement de minerais. |
-| P | Village usine | Complexes de transformation, usines d'assemblage, raffineries et chaînes de production. |
+| F | Village usine | Complexes de transformation, usines d'assemblage, raffineries et chaînes de production. |
 | A | Village Agricole | Serres et production de denrées alimentaires de base. |
 | T | Village de transit | Relais logistiques secondaires, entrepôts et halls de maintenance |
 | C | Ville complexe | Agglomération pluri-fonctionnelle regroupant plusieurs activités industrielles |
