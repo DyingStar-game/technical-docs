@@ -386,8 +386,8 @@ and comes from a scene**, one per village:
   node, as its definition (`items_def/<type>_def.json`) lists them.
 
 To add a building to every village, instance its scene as a direct child of the layout, under a
-name of its own, and position it there. The garage, the teleporter, the floodlights, the lampposts
-and the containers are placed this way. The name is part of the uuid: two children of one layout
+name of its own, and position it there. The garage, the teleporter, the lampposts and the containers
+are placed this way. The name is part of the uuid: two children of one layout
 never share a name.
 
 Which layout a POI gets is its `spawn_scene`, in its `poi_village` entry of Horizon's seed. The
@@ -409,6 +409,162 @@ A village that has already spawned (`is_spawned`, saved in the database) does no
 again: it only gets the new building after a purge of the world.
 :::
 
+### The mining village (village MVP)
+
+The mining village follows the sketch of *level design > village MVP*, digitised in the NPC service
+(`services/npc/config/village/mining_village.yaml`: an id, a centre and a size per building, at
+0.5 m per pixel). The mine stands to the west, the village along **one avenue** for vehicles
+(a `VillageRoad` 12 m wide, z = -28 m in the layout, see below), and the pedestrian
+alleys between the buildings are closed to vehicles by rows of bollards
+(`urban/streets/bollard_row_6m.tscn`). The containers of the new players are the sketch's
+"temporary housing for refugees".
+
+**One scene per building.** Until the real models arrive, each building is a CSG placeholder: a grey
+block (`assets/_universe/_shared/materials/placeholder_grey.tres`) with its name in neon, a
+`TerrainPad`, a `PropSync` of type `simple_building`, and a `MapMarker` when it serves the player.
+Under `scenes/_universe/structures/`:
+
+| Folder | Buildings |
+|---|---|
+| `buildings/civic/` | `town_hall`, `guard_post`, `school`, `infirmary`, `security_fire_station`, `server_room`, `geology_department`, `municipal_services`, `cemetery` |
+| `buildings/commerce/` | `bar`, `canteen`, `retail_shop` |
+| `buildings/houses/` | `worker_houses`, `dormitory` (the NPCs' homes: the NPCs spawn in the containers like the players) |
+| `industrial/mines/` | `mine_portal`, `spoil_heap`, `crusher`, `changing_rooms`, `mine_administration`, `mine_maintenance` |
+| `industrial/power/` | `transformer_station`, `battery_park`, `wind_farm` (20 `wind_turbine` in one scene) |
+| `industrial/refinery/` | `refinery`, and `ore_processor_machine`, the machine it shares with the crusher: the two differ by their sign only |
+| `industrial/storage/` | `imports_warehouse` |
+| `urban/walls/` | `wall_segment_20m`, a networked wall segment. The mine itself is now closed by six `VillageFence` lines (see below), open where the avenue enters at the guard post and at the mine portal to the west |
+
+The garage, the cargo depot (the export warehouse) and the mining depot are the existing scenes.
+The neon signs wear the colour of the ARES subsidiary that runs the building (`NeonSign.branded` /
+`brand`, read from `AresBrand`): MINING for the mine, HAULING for the warehouses, LIVING for the homes
+and the bar, and so on.
+
+Everything a client shows of a building lives **in its scene** (size, sign, colour): a value set on
+the instance in the layout never reaches a client, which builds the object from its scene and from
+the properties its definition lists. Hence one scene per building, not one scene with settings.
+
+**Roads.** A road drawn in QGIS knows nothing of the villages. Drop a `RoadSnap`
+(`urban/streets/road_snap.gd`, a Marker3D with a `kind`: road, path, highway, railway) at the edge of
+the layout, its −Z pointing out along the way the road leaves; the editor shows it as an arrow. Then
+run `godot --headless --path . res://tools/planettech/layout_snaps_export.tscn`, which writes every
+layout's footprint and snaps to `assets/qgis/export/layout_snaps.json` (`test_layout_snaps` fails
+until you do), and re-export the roads in QGIS: `export_roads.py` cuts every road out of every village
+footprint (the villages' poses come from Horizon's `startup_items.json`) and leads each cut end round
+the village to the nearest snap of its kind (`export/planet/village_snaps.py`). With no snap of its
+kind, the road stops at the village's edge.
+
+### The factory city (village MVP, screen 2)
+
+The 47 factory POIs (`ares_city_factory.tscn`, under `urban/cities/`) follow the second sketch of
+*level design > village MVP*, read at **0.27 m per pixel**: about 1.1 km by 1.4 km. North is −Z and
+the layout's origin is the crossroads of its avenue and its north road. Around it, from north to
+south:
+
+- a **civic centre** along the avenue and the north road: prison, cemetery, schools, sports halls,
+  place of worship, courthouse, town hall, police, fire station, bank, shops, bar, cinema, clinic,
+  science department;
+- **quarters** filled with repeated buildings: refugee shelters, worker houses and dormitories,
+  executive residences, a motel, the prefab module factory;
+- the **fenced factory** south of the avenue: its main road runs between two control posts, a
+  diagonal crosses it to the canteen; the iron and copper unloading yards (the mining depots, in rows
+  of four and three, on level areas), the furnaces, casting halls and loading bays of each metal, the
+  empty containers' yard;
+- along the **south road**: the logistics zone (the two cargo depots and their containers), the
+  municipal services, the recycling centre, the power zone (battery parks, transformers), and at its
+  end the **fenced Dedurium refinery**;
+- a **wind field** to the south-west: four `wind_field_block` (nine turbines each, one networked
+  prop and one pad per block, on the sketch's grid).
+
+Nobody lives here as a player: the homes are scenery (no `spawn_building`), Horizon sends new
+players to the mining villages. The four outer roads leave the city at a `RoadSnap` each.
+
+**New placeholder scenes** (same template as the mining village's):
+
+| Folder | Buildings |
+|---|---|
+| `buildings/civic/` | `prison`, `courthouse`, `place_of_worship`, `police_station`, `fire_station`, `clinic`, `gymnasium`, `sports_hall` |
+| `buildings/commerce/` | `bank`, `small_bar`, `party_hall_cinema`, `driving_school`, `car_dealership`; `grocery_store`, `clothing_store`, `hardware_store` (the `retail_shop` under another sign) |
+| `buildings/houses/` | `refugee_shelters`, `executive_houses`, `motel` |
+| `industrial/metallurgy/` | `arc_furnace`, `blast_furnace`, `oxygen_plant`, `pierce_smith_converter`, `electrolytic_refinery`, `pelletizing_plant`, `factory_office`; `casting_hall` and `loading_bay`, each with an `_iron`, `_copper` and `_rare_earths` variant |
+| `industrial/modules/`, `industrial/recycling/` | `prefab_module_factory`, `recycling_centre` |
+| `industrial/storage/` | `cold_storage`, `water_reserve` |
+| `industrial/power/` | `wind_field_block` |
+| `urban/streets/` | `parking_lot` (painted bays on a levelled lot, shown on the map) |
+
+A **variant** is an inherited scene that changes the sign and the map label only: the building
+itself stays in one place. Each building shows on the map with its own icon
+(`assets/textures/map_markers/`).
+
+**A sign never overhangs its facade.** Set `NeonSign.max_width` to the width the text may take
+(the facade's, less a margin): a translation that would run wider is drawn with smaller letters, in
+any language. `letter_height` stays the size it has when the text fits. At 0 (the default) a sign
+has no limit.
+
+Tests: `test_factory_city` (every building of the sketch, the gameplay buildings, the mining depots'
+rows, the containers around the cargo depots, the roads and their snaps, the fences open at their
+gates, unique names), `test_factory_city_buildings` (each new scene networked, levelled, named in
+both languages, its sign within its facade, on the map).
+
+### Roads, alleys and fences drawn in the layout
+
+The ways **inside** a village are not QGIS roads: they are drawn in the layout scene itself, and so
+are its fences. Nothing of them is networked or stored: the server and every client read them from
+the layout file and lay them on the village's ground. Redrawing one needs a relaunch, not a purge.
+
+**A road or an alley** (`urban/streets/village_road.gd`, `VillageRoad`):
+
+1. Open the layout (`ares_village_mining.tscn`…), add a **VillageRoad** child to its root.
+2. In the Inspector, pick its **Kind** (`Road` for vehicles, `Path` for a pedestrian alley) and its
+   **Width M** (total width).
+3. Draw its curve in the 3-D view with the Path3D tools (add points, drag handles for curves). Only
+   X and Z count: the road follows the ground.
+4. **Snapping**: an end dropped within 6 m of a `RoadSnap` of its kind, or of **any point** of
+   another VillageRoad, lands exactly on it. The editor previews the ribbon on flat ground (a child
+   never saved with the scene), cut at the junctions as the game cuts it.
+5. Save, then run `layout_snaps_export.tscn` again: the roads are part of the footprint.
+
+In the game the road is painted **on** the ground by the terrain, with the ribbon of a QGIS road
+(`RoadRibbon`, through `PlanetData.get_roads_for_chunk`) and its collision: no slab, no step. Under
+it the ground is the village's plane (and the layout's level areas), not the buildings' talus,
+which pierced the ribbon (`VillageRoadBed`). Where two roads overlap, **the larger one wins**: the
+higher type (highway > road > path > trail), then the wider, then the one that carries on over the
+branch that ends on it. The other stops where its **whole width** is under the winner and is drawn
+3 cm lower, so a slanted crossing shows no corner on top and nothing flickers (`LayoutRoads`).
+
+**A fence or a palisade** (`urban/streets/village_fence.gd`, `VillageFence`): add it to the layout's
+root and draw its curve the same way. Settings: **Height M** (2.2 m by default), **Post Spacing M**
+(3 m), **Panel Material** (the cargo depot's wire mesh), **Post Material**. Its ends snap onto any
+point of another VillageFence. In the game the server and every client build it on the final ground:
+a post every *post spacing*, panels between them, **one collision box per panel**, and a **gap** by
+itself where a VillageRoad crosses it (its width plus a 1 m kerb). The texture hangs plumb, a tile a
+metre: its bars stay level while the panel follows a slope.
+
+:::warning[Fences and triplanar materials]
+A triplanar material projects along the axes of the node that draws it. A fence is built in the
+planet's frame, tilted however the globe turns there, so the cargo depot's triplanar wire mesh came
+out diagonal. `LayoutFences.on_panel_uv` gives such a material a copy mapped on the panels' own UVs:
+any material can be picked, but what you see in the editor (whose frame is upright) is only proof
+once you have seen it in the game.
+:::
+
+**A level area** (a yard, a square, a garage with the alley leaving it): put a `TerrainPad` straight
+under the layout's **root**, with its `CSGBox3D` covering the area (scale it in the 3-D view). The
+layout never spawns it; `LayoutPads` reads it from the file and registers it with the village's
+ground. The buildings whose pads touch it take **its** level, and so do the roads crossing it. A
+level area is flat: on the 8° slope of a village, a large one cuts and fills metres at its edges.
+Several small ones fit the slope better.
+
+Tests: `test_village_roads` (snapping, frames, chunk partition, junctions, the ground under a road),
+`test_village_fences` (posts, gaps, collision boxes, the texture on a slope, triplanar materials),
+`test_layout_pads`.
+
+The town hall, the general store and the import warehouse are hollow, with `Marker3D` anchors for
+what comes next: `MissionScreenSpot1..4` (the mission screens), `NpcCounterSpot` (where the NPC
+stands behind the counter), `VehicleBay`. `test_village_mining_layout` checks that every building
+of the sketch stands in the layout, under a name of its own, that the avenue runs straight and that
+each placeholder is networked, named in both languages and stands on levelled ground.
+
 ### What needs a purge, and what only a restart
 
 The database keeps **where** each object is and **which scene** it loads, nothing else. So:
@@ -417,6 +573,7 @@ The database keeps **where** each object is and **which scene** it loads, nothin
 |---|---|
 | **What** a village holds: add, remove or move an object in the layout, change a `type_name` | purge the world, so that the villages spawn again |
 | **How** an object looks or sounds: a light, a material, a sign, a sound, a photocell | relaunch the client: every client builds the object from its scene |
+| A **road, fence or level area** drawn in a layout (VillageRoad, VillageFence, a root TerrainPad) | relaunch the server and the clients: nothing of them is stored. Their footprint moves the village's ground, and the buildings stored on the old ground keep their height until a purge |
 
 A client keeps a scene in memory once it has read it: reconnecting is not enough, relaunch it.
 
@@ -469,6 +626,20 @@ Sink the box until its top face is just under the building's floor. The pad's me
 `terrain_settled`, which the `simple_building` definition already replicates: a building with no
 state of its own can use that type and needs no new definition. A pad more than ~50 km from the
 surface (a station in orbit) levels nothing.
+
+:::warning[Every fixed object needs a TerrainPad]
+Anything meant to stay where it is in the world (a building, a row of bollards, a wind farm, a
+spoil heap, a wall, a street lamp) **must** have a `TerrainPad`. Without one it keeps the height it
+was stored at and never meets the ground the village actually builds: the bollards of the first
+mining village floated in the air. Only movable props (a `RigidBody3D`: crates, carts) and the
+props a layout places **under** another item (the containers of a storage area) go without.
+`test_layout_fixed_items_have_pads` checks it for every village and city layout.
+:::
+
+The grey and dark placeholder materials are named `mat_rock_placeholder_grey` and
+`mat_rock_placeholder_dark`: the footsteps read the family in the material's name, so a CSG
+placeholder sounds like rock. `SurfaceProbe` reads the material of the CSG primitive under the point
+when the collider is a CSG blockout.
 
 ## Moving or reparenting a prop on the Horizon side (GORC)
 
