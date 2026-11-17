@@ -36,6 +36,25 @@ Les vêtements ont aussi une valeur pour savoir s'ils bloquent ou non l'utilisat
 0 : Bloque
 1 : Non bloqué
 
+## Le code d'un équipement
+
+Chaque équipement a un code de quatre chiffres : **zone - support - couche - accès**.
+
+| Chiffre | Sens |
+| --- | --- |
+| zone | Où il se porte : un chiffre de 0 à 9 (voir « Emplacements »), plus G ou D pour un seul côté, plus 1 à 5 pour un seul doigt. |
+| support | La couche la plus haute **sur laquelle il peut se poser**. |
+| couche | La couche **qu'il occupe**. |
+| accès | 0 s'il bloque l'accès à ce qu'il y a dessous, 1 sinon. |
+
+Le holster, `8D-4-3-0`, se lit ainsi : il se porte sur la jambe droite. Il peut se poser jusque sur une armure légère (4). Il compte comme un manteau (3). Il bloque l'accès à ce qu'il recouvre (0).
+
+Deux équipements qui partagent une zone se portent l'un sur l'autre. L'ordre va du support le plus bas au plus haut, puis de la couche la plus basse à la plus haute. Pour que deux équipements puissent se porter ensemble, il faut que :
+- la couche de celui du dessous ne dépasse pas le support de celui du dessus ;
+- ils n'aient pas le même support et la même couche sur une même zone : pas deux pantalons.
+
+La zone 0 (tout le corps) recouvre toutes les autres. Ces règles sont celles du jeu. Voir [Vêtements](../../../creativeConcept/garments.md) pour en créer.
+
 ## Exemple 
 
 Caleçon : 8-0-0-0 
