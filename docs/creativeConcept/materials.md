@@ -201,6 +201,12 @@ able to alter shared metadata, or every model would end up with its own variant
 and the library would lose its point. To correct a published material, use
 **Append** instead, fix it, and export again.
 
+On a linked material, the **Dying Star Library** panel shows what the library
+says of it, read from its `material.json`: display name, author, license, tags,
+tile size. The buttons that would change it (*Export to Library*, *Load from
+Library*, *Detect Maps*, the tags) are off. On an appended one, the same fields
+are filled in and can be edited.
+
 ### Export settings
 
 Models using a shared material need these glTF export settings:
@@ -305,14 +311,24 @@ colour. A *Base Color* wired through a node it does not follow (a ColorRamp, a
 procedural texture) is refused, and the message names the node. Publishing the
 material anyway would give it a colour nobody chose.
 
-**The published albedo is the image, nothing else.** Only the images travel to
-the library, never the operations laid on top of them. A base colour tinted by
-a Mix node whose second input is a flat colour looks right in the viewport and
-comes out of the library pale, because that colour lives in the node tree. The
-panel reports `Base Color is tinted by a flat colour`. Flatten the tint into
-the image before exporting: the file on disk has to be what the surface
-actually looks like. The Mix node's second input is reserved for an occlusion
-map, which is the one modulation the pipeline does carry.
+**Only the images travel to the library, with one tint.** The operations laid
+on top of an image stay in the node tree, with two exceptions: an occlusion map
+multiplied into the base colour, and a flat colour **multiplied** over the
+albedo.
+
+To tint a texture, wire the albedo into input A of a Mix node set to *Multiply*
+with *Factor* at 1, and pick the colour in B. The export publishes the image and
+that colour (`albedo_color` in `material.json`), and Godot multiplies them the
+same way. One grey texture then gives every colour of a surface, with no new
+image. The tint also works under the occlusion Mix (the tinted albedo in its
+input A, the occlusion map in B).
+
+Any other colour work cannot be carried: a Color Ramp, another blend mode, a
+factor under 1 or driven by a node. It looks right in the viewport and would
+come out of the library a different colour, so the panel reports it (`Base Color
+is tinted by a flat colour in a way the library cannot carry`, or `Base Color
+goes through an unsupported node`). Flatten it into the image, or do it in
+Godot: a colour that changes per object belongs to a shader there.
 
 ### Tags
 
