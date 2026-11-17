@@ -117,6 +117,7 @@ Handy while working on the game. Like every key, these are InputMap actions — 
 | **+** / **−** | `debug_time_forward` / `_back` | Shift the **simulated time** by an hour, on **this client only**; hold to sweep the sky (a tool for judging an atmosphere at another hour). While it is shifted a **red banner** says so: everything worked out from the time on both sides — an orbital station's place — no longer matches the server, and leaving a station lands you where the server has it. Shares its keys with the star-map zoom, which only reads them while the map is open. |
 | **Alt + L** | `debug_toggle_moon_lights` | Cut the **moon lights** and print each factor (phase, elevation, extinction, energy) — the way to tell "the night is too dark" from "the moon is below the horizon". |
 | **Alt + I** | `debug_isolate_light` | Cycle the **light isolation** modes: no aerial perspective, no sky reflection, no sky ambient. Each step removes exactly one contributor, so whatever still lights the scene names its own source. |
+| **Alt + P** | `debug_light_probe` | **Light probe**: names what lights the point under the crosshair — the star and moons (open toward them, or hidden by what), every lamp whose reach covers it, and the wall between when there is one (`LEAK`), with each one's shadow. Takes an F8 debug capture with it; both land in the log (`[LightProbe]`). |
 | **F6** | `game_record` | Start / stop the gameplay recording (saved in `screenshots/records`). |
 
 See [Lighting, day/night & the sky](/docs/planetTech/lighting_sky_daynight) for what those readouts mean.
