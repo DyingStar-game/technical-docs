@@ -30,7 +30,7 @@ None of them is an editor plugin you have to enable per project.
 | Where | What | Job |
 | --- | --- | --- |
 | Blender | `tools/blender_scripts/addons/dyingstar_material_library/` | Reads a material's node tree and publishes it: renames the maps, writes `material.json`, renders `preview.jpg`, rebuilds the asset library. |
-| Command line | `tools/validate.py` | Enforces the manifest schema, the tag vocabulary and the pixel-level rules. Runs in CI and inside the add-on. |
+| Command line | `tools/validate.py` | Enforces the manifest schema, the tag vocabulary and the pixel-level rules. The add-on applies the same pixel-level rules at export. |
 | Command line | `tools/build_asset_library.py` | Regenerates `materials_library.blend` from the manifests, so the Asset Browser always matches what is committed. |
 | Godot | **DyingStar ▸ Rebuild shared materials** (`addons/dyingstar/shared_material_builder.gd`) | Turns each `material.json` into the `.tres` Godot renders, pins that material's texture import settings, and reimports the models that still show it unlinked. A pull request fails if it was not run. |
 | Godot | `addons/dyingstar/shared_material_resolver.gd` | Given a material name, finds and loads its `.tres`. |
@@ -153,8 +153,8 @@ This is what fills the Asset Browser.
   `Emission Color` input, both introduced in 4.0.
 - **No Python packages to install.** The addon only uses numpy, which ships
   with Blender.
-- `validate.py`, used in CI and optionally on the command line, needs
-  `jsonschema`, `pillow` and `numpy` in your system Python.
+- `validate.py`, run on the command line, needs `jsonschema`, `pillow` and
+  `numpy` in your system Python.
 
 ---
 
@@ -241,9 +241,10 @@ have been seen working in a shader graph at least once.
 
 ### Steps
 
-1. Build the material in Blender, named `mat_<family>_<descriptor>`, with its
-   textures wired into the Principled BSDF, see
-   [Naming pattern](#naming-pattern), the family segment is required
+1. Build the material in Blender, named `mat_<family>_<descriptor>`, with
+   whatever textures it has wired into the Principled BSDF, see
+   [Naming pattern](#naming-pattern), the family segment is required. No
+   texture is required, see [No map is required](#no-map-is-required)
 2. Open *Properties → Material → **Dying Star Library***
 3. Fill in display name, author, license, and at least one tag
 4. **Detect Maps** reads the node tree and fills in the real-world tile size
@@ -284,6 +285,25 @@ surface renders wrong, in Blender as much as in Godot. The panel reports
 `Normal input goes through an unsupported node` rather than publishing a
 material that would look broken everywhere. The node lives under
 *Add > Displacement > Normal Map*, or type its name into the Add search.
+
+### No map is required
+
+Every map is optional. A material publishes the maps it has and nothing more.
+
+- **No albedo map**: the base colour is the plain colour set on the
+  Principled's *Base Color*, or picked in an **RGB** node wired into it. It is
+  written to `material.json` as `albedo_color` (sRGB, 0 to 1), and Godot uses
+  it as the surface's colour. The same colour under an occlusion map (a Mix
+  node, colour in A, occlusion in B) is read the same way.
+- **No normal map**: the surface is smooth.
+- **No map at all**: a painted panel, a plain plastic. The folder then holds
+  `material.json` and `preview.jpg` and nothing else, and the panel shows
+  `plain colour` with its value where the maps would be listed.
+
+What is required is a base colour the add-on can read: an image or a plain
+colour. A *Base Color* wired through a node it does not follow (a ColorRamp, a
+procedural texture) is refused, and the message names the node. Publishing the
+material anyway would give it a colour nobody chose.
 
 **The published albedo is the image, nothing else.** Only the images travel to
 the library, never the operations laid on top of them. A base colour tinted by
@@ -399,7 +419,9 @@ not know will be a silent failure.
 
 Texture files follow `tex_[descriptor]_[map].png`, where `[map]` is one of
 `albedo`, `normal`, `orm`, `ao`, `roughness`, `metallic`, `height`, `emissive`,
-`opacity`. The addon writes them, so there is nothing to remember.
+`opacity`. The addon writes them, so there is nothing to remember. None of
+them is required: a material lists the maps it has, down to none for a plain
+colour.
 
 Shared materials sit alongside the prefixes listed in
 [Files structure](./files_structure.md).
@@ -570,7 +592,7 @@ changes the layout.
 ## Validation
 
 The same rules run inside the addon and on the command line, so a material
-accepted at export cannot be rejected in CI.
+accepted at export cannot be rejected by `validate.py`.
 
 ```bash
 python tools/validate.py                 # every material
@@ -585,6 +607,8 @@ Errors block; warnings inform.
 | Tags exist in the vocabulary | error |
 | Folder name matches the id | error |
 | `preview.jpg` present | error |
+| A base colour: an albedo map, `albedo_color`, or both | error |
+| Maps all the same size | error |
 | Dimensions a multiple of 4 | error |
 | Texel density close to the 1024 px/m target | warning |
 | Normal map uses the OpenGL (+Y) convention | error |
