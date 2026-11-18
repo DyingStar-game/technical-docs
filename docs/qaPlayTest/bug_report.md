@@ -13,20 +13,31 @@ the report lands in the QA channel on Discord with its capture.
 1. Press **F9** (`bug_report`, rebindable in **Settings › Controls**, with the capture keys).
 2. The game takes the bug-report capture — the F8 one: the screen as it is, debug panels shown —
    **before** the form opens, so the form is not in the picture.
-3. Fill in the **template** — every part is required — leave *Attach the end of the game's log*
-   ticked unless there is a reason not to, and send.
+3. Fill in the **template** — every part is required, **Tab** goes from one field to the next —
+   leave *Attach the end of the game's log* ticked unless there is a reason not to, and send.
 
 | Part of the template | What goes in it | Limit |
 |---|---|---|
 | **Title** | What goes wrong, in a few words | 3 to 80 characters |
+| **Severity** | How bad it is, chosen in a list (below) | *Minor* unless changed |
 | **Description** | What goes wrong, in a sentence or two | 1000 |
 | **Steps** | How to get there, one step a line | 1500 |
 | **Actual result** | What happened | 700 |
 | **Expected result** | What should have happened | 700 |
 | **Capture** | Taken by the game, debug panels shown | — |
 
-The four texts are posted as titled sections of one Discord message, in the player's language
-(*Description / Étapes / Résultat obtenu / Résultat attendu* for a French client).
+The severity and the four texts are posted as titled sections of one Discord message, in the
+player's language (*Sévérité / Description / Étapes / Résultat obtenu / Résultat attendu* for a
+French client).
+
+| Severity | Means | In the title | Message colour |
+|---|---|---|---|
+| **Blocker** | You cannot go on playing | 🔴 `[BLOCKER]` | red |
+| **Major** | A feature does not work | 🟠 `[MAJOR]` | orange |
+| **Minor** | Annoying, but there is a way round | 🟡 `[MINOR]` | yellow |
+| **Cosmetic** | A look, a text, a sound | 🟣 `[COSMETIC]` | purple |
+
+The round mark opens the post's title, so the list of posts reads by severity at a glance.
 
 What leaves with the report:
 
@@ -34,7 +45,8 @@ What leaves with the report:
 |---|---|
 | The template | What the player typed, part by part |
 | Capture | A JPEG no wider than 1920 px (the PNG stays in `screenshots/debug`) |
-| Context | Build (`version · build id`), OS, GPU, FPS, language, the body and frame the player is in, their position in it |
+| Context | Version and build (the export's build id; run from the sources, the branch and the commit), FPS, language, the body and frame the player is in, their position in it |
+| Machine | System and architecture, processor and threads, memory (total, free, used by the game), graphics card (vendor, dedicated or integrated), its driver, video memory used, renderer, screen and window, engine version. Nothing that names the owner |
 | Log | The last 256 kB of `godot.log`, with every token taken out |
 | Author | The player's name and id, read from their token by the service |
 
@@ -70,9 +82,12 @@ Nothing is stored by the service: a report lives in Discord.
 
 | Environment | Secret | Title |
 |---|---|---|
-| preprod | `social-bug-report` in `dyingstar-preprod` | `[BUG][PREPROD][<build>] <title>` |
-| prod (once its values exist in the chart) | `social-bug-report` in `dyingstar-prod` | `[BUG][PROD][<build>] <title>` |
-| dev-local | none by default: the feature is off | `[BUG][DEV][<build>] <title>` |
+| preprod | `social-bug-report` in `dyingstar-preprod` | `🔴 [BUG][PREPROD][BLOCKER][<version>] <title>` |
+| prod (once its values exist in the chart) | `social-bug-report` in `dyingstar-prod` | `🔴 [BUG][PROD][BLOCKER][<version>] <title>` |
+| dev-local | none by default: the feature is off | `🔴 [BUG][DEV][BLOCKER][<version>] <title>` |
+
+A title is 100 characters at most on Discord: when it does not fit, the version leaves it (it is in
+the fields of the message) before the player's words are cut.
 
 The Secret holds the URL under the key `DISCORD_BUG_WEBHOOK_URL` and is created out of band, never
 committed:
@@ -86,8 +101,10 @@ The chart reads it as **optional**: an environment that names the Secret before 
 the same, with bug reports off. A leaked URL is fixed on Discord's side — delete the webhook, create
 another, update the Secret.
 
-If the QA channel is a **forum**, set `bugReport.forum: true` in the chart's values: each report then
-opens a post named after its title (and `bugReport.forumTagIds` applies the tags a forum may require).
+The QA channel is a **forum**: `bugReport.forum: true` is set in the chart's values, and each report
+opens a post named after its title (`bugReport.forumTagIds` applies the tags a forum may require).
+Without it Discord refuses the report (error 220001) and the form says *not sent*; the reason is in
+the logs of `service-social`.
 
 ## Trying it locally
 
