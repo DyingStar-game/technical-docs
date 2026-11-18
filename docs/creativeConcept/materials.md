@@ -302,6 +302,11 @@ Every map is optional. A material publishes the maps it has and nothing more.
   it as the surface's colour. The same colour under an occlusion map (a Mix
   node, colour in A, occlusion in B) is read the same way.
 - **No normal map**: the surface is smooth.
+- **No roughness or metallic map**: the value set by hand on the Principled's
+  *Roughness* or *Metallic* is the surface's. It is written to `material.json`
+  as `roughness` / `metallic` (0 to 1) and Godot applies it, so a polished
+  screen comes back polished. Under a map, the map decides and no value is
+  written.
 - **No map at all**: a painted panel, a plain plastic. The folder then holds
   `material.json` and `preview.jpg` and nothing else, and the panel shows
   `plain colour` with its value where the maps would be listed.
@@ -323,9 +328,15 @@ same way. One grey texture then gives every colour of a surface, with no new
 image. The tint also works under the occlusion Mix (the tinted albedo in its
 input A, the occlusion map in B).
 
+Nothing else set on the Principled travels: IOR, transmission, coat, sheen and
+the rest have no counterpart in the material Godot builds, and a material that
+relies on them looks different there.
+
 Any other colour work cannot be carried: a Color Ramp, another blend mode, a
 factor under 1 or driven by a node. It looks right in the viewport and would
-come out of the library a different colour, so the panel reports it (`Base Color
+come out of the library a different colour, so the panel reports it. Two images
+blended by a mask (paint over bare metal) are the same case: only the first one
+is published, and the panel says so (`Base Color
 is tinted by a flat colour in a way the library cannot carry`, or `Base Color
 goes through an unsupported node`). Flatten it into the image, or do it in
 Godot: a colour that changes per object belongs to a shader there.
