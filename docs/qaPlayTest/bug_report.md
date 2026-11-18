@@ -12,6 +12,8 @@ the report lands in the QA channel on Discord with its capture.
 
 1. Press **F9** (`bug_report`, rebindable in **Settings › Controls**, with the capture keys). It answers
    wherever the bug shows: in the world, in the pause menu, the settings, the DataPad or the main menu.
+   A line in the bottom right corner of the screen recalls it everywhere, with the key as it is bound
+   (`[F9] Report a bug`); the F7 photo leaves it out, like the rest of the interface.
 2. The game takes the bug-report capture — the F8 one: the screen as it is, debug panels shown —
    **before** the form opens, so the form is not in the picture.
 3. Fill in the **template** — every part is required, **Tab** goes from one field to the next —
