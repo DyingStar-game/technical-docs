@@ -30,7 +30,7 @@ None of them is an editor plugin you have to enable per project.
 | Where | What | Job |
 | --- | --- | --- |
 | Blender | `tools/blender_scripts/addons/dyingstar_material_library/` | Reads a material's node tree and publishes it: renames the maps, writes `material.json`, renders `preview.jpg`, rebuilds the asset library. |
-| Command line | `tools/validate.py` | Enforces the manifest schema, the tag vocabulary and the pixel-level rules. Runs in CI and inside the add-on. |
+| Command line | `tools/validate.py` | Enforces the manifest schema, the tag vocabulary and the pixel-level rules. The add-on applies the same pixel-level rules at export. |
 | Command line | `tools/build_asset_library.py` | Regenerates `materials_library.blend` from the manifests, so the Asset Browser always matches what is committed. |
 | Godot | **DyingStar ▸ Rebuild shared materials** (`addons/dyingstar/shared_material_builder.gd`) | Turns each `material.json` into the `.tres` Godot renders, pins that material's texture import settings, and reimports the models that still show it unlinked. A pull request fails if it was not run. |
 | Godot | `addons/dyingstar/shared_material_resolver.gd` | Given a material name, finds and loads its `.tres`. |
@@ -153,8 +153,8 @@ This is what fills the Asset Browser.
   `Emission Color` input, both introduced in 4.0.
 - **No Python packages to install.** The addon only uses numpy, which ships
   with Blender.
-- `validate.py`, used in CI and optionally on the command line, needs
-  `jsonschema`, `pillow` and `numpy` in your system Python.
+- `validate.py`, run on the command line, needs `jsonschema`, `pillow` and
+  `numpy` in your system Python.
 
 ---
 
@@ -201,6 +201,12 @@ able to alter shared metadata, or every model would end up with its own variant
 and the library would lose its point. To correct a published material, use
 **Append** instead, fix it, and export again.
 
+On a linked material, the **Dying Star Library** panel shows what the library
+says of it, read from its `material.json`: display name, author, license, tags,
+tile size. The buttons that would change it (*Export to Library*, *Load from
+Library*, *Detect Maps*, the tags) are off. On an appended one, the same fields
+are filled in and can be edited.
+
 ### Export settings
 
 Models using a shared material need these glTF export settings:
@@ -241,9 +247,10 @@ have been seen working in a shader graph at least once.
 
 ### Steps
 
-1. Build the material in Blender, named `mat_<family>_<descriptor>`, with its
-   textures wired into the Principled BSDF, see
-   [Naming pattern](#naming-pattern), the family segment is required
+1. Build the material in Blender, named `mat_<family>_<descriptor>`, with
+   whatever textures it has wired into the Principled BSDF, see
+   [Naming pattern](#naming-pattern), the family segment is required. No
+   texture is required, see [No map is required](#no-map-is-required)
 2. Open *Properties → Material → **Dying Star Library***
 3. Fill in display name, author, license, and at least one tag
 4. **Detect Maps** reads the node tree and fills in the real-world tile size
@@ -285,14 +292,68 @@ surface renders wrong, in Blender as much as in Godot. The panel reports
 material that would look broken everywhere. The node lives under
 *Add > Displacement > Normal Map*, or type its name into the Add search.
 
-**The published albedo is the image, nothing else.** Only the images travel to
-the library, never the operations laid on top of them. A base colour tinted by
-a Mix node whose second input is a flat colour looks right in the viewport and
-comes out of the library pale, because that colour lives in the node tree. The
-panel reports `Base Color is tinted by a flat colour`. Flatten the tint into
-the image before exporting: the file on disk has to be what the surface
-actually looks like. The Mix node's second input is reserved for an occlusion
-map, which is the one modulation the pipeline does carry.
+### No map is required
+
+Every map is optional. A material publishes the maps it has and nothing more.
+
+- **No albedo map**: the base colour is the plain colour set on the
+  Principled's *Base Color*, or picked in an **RGB** node wired into it. It is
+  written to `material.json` as `albedo_color` (sRGB, 0 to 1), and Godot uses
+  it as the surface's colour. The same colour under an occlusion map (a Mix
+  node, colour in A, occlusion in B) is read the same way.
+- **No normal map**: the surface is smooth.
+- **No roughness or metallic map**: the value set by hand on the Principled's
+  *Roughness* or *Metallic* is the surface's. It is written to `material.json`
+  as `roughness` / `metallic` (0 to 1) and Godot applies it, so a polished
+  screen comes back polished. Under a map, the map decides and no value is
+  written.
+- **No map at all**: a painted panel, a plain plastic. The folder then holds
+  `material.json` and `preview.jpg` and nothing else, and the panel shows
+  `plain colour` with its value where the maps would be listed.
+
+What is required is a base colour: an image, a plain colour, or nodes that
+make one.
+
+**What the nodes compute is baked.** The library carries images and a few
+numbers, not node trees: Godot rebuilds a material from its maps alone. The
+export reads as they are the wirings `material.json` says in full:
+
+- an image, a plain colour, or an **RGB** node on *Base Color*;
+- a flat colour **multiplied** over the albedo, which is a tint (below);
+- an occlusion map **multiplied** over any of those;
+- an image, one channel of a packed image (**Separate Color**), or a value set
+  by hand on *Roughness* and *Metallic*.
+
+Anything else on *Base Color*, *Roughness* or *Metallic* is node work, and the
+export **bakes** it: a wear mask blending two paints, a hue shift, a Color Ramp,
+a roughness map passed through a contrast node, a metalness taken from an alpha
+channel. The input is rendered into an image of the size of the largest texture
+the material reads, over one tile, and that image is published as the map. The
+material then comes out of the library as it looks in Blender. Before the
+export, the panel lists each such input as `baked from the nodes at export`.
+
+- The bake is done for the time of the export. The artist's file keeps its
+  nodes, and no image is added to it.
+- A baked input that gives the same value everywhere is published as that
+  number (`albedo_color`, `roughness`, `metallic`), not as an image.
+- A bake needs **Object Mode**: in Edit Mode the export stops and says so.
+- An occlusion map multiplied over node work is baked into the albedo with the
+  rest, since it can no longer be told apart from it.
+- The *Normal* input is not baked: wire the normal map through a **Normal Map**
+  node as described above.
+
+To tint a texture without a new image, wire the albedo into input A of a Mix
+node set to *Multiply* with *Factor* at 1, and pick the colour in B. The export
+publishes the image and that colour (`albedo_color` in `material.json`), and
+Godot multiplies them the same way. One grey texture then gives every colour of
+a surface. The tint also works under the occlusion Mix (the tinted albedo in its
+input A, the occlusion map in B). Any other way of colouring a texture is baked
+into a new albedo, which costs an image per colour.
+
+Nothing else set on the Principled travels: IOR, transmission, coat, sheen and
+the rest have no counterpart in the material Godot builds, and a material that
+relies on them looks different there. The **Displacement** output is not carried
+either.
 
 ### Tags
 
@@ -399,7 +460,9 @@ not know will be a silent failure.
 
 Texture files follow `tex_[descriptor]_[map].png`, where `[map]` is one of
 `albedo`, `normal`, `orm`, `ao`, `roughness`, `metallic`, `height`, `emissive`,
-`opacity`. The addon writes them, so there is nothing to remember.
+`opacity`. The addon writes them, so there is nothing to remember. None of
+them is required: a material lists the maps it has, down to none for a plain
+colour.
 
 Shared materials sit alongside the prefixes listed in
 [Files structure](./files_structure.md).
@@ -570,7 +633,7 @@ changes the layout.
 ## Validation
 
 The same rules run inside the addon and on the command line, so a material
-accepted at export cannot be rejected in CI.
+accepted at export cannot be rejected by `validate.py`.
 
 ```bash
 python tools/validate.py                 # every material
@@ -585,6 +648,8 @@ Errors block; warnings inform.
 | Tags exist in the vocabulary | error |
 | Folder name matches the id | error |
 | `preview.jpg` present | error |
+| A base colour: an albedo map, `albedo_color`, or both | error |
+| Maps all the same size | error |
 | Dimensions a multiple of 4 | error |
 | Texel density close to the 1024 px/m target | warning |
 | Normal map uses the OpenGL (+Y) convention | error |
