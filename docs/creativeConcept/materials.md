@@ -311,35 +311,49 @@ Every map is optional. A material publishes the maps it has and nothing more.
   `material.json` and `preview.jpg` and nothing else, and the panel shows
   `plain colour` with its value where the maps would be listed.
 
-What is required is a base colour the add-on can read: an image or a plain
-colour. A *Base Color* wired through a node it does not follow (a ColorRamp, a
-procedural texture) is refused, and the message names the node. Publishing the
-material anyway would give it a colour nobody chose.
+What is required is a base colour: an image, a plain colour, or nodes that
+make one.
 
-**Only the images travel to the library, with one tint.** The operations laid
-on top of an image stay in the node tree, with two exceptions: an occlusion map
-multiplied into the base colour, and a flat colour **multiplied** over the
-albedo.
+**What the nodes compute is baked.** The library carries images and a few
+numbers, not node trees: Godot rebuilds a material from its maps alone. The
+export reads as they are the wirings `material.json` says in full:
 
-To tint a texture, wire the albedo into input A of a Mix node set to *Multiply*
-with *Factor* at 1, and pick the colour in B. The export publishes the image and
-that colour (`albedo_color` in `material.json`), and Godot multiplies them the
-same way. One grey texture then gives every colour of a surface, with no new
-image. The tint also works under the occlusion Mix (the tinted albedo in its
-input A, the occlusion map in B).
+- an image, a plain colour, or an **RGB** node on *Base Color*;
+- a flat colour **multiplied** over the albedo, which is a tint (below);
+- an occlusion map **multiplied** over any of those;
+- an image, one channel of a packed image (**Separate Color**), or a value set
+  by hand on *Roughness* and *Metallic*.
+
+Anything else on *Base Color*, *Roughness* or *Metallic* is node work, and the
+export **bakes** it: a wear mask blending two paints, a hue shift, a Color Ramp,
+a roughness map passed through a contrast node, a metalness taken from an alpha
+channel. The input is rendered into an image of the size of the largest texture
+the material reads, over one tile, and that image is published as the map. The
+material then comes out of the library as it looks in Blender. Before the
+export, the panel lists each such input as `baked from the nodes at export`.
+
+- The bake is done for the time of the export. The artist's file keeps its
+  nodes, and no image is added to it.
+- A baked input that gives the same value everywhere is published as that
+  number (`albedo_color`, `roughness`, `metallic`), not as an image.
+- A bake needs **Object Mode**: in Edit Mode the export stops and says so.
+- An occlusion map multiplied over node work is baked into the albedo with the
+  rest, since it can no longer be told apart from it.
+- The *Normal* input is not baked: wire the normal map through a **Normal Map**
+  node as described above.
+
+To tint a texture without a new image, wire the albedo into input A of a Mix
+node set to *Multiply* with *Factor* at 1, and pick the colour in B. The export
+publishes the image and that colour (`albedo_color` in `material.json`), and
+Godot multiplies them the same way. One grey texture then gives every colour of
+a surface. The tint also works under the occlusion Mix (the tinted albedo in its
+input A, the occlusion map in B). Any other way of colouring a texture is baked
+into a new albedo, which costs an image per colour.
 
 Nothing else set on the Principled travels: IOR, transmission, coat, sheen and
 the rest have no counterpart in the material Godot builds, and a material that
-relies on them looks different there.
-
-Any other colour work cannot be carried: a Color Ramp, another blend mode, a
-factor under 1 or driven by a node. It looks right in the viewport and would
-come out of the library a different colour, so the panel reports it. Two images
-blended by a mask (paint over bare metal) are the same case: only the first one
-is published, and the panel says so (`Base Color
-is tinted by a flat colour in a way the library cannot carry`, or `Base Color
-goes through an unsupported node`). Flatten it into the image, or do it in
-Godot: a colour that changes per object belongs to a shader there.
+relies on them looks different there. The **Displacement** output is not carried
+either.
 
 ### Tags
 
