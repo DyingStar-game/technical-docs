@@ -123,6 +123,37 @@ opens a post named after its title (`bugReport.forumTagIds` applies the tags a f
 Without it Discord refuses the report (error 220001) and the form says *not sent*; the reason is in
 the logs of `service-social`.
 
+## Adding to a bug already posted
+
+When the service can read the forum, the form shows a field **Already reported?**: type a few words,
+pick the bug in the list (a click, or Enter for the first), and the report becomes a message in that
+bug's post instead of a new post. Left empty, the report opens its own post as before.
+
+The list holds the posts of the forum that are neither archived nor closed, newest first. Where a
+bug stands is the **square the QA team puts as a reaction under its post**:
+
+| Reaction | Means | Listed |
+|---|---|---|
+| none | New, not looked at yet | yes |
+| 🟥 | Open | yes |
+| 🟧 | Taken by a developer | yes |
+| 🟪 | Fixed, to be tested in the build | yes |
+| 🟩 | Closed | no |
+
+With several squares under a post, the furthest one counts.
+
+A webhook writes to a forum but cannot read it, so the list takes a **Discord bot**, with two rights
+on the forum and nothing else: *View Channel* and *Read Message History*. It posts nothing. Its token
+is a secret, kept as an optional key of the same Secret:
+
+```bash
+kubectl -n dyingstar-preprod patch secret social-bug-report --type merge \
+  -p '{"stringData":{"DISCORD_BUG_BOT_TOKEN":"<token>"}}'
+```
+
+Without the token the field is hidden and nothing else changes. The service keeps the list two
+minutes (`GET /api/bug-reports/open`) and only posts in a bug that list gave out.
+
 ## Trying it locally
 
 Create a webhook on a Discord server of your own, put it in a `social-bug-report` Secret in the
@@ -138,4 +169,5 @@ channel.
 | The form | `ui/bug_report/bug_report_dialog.gd` (game) |
 | The call | `PlayerServices.bug_report_create` (game) |
 | The relay, its limits, the Discord payload | `social/src/services/bugReports.service.ts` (services) |
+| The open bugs read from the forum | `social/src/services/bugThreads.service.ts` (services) |
 | The Secret and the environment label | `service-social/values*.yaml` (kubernetes) |
