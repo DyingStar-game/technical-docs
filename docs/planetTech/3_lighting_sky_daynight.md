@@ -183,6 +183,23 @@ It also changes how the star reads. Seen from Sandbox, Tarsis subtends **0.80°*
 view that is still only a handful of pixels, so a star that "looks small" is not a scale bug: the lever
 for making it feel big is the **glow**, not the geometry, which is now correct.
 
+## Lamps and their shadows
+
+Street lamps, room lights, floodlights: every `OmniLight3D`, `SpotLight3D` or `AreaLight3D` placed in
+a scene is a **lamp**, and a lamp casts a shadow **whether its "Shadow" box is ticked or not**. You do
+not tick it, and you do not leave it out to save frames: the cost is bounded in one place
+(`LampShadowBudget`, on the client).
+
+- Only the **8 lamps nearest to the camera** cast, and only within the player's **lamp shadow
+  distance** (Graphics ▸ Shadows, 60 m by default, 0 = none). Every other lamp still lights; it just
+  casts nothing. One setting for all of them, whoever placed them.
+- A light that must **never** cast (a rotating beacon, a vehicle's position lights) goes in the group
+  **`no_lamp_shadow`**.
+- A light **made by code** keeps what its script gave it: a neon's glow or a spark is built without a
+  shadow on purpose, and stays that way.
+- The headlights of the vehicle you sit in keep their shadow on top of the budget; the torches of the
+  other players have a budget of their own (`TorchShadowBudget`).
+
 ## Seeing it in-game (for developers)
 
 - **Toggle the debug panels** (altitude / local time / lon-lat / celestial markers) with the
