@@ -19,6 +19,18 @@ the report lands in the QA channel on Discord with its capture.
 3. Fill in the **template** — every part is required, **Tab** goes from one field to the next —
    leave *Attach the end of the game's log* ticked unless there is a reason not to, and send.
 
+The form has three other ways out:
+
+- **Attach another capture**: the form steps aside with what you typed. Go and show what you want,
+  press the key again: the new capture joins the report and the form comes back. Five captures at
+  most; a click on one in the form takes it off.
+- **Continue later**: the form closes and keeps everything. The key brings it back as it was (and
+  takes no capture then). Kept until the game is closed.
+- **Cancel** (or Escape): the report is dropped.
+
+The line in the corner of the screen says what the key will do: report a bug, add this view to your
+report, or resume it.
+
 | Part of the template | What goes in it | Limit |
 |---|---|---|
 | **Title** | What goes wrong, in a few words | 3 to 80 characters |
@@ -27,18 +39,18 @@ the report lands in the QA channel on Discord with its capture.
 | **Steps** | How to get there, one step a line | 1500 |
 | **Actual result** | What happened | 700 |
 | **Expected result** | What should have happened | 700 |
-| **Capture** | Taken by the game, debug panels shown | — |
+| **Captures** | Taken by the game, debug panels shown; the first one when the key is pressed | 5 |
 
 The severity and the four texts are posted as titled sections of one Discord message, in the
 player's language (*Sévérité / Description / Étapes / Résultat obtenu / Résultat attendu* for a
 French client).
 
-| Severity | Means | In the title | Message colour |
+| Severity | Means | Mark in the title | Message colour |
 |---|---|---|---|
-| **Blocker** | You cannot go on playing | 🔴 `[BLOCKER]` | red |
-| **Major** | A feature does not work | 🟠 `[MAJOR]` | orange |
-| **Minor** | Annoying, but there is a way round | 🟡 `[MINOR]` | yellow |
-| **Cosmetic** | A look, a text, a sound | 🟣 `[COSMETIC]` | purple |
+| **Blocker** | You cannot go on playing | 🔴 | red |
+| **Major** | A feature does not work | 🟠 | orange |
+| **Minor** | Annoying, but there is a way round | 🟡 | yellow |
+| **Cosmetic** | A look, a text, a sound | 🟣 | purple |
 
 The round mark opens the post's title, so the list of posts reads by severity at a glance.
 
@@ -47,8 +59,9 @@ What leaves with the report:
 | Part | Content |
 |---|---|
 | The template | What the player typed, part by part |
-| Capture | A JPEG no wider than 1920 px (the PNG stays in `screenshots/debug`) |
-| Context | Version and build (the export's build id; run from the sources, the branch and the commit), FPS, language, the body and frame the player is in, their position in it |
+| Captures | JPEGs no wider than 1920 px (the PNGs stay in `screenshots/debug`), the first as the message's picture |
+| Context | Version and build (the export's build id; run from the sources, the branch and the commit), FPS, language |
+| Place | Where the player stood at the first capture, shown in the form too: world coordinates (m), the planet with latitude, longitude and elevation when on one, and the node carrying the player. Nothing in a menu |
 | Machine | System and architecture, processor and threads, memory (total, free, used by the game), graphics card (vendor, dedicated or integrated), its driver, video memory used, renderer, screen and window, engine version. Nothing that names the owner |
 | Log | The last 256 kB of `godot.log`, with every token taken out |
 | Author | The player's name and id, read from their token by the service |
@@ -85,12 +98,13 @@ Nothing is stored by the service: a report lives in Discord.
 
 | Environment | Secret | Title |
 |---|---|---|
-| preprod | `social-bug-report` in `dyingstar-preprod` | `🔴 [BUG][PREPROD][BLOCKER][<version>] <title>` |
-| prod (once its values exist in the chart) | `social-bug-report` in `dyingstar-prod` | `🔴 [BUG][PROD][BLOCKER][<version>] <title>` |
-| dev-local | none by default: the feature is off | `🔴 [BUG][DEV][BLOCKER][<version>] <title>` |
+| preprod | `social-bug-report` in `dyingstar-preprod` | `🔴 [PREPROD] <title>` |
+| prod (once its values exist in the chart) | `social-bug-report` in `dyingstar-prod` | `🔴 [PROD] <title>` |
+| dev-local | none by default: the feature is off | `🔴 [DEV] <title>` |
 
-A title is 100 characters at most on Discord: when it does not fit, the version leaves it (it is in
-the fields of the message) before the player's words are cut.
+The title is the round mark of the severity, the environment, then the player's words: the channel
+holds nothing but bugs, the severity is the mark's colour, and the version is in the fields of the
+message.
 
 The Secret holds the URL under the key `DISCORD_BUG_WEBHOOK_URL` and is created out of band, never
 committed:
