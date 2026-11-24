@@ -137,7 +137,8 @@ bug stands is the **square the QA team puts as a reaction under its post**:
 | none | New, not looked at yet | yes |
 | 🟥 | Open | yes |
 | 🟧 | Taken by a developer | yes |
-| 🟪 | Fixed, to be tested in the build | yes |
+| 🟦 | Fixed, to be tested in the next build (reports can still be added) | yes |
+| 🟪 | To be tested in the build out now | yes |
 | 🟩 | Closed | no |
 
 With several squares under a post, the furthest one counts.
